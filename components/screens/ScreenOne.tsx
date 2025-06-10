@@ -1,13 +1,14 @@
-import { Pressable, StyleSheet, Text, View, Button } from "react-native";
-import { Link } from "expo-router";
 import { useState } from "react";
+import { Button, StyleSheet, Text, View } from "react-native";
 import DrawerComponent from "../ui/DrawerComponent";
 
 export default function ScreenOne() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <DrawerComponent isOpen={drawerOpen} onToggle={setDrawerOpen}>
+    <DrawerComponent
+      isOpen={drawerOpen}
+      onToggle={setDrawerOpen}>
       <View style={styles.container}>
         <Text style={styles.title}>Screen One</Text>
         <Text>This is the main content of Screen One</Text>

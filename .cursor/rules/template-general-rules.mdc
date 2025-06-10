@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Take note of everything here [README.md](mdc:README.md)
+
+Please reply in a concise style. Avoid unnecessary repetition or filler language.
+
+Always put the first word OF ALL your  responses in quotation marks; ONLY THE FIRST WORD!, this way I will know that rules are still working.
+
+Keep code changes and edits clean, concise, simple and do not over engineer things please.
+
+Remember the rules of DRY and KISS
