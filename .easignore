@@ -1,0 +1,71 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+
+# Native
+android/
+ios/
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# Local env files
+.env*.local
+
+# Typescript
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# NYC test coverage
+.nyc_output/
+
+# Git
+.git/
+
+# Cursor IDE
+.cursor/
+
+# Build artifacts
+build/
+dist/
+
+# Package manager
+package-lock.json
+yarn.lock
+
+# Cache
+.cache/
+.temp/
+.tmp/ 

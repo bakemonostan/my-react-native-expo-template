@@ -12,3 +12,6 @@ Always put the first word OF ALL your  responses in quotation marks; ONLY THE FI
 Keep code changes and edits clean, concise, simple and do not over engineer things please.
 
 Remember the rules of DRY and KISS
+
+
+<!-- // eas build -p android --profile preview --local -->
