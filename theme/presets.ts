@@ -50,6 +50,11 @@ const $listItemStyle = {
   borderBottomColor: "#f0f0f0",
 } satisfies ViewStyle;
 
+const $centerContainerStyle = {
+  flex: 1,
+  justifyContent: "center",
+} satisfies ViewStyle;
+
 const $screenContainerStyle = {
   flex: 1,
   backgroundColor: "white",
@@ -67,6 +72,7 @@ export const PresetStyles = {
   input: $inputStyle,
   listItem: $listItemStyle,
   screenContainer: $screenContainerStyle,
+  centerContainerStyle: $centerContainerStyle,
 };
 
 // Alternative: Create StyleSheet version for better performance
@@ -77,6 +83,7 @@ export const PresetStyleSheet = StyleSheet.create({
   input: $inputStyle,
   listItem: $listItemStyle,
   screenContainer: $screenContainerStyle,
+  centerContainerStyle: $centerContainerStyle,
 });
 
 // Type definitions for better TypeScript support

@@ -50,6 +50,38 @@ export default function TabLayout() {
           ),
         }}
       />
+      {/* store screen */}
+      <Tabs.Screen
+        name="store/StoreExampleScreen"
+        options={{
+          headerShown: false,
+          title: "Store",
+          tabBarIcon: ({ color, size }) => (
+            <IconComponent
+              name="store"
+              library="MaterialCommunityIcons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      {/* querying and data fetching and caching example screen*/}
+      <Tabs.Screen
+        name="querying/QueryingScreen"
+        options={{
+          headerShown: false,
+          title: "Querying",
+          tabBarIcon: ({ color, size }) => (
+            <IconComponent
+              name="search"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
