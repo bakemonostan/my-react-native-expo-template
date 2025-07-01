@@ -4,7 +4,7 @@ import CardComponent from "@/components/ui/CardComponent";
 import IconComponent from "@/components/ui/IconComponent";
 import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
 import TextComponent from "@/components/ui/TextComponent";
-import { Colors } from "@/constants/Colors";
+import { colors } from "@/constants/Colors";
 import { scale, vScale } from "@/constants/mixins";
 import { heightToDp, SPACING } from "@/constants/responsive";
 import { PresetStyles } from "@/theme/presets";
@@ -17,14 +17,19 @@ export default function CardExample() {
     <SafeAreaViewComponent withEdges={false}>
       <ScrollViewComponent
         style={PresetStyles.screenContainer}
-        contentContainerStyle={{ paddingBottom: vScale(20) }}
-      >
-        <TextComponent size="lg" weight="bold" style={styles.title}>
+        contentContainerStyle={{ paddingBottom: vScale(20) }}>
+        <TextComponent
+          size="lg"
+          weight="bold"
+          style={styles.title}>
           Card Examples
         </TextComponent>
 
         {/* Basic Card */}
-        <TextComponent size="base" weight="medium" style={styles.sectionTitle}>
+        <TextComponent
+          size="base"
+          weight="medium"
+          style={styles.sectionTitle}>
           Basic Card
         </TextComponent>
         <CardComponent style={[PresetStyles.card, { borderWidth: 0 }]}>
@@ -32,7 +37,10 @@ export default function CardExample() {
         </CardComponent>
 
         {/* Product Card */}
-        <TextComponent size="base" weight="medium" style={styles.sectionTitle}>
+        <TextComponent
+          size="base"
+          weight="medium"
+          style={styles.sectionTitle}>
           Product Card
         </TextComponent>
         <CardComponent style={styles.card}>
@@ -44,22 +52,26 @@ export default function CardExample() {
           />
           <View style={styles.productContent}>
             <View style={styles.productHeader}>
-              <TextComponent size="lg" weight="bold">
+              <TextComponent
+                size="lg"
+                weight="bold">
                 Smart Watch
               </TextComponent>
               <BadgeComponent
                 content="New"
-                backgroundColor={Colors.light.primary}
+                backgroundColor={colors.primary}
               />
             </View>
             <TextComponent
-              color={Colors.light.gray}
-              style={styles.productDescription}
-            >
+              color={colors.background}
+              style={styles.productDescription}>
               Latest model with health tracking features
             </TextComponent>
             <View style={styles.productFooter}>
-              <TextComponent size="lg" weight="bold" color={Colors.light.tint}>
+              <TextComponent
+                size="lg"
+                weight="bold"
+                color={colors.tint}>
                 $299.99
               </TextComponent>
               <IconComponent
@@ -72,7 +84,10 @@ export default function CardExample() {
         </CardComponent>
 
         {/* Profile Card */}
-        <TextComponent size="base" weight="medium" style={styles.sectionTitle}>
+        <TextComponent
+          size="base"
+          weight="medium"
+          style={styles.sectionTitle}>
           Profile Card
         </TextComponent>
         <CardComponent style={styles.card}>
@@ -84,38 +99,51 @@ export default function CardExample() {
               }}
             />
             <View style={styles.profileInfo}>
-              <TextComponent size="lg" weight="bold">
+              <TextComponent
+                size="lg"
+                weight="bold">
                 Sarah Johnson
               </TextComponent>
-              <TextComponent color={Colors.light.gray}>
-                Product Designer
-              </TextComponent>
+              <TextComponent>Product Designer</TextComponent>
             </View>
           </View>
           <View style={styles.profileStats}>
             <View style={styles.statItem}>
-              <TextComponent size="lg" weight="bold">
+              <TextComponent
+                size="lg"
+                weight="bold">
                 245
               </TextComponent>
-              <TextComponent color={Colors.light.gray}>Posts</TextComponent>
+              <TextComponent color={colors.backgroundGray}>Posts</TextComponent>
             </View>
             <View style={styles.statItem}>
-              <TextComponent size="lg" weight="bold">
+              <TextComponent
+                size="lg"
+                weight="bold">
                 12.5K
               </TextComponent>
-              <TextComponent color={Colors.light.gray}>Followers</TextComponent>
+              <TextComponent color={colors.backgroundGray}>
+                Followers
+              </TextComponent>
             </View>
             <View style={styles.statItem}>
-              <TextComponent size="lg" weight="bold">
+              <TextComponent
+                size="lg"
+                weight="bold">
                 1.2K
               </TextComponent>
-              <TextComponent color={Colors.light.gray}>Following</TextComponent>
+              <TextComponent color={colors.backgroundGray}>
+                Following
+              </TextComponent>
             </View>
           </View>
         </CardComponent>
 
         {/* Blog Post Card */}
-        <TextComponent size="base" weight="medium" style={styles.sectionTitle}>
+        <TextComponent
+          size="base"
+          weight="medium"
+          style={styles.sectionTitle}>
           Blog Post Card
         </TextComponent>
         <CardComponent style={styles.card}>
@@ -126,13 +154,14 @@ export default function CardExample() {
             style={styles.blogImage}
           />
           <View style={styles.blogContent}>
-            <TextComponent size="lg" weight="bold">
+            <TextComponent
+              size="lg"
+              weight="bold">
               The Future of Technology
             </TextComponent>
             <TextComponent
-              color={Colors.light.gray}
-              style={styles.blogDescription}
-            >
+              color={colors.backgroundGray}
+              style={styles.blogDescription}>
               Exploring the latest trends in AI and machine learning...
             </TextComponent>
             <View style={styles.blogFooter}>
@@ -147,7 +176,7 @@ export default function CardExample() {
                   John Doe
                 </TextComponent>
               </View>
-              <TextComponent color={Colors.light.gray}>
+              <TextComponent color={colors.backgroundGray}>
                 5 min read
               </TextComponent>
             </View>
@@ -155,7 +184,10 @@ export default function CardExample() {
         </CardComponent>
 
         {/* Event Card */}
-        <TextComponent size="base" weight="medium" style={styles.sectionTitle}>
+        <TextComponent
+          size="base"
+          weight="medium"
+          style={styles.sectionTitle}>
           Event Card
         </TextComponent>
         <CardComponent style={styles.card}>
@@ -168,9 +200,12 @@ export default function CardExample() {
           <View style={styles.eventContent}>
             <BadgeComponent
               content="Upcoming"
-              backgroundColor={Colors.light.Alert}
+              backgroundColor={colors.palette.alert50}
             />
-            <TextComponent size="lg" weight="bold" style={styles.eventTitle}>
+            <TextComponent
+              size="lg"
+              weight="bold"
+              style={styles.eventTitle}>
               Tech Conference 2024
             </TextComponent>
             <View style={styles.eventDetails}>
@@ -190,7 +225,7 @@ export default function CardExample() {
               <TextComponent>San Francisco, CA</TextComponent>
             </View>
             <View style={styles.eventFooter}>
-              <TextComponent color={Colors.light.gray}>
+              <TextComponent color={colors.backgroundGray}>
                 120 attendees
               </TextComponent>
               <IconComponent
@@ -217,9 +252,9 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: vScale(16),
     padding: SPACING,
-    backgroundColor: Colors.light.white,
+    backgroundColor: colors.background,
     borderRadius: scale(8),
-    shadowColor: Colors.light.text,
+    shadowColor: colors.text,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -261,7 +296,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     padding: SPACING,
     borderTopWidth: 1,
-    borderTopColor: Colors.light.lighBlueBg,
+    borderTopColor: colors.background,
   },
   statItem: {
     alignItems: "center",

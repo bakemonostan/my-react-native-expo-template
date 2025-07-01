@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { colors } from "@/constants/Colors";
 import { mScale } from "@/constants/mixins";
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -69,7 +69,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
           tint="extraLight"
           style={styles.footerContainer}>
           <PressableComponent
-            btnLabel="Continue"
+            buttonText="Continue"
             onPress={onClose}
           />
         </BlurView>
@@ -116,7 +116,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
       <View style={styles.header}>
         <ResponsiveText variant="h4">{title}</ResponsiveText>
         <PressableComponent
-          btnLabel="Close"
+          buttonText="Close"
           style={styles.closeButton}
           onPress={onClose}
         />
@@ -172,18 +172,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: mScale(16),
     backgroundColor: "transparent",
     borderRadius: mScale(8),
-    borderColor: Colors.light.TakerSkyBlue,
+    borderColor: colors.backgroundAuth,
     borderWidth: 1,
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: Colors.light.background,
+    backgroundColor: colors.background,
     padding: mScale(12),
   },
   listWrapper: {
     flex: 1,
     borderRadius: mScale(16),
-    backgroundColor: Colors.light.background,
+    backgroundColor: colors.background,
     marginBottom: Platform.OS === "ios" ? mScale(55) : mScale(60),
   },
   footerContainer: {

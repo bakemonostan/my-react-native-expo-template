@@ -1,3 +1,4 @@
+import { customFontsToLoad } from "@/theme/typography";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import {
   QueryClient,
@@ -8,7 +9,7 @@ import {
 import { useFonts } from "expo-font";
 import * as Network from "expo-network";
 import { SplashScreen, Stack } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { AppState, AppStateStatus, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -48,33 +49,41 @@ function onAppStateChange(status: AppStateStatus) {
 }
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    regular: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Regular.ttf"),
-    black: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Black.ttf"),
-    bold: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Bold.ttf"),
-    extra_bold: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-ExtraBold.ttf"),
-    light: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Light.ttf"),
-    medium: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Medium.ttf"),
-    semi_bold: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-SemiBold.ttf"),
-    variable: require("../assets/fonts/Afacad_Flux/AfacadFlux-VariableFont_slnt,wght.ttf"),
-  });
+  const [fontsLoaded, fontError] = useFonts(customFontsToLoad);
+  const splashHidden = useRef(false);
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+  const hideSplashScreen = async () => {
+    if (!splashHidden.current) {
+      splashHidden.current = true;
+      await SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  };
 
+  // Hide splash screen when fonts are ready or on error
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      hideSplashScreen();
+    }
+  }, [fontsLoaded, fontError]);
+
+  // Safety timeout - hide splash after 3 seconds regardless
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      hideSplashScreen();
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  // Set up app state listener for React Query focus management
   useEffect(() => {
     const subscription = AppState.addEventListener("change", onAppStateChange);
     return () => subscription.remove();
   }, []);
 
-  if (!loaded && !error) {
+  // Don't render anything until fonts are loaded or timeout
+  if (!fontsLoaded && !fontError) {
     return null;
   }
-
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView style={{ flex: 1 }}>

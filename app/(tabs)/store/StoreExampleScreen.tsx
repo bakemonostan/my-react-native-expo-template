@@ -18,12 +18,12 @@ const StoreExampleScreen = () => {
           Persistent Store Example with Zustand and AsyncStorage
         </TextComponent>
         <TextComponent>Count: {count}</TextComponent>
-        <PressableComponent onPress={increment}>
-          <TextComponent>Increment</TextComponent>
-        </PressableComponent>
-        <PressableComponent onPress={reset}>
-          <TextComponent>Reset</TextComponent>
-        </PressableComponent>
+        <PressableComponent
+          buttonText="Increment"
+          onPress={increment}></PressableComponent>
+        <PressableComponent
+          buttonText="Reset"
+          onPress={reset}></PressableComponent>
       </View>
     </SafeAreaViewComponent>
   );

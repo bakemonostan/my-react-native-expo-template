@@ -12,28 +12,29 @@ export default function ModalExample() {
   return (
     <SafeAreaViewComponent style={PresetStyles.screenContainer}>
       <View style={{ gap: 16, padding: 16 }}>
-        <TextComponent size="lg" weight="bold">
+        <TextComponent
+          size="lg"
+          weight="bold">
           Modal Component
         </TextComponent>
 
         <PressableComponent
           variant="primary"
-          btnLabel="Open Modal"
+          buttonText="Open Modal"
           onPress={() => setIsVisible(true)}
         />
 
         <ModalComponent
           visible={isVisible}
           onClose={() => setIsVisible(false)}
-          title="Example Modal"
-        >
+          title="Example Modal">
           <View style={{ gap: 16 }}>
             <TextComponent>
               This is a modal example with a title and content.
             </TextComponent>
             <PressableComponent
               variant="secondary"
-              btnLabel="Close"
+              buttonText="Close"
               onPress={() => setIsVisible(false)}
             />
           </View>

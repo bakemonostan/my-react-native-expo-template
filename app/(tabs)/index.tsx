@@ -1,7 +1,7 @@
 import ImageComponent from "@/components/ui/ImageComponent";
 import ResponsiveText from "@/components/ui/ResponsiveText";
 import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
-import { Colors } from "@/constants/Colors";
+import { colors } from "@/constants/Colors";
 import { PresetStyles } from "@/theme/presets";
 import { View } from "react-native";
 
@@ -9,10 +9,14 @@ export default function TabOneScreen() {
   return (
     <SafeAreaViewComponent style={PresetStyles.screenContainer}>
       <View style={{ gap: 16, padding: 16 }}>
-        <ResponsiveText size="lg" color={Colors.light.primary}>
+        <ResponsiveText
+          size="lg"
+          color={colors.text}>
           Hello
         </ResponsiveText>
-        <ResponsiveText size="base" color={Colors.light.Alert}>
+        <ResponsiveText
+          size="lg"
+          color={colors.text}>
           To see examples of components, navigate to the components tab. We have
           a lot of components to show you. We have the following components: -
           Icons - Buttons - Inputs - Lists - Modals - Images - Texts - Safe

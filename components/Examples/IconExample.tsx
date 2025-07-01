@@ -1,7 +1,7 @@
 import IconComponent from "@/components/ui/IconComponent";
 import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
 import TextComponent from "@/components/ui/TextComponent";
-import { Colors } from "@/constants/Colors";
+import { colors } from "@/constants/Colors";
 import { PresetStyles } from "@/theme/presets";
 import React from "react";
 import { View } from "react-native";
@@ -10,7 +10,9 @@ export default function IconExample() {
   return (
     <SafeAreaViewComponent style={PresetStyles.screenContainer}>
       <View style={{ gap: 16, padding: 16 }}>
-        <TextComponent size="lg" weight="bold">
+        <TextComponent
+          size="lg"
+          weight="bold">
           Icon Component
         </TextComponent>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 16 }}>
@@ -18,13 +20,13 @@ export default function IconExample() {
             name="woman-sharp"
             library="Ionicons"
             size={28}
-            color={Colors.light.Wisteria}
+            color={colors.error}
           />
           <IconComponent
             name="star"
             library="FontAwesome"
             size={24}
-            color={Colors.light.Alert}
+            color={colors.error}
           />
           <IconComponent
             name="heart"
@@ -54,7 +56,7 @@ export default function IconExample() {
             name="heart"
             library="Entypo"
             size={72}
-            color={Colors.light.primary}
+            color={colors.error}
           />
           <IconComponent
             source={require("@/assets/images/react-logo.png")}

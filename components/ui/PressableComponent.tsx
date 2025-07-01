@@ -1,11 +1,22 @@
-import React from "react";
-import { Pressable, PressableProps, StyleProp, ViewStyle } from "react-native";
-import TextComponent, { FontWeight } from "./TextComponent";
+import { colors } from "@/constants/Colors";
+import React, { useRef } from "react";
+import {
+  ActivityIndicator,
+  Animated,
+  Pressable,
+  PressableProps,
+  StyleProp,
+  View,
+  ViewStyle,
+} from "react-native";
+import IconComponent, { IconComponentProps } from "./IconComponent";
+import ResponsiveText, { TEXT_VARIANTS } from "./ResponsiveText";
 
 /**
  * Pressable size presets for consistent touch targets
  */
 export type PressableSize =
+  | "xs" // 26px height
   | "sm" // 32px height
   | "base" // 44px height
   | "lg" // 56px height
@@ -15,7 +26,15 @@ export type PressableSize =
 /**
  * Common pressable variants
  */
-export type PressableVariant = "primary" | "secondary" | "ghost" | "danger";
+export type PressableVariant =
+  | "primary"
+  | "secondary"
+  | "ghost"
+  | "alert"
+  | "login"
+  | "outline"
+  | "wisty"
+  | "social";
 
 /**
  * Props interface for the PressableComponent
@@ -47,7 +66,40 @@ export interface PressableComponentProps extends PressableProps {
   /**
    * Button label text
    */
-  btnLabel?: string;
+  buttonText?: string;
+
+  /**
+   * Button label variant from ResponsiveText variants
+   * @default 'body1Bold'
+   */
+  labelVariant?: keyof typeof TEXT_VARIANTS;
+
+  /**
+   * Button label text color
+   */
+  buttonTextColor?: string;
+
+  /**
+   * Whether the pressable is rounded
+   * @default false
+   */
+  rounded?: boolean;
+
+  /**
+   * Left accessory (icon) to display before the text
+   */
+  leftAccessory?: IconComponentProps | React.ReactNode;
+
+  /**
+   * Right accessory (icon) to display after the text
+   */
+  rightAccessory?: IconComponentProps | React.ReactNode;
+
+  /**
+   * Spacing between accessories and text
+   * @default 8
+   */
+  accessorySpacing?: number;
 
   /**
    * Custom styles applied to the pressable
@@ -72,10 +124,11 @@ export interface PressableComponentProps extends PressableProps {
  */
 const SIZE_MAP: Record<
   Exclude<PressableSize, number>,
-  { height: number; paddingHorizontal: number }
+  { height: number; paddingHorizontal: number; paddingVertical?: number }
 > = {
-  sm: { height: 32, paddingHorizontal: 12 },
-  base: { height: 44, paddingHorizontal: 16 },
+  xs: { height: 26, paddingHorizontal: 8, paddingVertical: 0 },
+  sm: { height: 36, paddingHorizontal: 12 },
+  base: { height: 42, paddingHorizontal: 16 },
   lg: { height: 56, paddingHorizontal: 20 },
   xl: { height: 64, paddingHorizontal: 24 },
 };
@@ -83,44 +136,67 @@ const SIZE_MAP: Record<
 /**
  * Text styles for each variant
  */
-const VARIANT_TEXT_STYLES: Record<
-  PressableVariant,
-  { weight: FontWeight; color: string }
-> = {
+const VARIANT_TEXT_STYLES: Record<PressableVariant, { color: string }> = {
   primary: {
-    weight: "semi_bold",
     color: "#FFFFFF",
   },
   secondary: {
-    weight: "medium",
-    color: "#007AFF",
+    color: colors.palette.takersBlue100,
+  },
+  login: {
+    color: "#FFFFFF",
+  },
+  outline: {
+    color: colors.palette.takersBlue100,
   },
   ghost: {
-    weight: "medium",
-    color: "#007AFF",
+    color: colors.palette.takersBlue100,
   },
-  danger: {
-    weight: "semi_bold",
-    color: "#FFFFFF",
+  alert: {
+    color: colors.palette.takersBlue100,
+  },
+  wisty: {
+    color: colors.palette.takersBlue100,
+  },
+  social: {
+    color: colors.palette.takersBlue100,
   },
 };
 const VARIANT_STYLES: Record<PressableVariant, ViewStyle> = {
   primary: {
-    backgroundColor: "#007AFF",
+    backgroundColor: colors.palette.takersBlue100,
     borderWidth: 0,
   },
   secondary: {
-    backgroundColor: "transparent",
+    backgroundColor: colors.palette.takersSky100,
     borderWidth: 1,
-    borderColor: "#007AFF",
+    borderColor: colors.palette.takersSky100,
   },
   ghost: {
     backgroundColor: "transparent",
     borderWidth: 0,
   },
-  danger: {
-    backgroundColor: "#FF3B30",
+  alert: {
+    backgroundColor: colors.palette.takersSky25,
+    borderWidth: 1,
+    borderColor: colors.palette.alert100,
+  },
+  wisty: {
+    backgroundColor: colors.palette.wisty25,
     borderWidth: 0,
+  },
+  login: {
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: "#CADFFD",
+  },
+  outline: {
+    backgroundColor: "#FFFFFF",
+  },
+  social: {
+    backgroundColor: colors.palette.takersSky15,
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
 };
 
@@ -132,7 +208,8 @@ const VARIANT_STYLES: Record<PressableVariant, ViewStyle> = {
  * <PressableComponent
  *   variant="primary"
  *   size="lg"
- *   btnLabel="Submit"
+ *   buttonText="Submit"
+ *   labelVariant="body1Bold"
  *   onPress={() => console.log('Pressed!')}
  * />
  * ```
@@ -149,21 +226,112 @@ const VARIANT_STYLES: Record<PressableVariant, ViewStyle> = {
  *   <CustomIcon name="heart" />
  * </PressableComponent>
  * ```
+ *
+ * @example
+ * ```tsx
+ * // Button with left icon
+ * <PressableComponent
+ *   variant="primary"
+ *   buttonText="Save"
+ *   labelVariant="body1Medium"
+ *   leftAccessory={{
+ *     library: "Ionicons",
+ *     name: "save-outline",
+ *     color: "#FFFFFF"
+ *   }}
+ *   onPress={handleSave}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Button with right icon
+ * <PressableComponent
+ *   variant="ghost"
+ *   buttonText="Next"
+ *   labelVariant="body1Regular"
+ *   rightAccessory={{
+ *     library: "Feather",
+ *     name: "arrow-right",
+ *     color: "#007AFF"
+ *   }}
+ *   onPress={handleNext}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Button with both icons
+ * <PressableComponent
+ *   variant="secondary"
+ *   buttonText="Share"
+ *   labelVariant="body1Bold"
+ *   leftAccessory={{
+ *     library: "Ionicons",
+ *     name: "share-outline",
+ *     color: "#007AFF"
+ *   }}
+ *   rightAccessory={{
+ *     library: "Ionicons",
+ *     name: "chevron-forward",
+ *     color: "#007AFF"
+ *   }}
+ *   accessorySpacing={12}
+ *   onPress={handleShare}
+ * />
+ * ```
  */
 export default function PressableComponent({
   size = "base",
   variant = "primary",
   backgroundColor,
   borderRadius = 8,
-  btnLabel,
+  rounded = true,
+  buttonText,
+  labelVariant = "body1Bold",
+  buttonTextColor,
+  leftAccessory,
+  rightAccessory,
+  accessorySpacing = 8,
   pressableStyle,
   loading = false,
-  activeOpacity = 0.6,
+  activeOpacity,
   disabled,
   style,
   children,
   ...restProps
 }: PressableComponentProps) {
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const opacityAnim = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.parallel([
+      Animated.spring(scaleAnim, {
+        toValue: 0.99,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: activeOpacity || 0.9,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.parallel([
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   /**
    * Get size dimensions
    */
@@ -185,9 +353,14 @@ export default function PressableComponent({
   const baseStyles: ViewStyle = {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: borderRadius,
+    borderRadius: rounded ? 100 : borderRadius,
     ...dimensions,
     ...VARIANT_STYLES[variant],
+  };
+
+  const disabledStyles: ViewStyle = {
+    opacity: 0.9,
+    backgroundColor: variant === "ghost" ? undefined : "#251D4B1A", // Light gray background
   };
 
   // Override background color if provided
@@ -200,38 +373,91 @@ export default function PressableComponent({
   // const finalOpacity = isInteractionDisabled ? 0.5 : 1;
 
   /**
-   * Combine all styles
+   * Render button content
    */
-  const resolveStyle = (pressed: boolean, hovered: boolean = false) => {
-    // If style is a function, call it with the pressed and hovered state
-    const resolvedStyle =
-      typeof style === "function" ? style({ pressed, hovered }) : style;
-
-    return [
-      baseStyles,
-      { opacity: isInteractionDisabled ? 0.5 : pressed ? activeOpacity : 1 },
-      pressableStyle,
-      resolvedStyle,
-    ];
+  const renderContent = () => {
+    if (buttonText) {
+      return (
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          {leftAccessory && (
+            <View style={{ marginRight: accessorySpacing }}>
+              {typeof leftAccessory === "object" &&
+              "library" in leftAccessory ? (
+                <IconComponent
+                  {...(leftAccessory as IconComponentProps)}
+                  size={leftAccessory.size || 20}
+                  {...(leftAccessory.library !== "custom" && {
+                    color: isInteractionDisabled
+                      ? "#00000033"
+                      : leftAccessory.color,
+                  })}
+                />
+              ) : (
+                leftAccessory
+              )}
+            </View>
+          )}
+          <ResponsiveText
+            variant={labelVariant}
+            color={
+              isInteractionDisabled
+                ? "#00000033"
+                : buttonTextColor || VARIANT_TEXT_STYLES[variant].color
+            }
+            text={buttonText}
+          />
+          {loading ? (
+            <View style={{ marginLeft: accessorySpacing }}>
+              <ActivityIndicator
+                size="small"
+                color={colors.textDim}
+              />
+            </View>
+          ) : (
+            rightAccessory && (
+              <View style={{ marginLeft: accessorySpacing }}>
+                {typeof rightAccessory === "object" &&
+                "library" in rightAccessory ? (
+                  <IconComponent
+                    {...(rightAccessory as IconComponentProps)}
+                    size={rightAccessory.size || 20}
+                    {...(rightAccessory.library !== "custom" && {
+                      color: isInteractionDisabled
+                        ? "#00000033"
+                        : rightAccessory.color,
+                    })}
+                  />
+                ) : (
+                  rightAccessory
+                )}
+              </View>
+            )
+          )}
+        </View>
+      );
+    }
+    return children as React.ReactNode;
   };
 
   return (
     <Pressable
-      style={({ pressed, hovered }) => resolveStyle(pressed, hovered)}
-      disabled={isInteractionDisabled}
-      {...restProps}
-    >
-      {btnLabel ? (
-        <TextComponent
-          weight={VARIANT_TEXT_STYLES[variant].weight}
-          color={VARIANT_TEXT_STYLES[variant].color}
-          size="base"
-        >
-          {btnLabel}
-        </TextComponent>
-      ) : (
-        children
-      )}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      disabled={isInteractionDisabled || disabled}
+      {...restProps}>
+      <Animated.View
+        style={[
+          baseStyles,
+          isInteractionDisabled && disabledStyles,
+          { opacity: isInteractionDisabled ? 0.9 : opacityAnim },
+          pressableStyle,
+          typeof style === "function"
+            ? style({ pressed: false, hovered: false })
+            : style,
+          { transform: [{ scale: scaleAnim }] },
+        ]}>
+        {renderContent()}
+      </Animated.View>
     </Pressable>
   );
 }

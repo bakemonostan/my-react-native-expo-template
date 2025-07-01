@@ -1,5 +1,5 @@
-import { StyleSheet, ViewStyle } from 'react-native';
-import { Colors } from "../constants/Colors";
+import { colors } from "@/constants/Colors";
+import { StyleSheet, ViewStyle } from "react-native";
 import { BorderRadius, Shadows } from "./borders-shadows-animations";
 import { ComponentSizes } from "./component-dimensions";
 import { Layout } from "./layout-dimensions";
@@ -33,7 +33,7 @@ const $buttonSecondaryStyle = {
 } satisfies ViewStyle;
 
 const $inputStyle = {
-  backgroundColor: Colors.light.lighBlueBg,
+  backgroundColor: colors.background,
   height: ComponentSizes.input.height.base,
   paddingHorizontal: ComponentSizes.input.padding.base,
   borderBottomWidth: 1,

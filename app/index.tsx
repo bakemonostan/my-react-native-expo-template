@@ -14,19 +14,18 @@ export default function Index() {
           gap: 10,
           justifyContent: "center",
           flex: 1,
-        }}
-      >
+        }}>
         <ResponsiveText size="lg">
           Edit app/index.tsx to edit this screen.
         </ResponsiveText>
         <PressableComponent
           onPress={() => router.push("/Modal")}
-          btnLabel="Show Modal"
+          buttonText="Show Modal"
         />
         <PressableComponent
           variant="secondary"
           onPress={() => router.push("/(tabs)")}
-          btnLabel="Go to Tabs screen"
+          buttonText="Go to Tabs screen"
         />
       </View>
     </SafeAreaViewComponent>

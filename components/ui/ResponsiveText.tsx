@@ -1,41 +1,42 @@
-import { mScale, scale } from "@/constants/mixins";
+import { colors } from "@/constants/Colors";
+import { mScale } from "@/constants/mixins";
+import { typography } from "@/theme/typography";
 import React from "react";
-import { StyleProp, Text, TextStyle } from "react-native";
+import { StyleProp, Text, TextProps, TextStyle } from "react-native";
 
 /**
  * Font weight options based on the loaded Afacad Flux font family
+ * These must match the keys in typography.fontFamily
  */
-export type FontWeight =
-  | "regular"
-  | "light"
-  | "medium"
-  | "semi_bold"
-  | "bold"
-  | "extra_bold"
-  | "black"
-  | "variable";
+export type FontWeight = keyof typeof typography.fontFamily;
 
 /**
  * Font size presets for consistent typography
+ * These match the typography configuration
  */
 export type FontSize =
-  | "xs" // 12
-  | "sm" // 14
-  | "base" // 16
+  | "xs" // 10
+  | "sm" // 12
+  | "base" // 14
+  | "md" // 16
   | "lg" // 18
   | "xl" // 20
   | "xxl" // 24
-  | "xxxl" // 32
+  | "xxxl" // 28
+  | "huge" // 32
+  | "mega" // 40
+  | "giant" // 48
   | number;
 
 /**
  * Props interface for the TextComponent
+ * Extends TextProps to receive all native Text component props
  */
-export interface TextComponentProps {
+export interface TextComponentProps extends TextProps {
   /**
    * The text content to display
    */
-  children: React.ReactNode;
+  text?: string;
 
   /**
    * Font weight using the loaded Afacad Flux font variants
@@ -58,50 +59,96 @@ export interface TextComponentProps {
   /**
    * Apply responsive scaling to font size
    * @default false
+   *
+   * Uses globally accepted moderate scaling (factor: 0.1)
+   * Prevents text from becoming too large/small across devices
    */
   responsive?: boolean;
 
-  /**
-   * Use moderate scaling for font size (prevents text from becoming too large/small)
-   * @default true when responsive is true
-   */
-  moderateScale?: boolean;
+  // variants
+  variant?: keyof typeof TEXT_VARIANTS;
 
   /**
-   * Custom scaling factor for moderate scaling
-   * @default 0.1
+   * Line height multiplier
+   * @default undefined (uses typography defaults)
    */
-  scaleFactor?: number;
+  lineHeight?: keyof typeof typography.lineHeight;
+
+  /**
+   * Letter spacing
+   * @default undefined (uses typography defaults)
+   */
+  letterSpacing?: keyof typeof typography.letterSpacing;
+
+  /**
+   * Text alignment
+   * @default undefined
+   */
+  textAlign?: "auto" | "left" | "right" | "center" | "justify";
+
+  /**
+   * Text decoration
+   * @default undefined
+   */
+  textDecoration?:
+    | "none"
+    | "underline"
+    | "line-through"
+    | "underline line-through";
+
+  /**
+   * Text decoration color
+   * @default undefined (uses text color)
+   */
+  textDecorationColor?: string;
+
+  /**
+   * Text decoration style
+   * @default undefined
+   */
+  textDecorationStyle?: "solid" | "double" | "dotted" | "dashed";
+
+  /**
+   * Font style
+   * @default undefined
+   */
+  fontStyle?: "normal" | "italic";
+
+  /**
+   * Text transform
+   * @default undefined
+   */
+  textTransform?: "none" | "uppercase" | "lowercase" | "capitalize";
 
   /**
    * Default styles applied to the text component
    * These are merged with the component's base styles
    */
-  styles?: StyleProp<TextStyle>;
+  textStyles?: StyleProp<TextStyle>;
 
   /**
    * Override styles that take precedence over all other styles
    * Use this when you need to completely override specific style properties
    */
   overrideStyles?: StyleProp<TextStyle>;
-
-  /**
-   * Additional props passed to the underlying Text component
-   */
-  [key: string]: any;
 }
 
 /**
- * Font size mapping for consistent typography scale
+ * Font size mapping that matches the typography configuration
+ * Using raw values since typography.fontSize values are already scaled
  */
 const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
-  xs: 12,
-  sm: 14,
-  base: 16,
+  xs: 10,
+  sm: 12,
+  base: 14,
+  md: 16,
   lg: 18,
   xl: 20,
   xxl: 24,
-  xxxl: 32,
+  xxxl: 28,
+  huge: 32,
+  mega: 40,
+  giant: 48,
 };
 
 /**
@@ -109,37 +156,48 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
  *
  * @example
  * ```tsx
- * <TextComponent
+ * <ResponsiveText
  *   weight="bold"
  *   color="#007AFF"
  *   size="lg"
  *   responsive={true}
- *   styles={{ textAlign: 'center' }}
+ *   textAlign="center"
+ *   styles={{ marginTop: 10 }}
  * >
  *   Hello World
- * </TextComponent>
+ * </ResponsiveText>
  * ```
  *
  * @example
  * ```tsx
- * <TextComponent
+ * <ResponsiveText
  *   {...TEXT_VARIANTS.responsive.bodyLarge}
+ *   textDecoration="underline"
+ *   textDecorationColor="#FF0000"
  *   overrideStyles={{ fontStyle: 'italic' }}
  * >
  *   Responsive text with variant
- * </TextComponent>
+ * </ResponsiveText>
  * ```
  */
 export default function ResponsiveText({
-  children,
   weight = "regular",
-  color = "#000000",
+  color = colors.text,
   size = "base",
-  responsive = false,
-  moderateScale = true,
-  scaleFactor = 0.1,
-  styles,
+  responsive = true,
+  variant,
+  lineHeight,
+  letterSpacing,
+  textAlign,
+  textDecoration,
+  textDecorationColor,
+  textDecorationStyle,
+  fontStyle,
+  textTransform,
+  text,
+  textStyles,
   overrideStyles,
+  children,
   ...restProps
 }: TextComponentProps) {
   /**
@@ -152,21 +210,46 @@ export default function ResponsiveText({
     } else {
       fontSize = FONT_SIZE_MAP[sizeValue];
     }
-    if (responsive) {
-      return moderateScale ? mScale(fontSize, scaleFactor) : scale(fontSize);
-    }
 
-    return fontSize;
+    // Apply mScale only if responsive is true, since typography values are already scaled
+    return responsive ? mScale(fontSize) : fontSize;
+  };
+
+  /**
+   * Get variant styles if variant is provided
+   */
+  const getVariantStyles = () => {
+    if (!variant) return {};
+
+    const variantConfig = TEXT_VARIANTS[variant];
+    return {
+      fontFamily: typography.fontFamily[variantConfig.weight],
+      fontSize: getFontSize(variantConfig.size),
+    };
   };
 
   /**
    * Base styles for the text component
    */
-  const baseStyles: TextStyle = {
-    fontFamily: weight,
-    fontSize: getFontSize(size),
-    color: color,
-  };
+  const baseStyles: TextStyle = variant
+    ? getVariantStyles()
+    : {
+        fontFamily: typography.fontFamily[weight],
+        fontSize: getFontSize(size),
+        ...(lineHeight && { lineHeight: typography.lineHeight[lineHeight] }),
+        ...(letterSpacing && {
+          letterSpacing: typography.letterSpacing[letterSpacing],
+        }),
+      };
+
+  // Apply color and convenience props to base styles
+  baseStyles.color = color;
+  if (textAlign) baseStyles.textAlign = textAlign;
+  if (textDecoration) baseStyles.textDecorationLine = textDecoration;
+  if (textDecorationColor) baseStyles.textDecorationColor = textDecorationColor;
+  if (textDecorationStyle) baseStyles.textDecorationStyle = textDecorationStyle;
+  if (fontStyle) baseStyles.fontStyle = fontStyle;
+  if (textTransform) baseStyles.textTransform = textTransform;
 
   /**
    * Combine all styles in the correct order of precedence:
@@ -174,13 +257,15 @@ export default function ResponsiveText({
    */
   const combinedStyles: StyleProp<TextStyle> = [
     baseStyles,
-    styles,
+    textStyles,
     overrideStyles,
   ];
 
   return (
-    <Text style={combinedStyles} {...restProps}>
-      {children}
+    <Text
+      style={combinedStyles}
+      {...restProps}>
+      {text || children}
     </Text>
   );
 }
@@ -193,52 +278,81 @@ export type TextComponentRef = React.ComponentRef<typeof Text>;
 /**
  * Predefined text style variants for common use cases
  */
-/**
- * Predefined text style variants for common use cases
- */
 export const TEXT_VARIANTS = {
-  heading1: {
+  h1: {
     weight: "bold" as FontWeight,
-    size: "xxxl" as FontSize,
-    color: "#1a1a1a",
+    size: "xxxl" as FontSize, // 28
   },
-  heading2: {
-    weight: "semi_bold" as FontWeight,
-    size: "xxl" as FontSize,
-    color: "#1a1a1a",
+  h2: {
+    weight: "bold" as FontWeight,
+    size: "xxl" as FontSize, // 24
   },
-  heading3: {
-    weight: "medium" as FontWeight,
-    size: "xl" as FontSize,
-    color: "#1a1a1a",
+  h3: {
+    weight: "bold" as FontWeight,
+    size: "xl" as FontSize, // 20
   },
-  body: {
+  h4: {
+    weight: "bold" as FontWeight,
+    size: "lg" as FontSize, // 18
+  },
+  body1Light: {
     weight: "regular" as FontWeight,
-    size: "base" as FontSize,
-    color: "#333333",
+    size: "md" as FontSize, // 16
   },
-  caption: {
+  body1Regular: {
+    weight: "regular" as FontWeight,
+    size: "md" as FontSize, // 16
+  },
+  body1Medium: {
+    weight: "medium" as FontWeight,
+    size: "md" as FontSize, // 16
+  },
+  body1Bold: {
+    weight: "bold" as FontWeight,
+    size: "md" as FontSize, // 16
+  },
+  body1ExtraBold: {
+    weight: "extraBold" as FontWeight,
+    size: "md" as FontSize, // 16
+  },
+  body2Light: {
     weight: "light" as FontWeight,
-    size: "sm" as FontSize,
-    color: "#666666",
+    size: "base" as FontSize, // 14
   },
-  button: {
-    weight: "semi_bold" as FontWeight,
-    size: "base" as FontSize,
-    color: "#007AFF",
+  body2Regular: {
+    weight: "regular" as FontWeight,
+    size: "base" as FontSize, // 14
   },
-  responsive: {
-    headlineLarge: {
-      weight: "bold" as FontWeight,
-      size: "xl" as FontSize,
-      color: "#1a1a1a",
-      responsive: true,
-    },
-    bodyLarge: {
-      weight: "regular" as FontWeight,
-      size: "base" as FontSize,
-      color: "#333333",
-      responsive: true,
-    },
+  body2Medium: {
+    weight: "medium" as FontWeight,
+    size: "base" as FontSize, // 14
+  },
+  body2Bold: {
+    weight: "bold" as FontWeight,
+    size: "base" as FontSize, // 14
+  },
+  body3Regular: {
+    weight: "regular" as FontWeight,
+    size: "sm" as FontSize, // 12
+  },
+  body3Medium: {
+    weight: "medium" as FontWeight,
+    size: "sm" as FontSize, // 12
+  },
+  body3Bold: {
+    weight: "bold" as FontWeight,
+    size: "sm" as FontSize, // 12
+  },
+  body4Regular: {
+    weight: "regular" as FontWeight,
+    size: "xs" as FontSize, // 10
+  },
+  body4Medium: {
+    weight: "medium" as FontWeight,
+    size: "xs" as FontSize, // 10
+  },
+  body4Bold: {
+    weight: "bold" as FontWeight,
+    size: "xs" as FontSize, // 10
   },
 } as const;
