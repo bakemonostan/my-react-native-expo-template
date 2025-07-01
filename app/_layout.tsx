@@ -49,8 +49,15 @@ function onAppStateChange(status: AppStateStatus) {
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    // Inter: require("@expo-google-fonts/inter"),
-    // SpaceMono: require("@expo-google-fonts/space-mono").default,
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    regular: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Regular.ttf"),
+    black: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Black.ttf"),
+    bold: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Bold.ttf"),
+    extra_bold: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-ExtraBold.ttf"),
+    light: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Light.ttf"),
+    medium: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-Medium.ttf"),
+    semi_bold: require("../assets/fonts/Afacad_Flux/static/AfacadFlux-SemiBold.ttf"),
+    variable: require("../assets/fonts/Afacad_Flux/AfacadFlux-VariableFont_slnt,wght.ttf"),
   });
 
   useEffect(() => {

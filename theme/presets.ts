@@ -58,7 +58,6 @@ const $centerContainerStyle = {
 const $screenContainerStyle = {
   flex: 1,
   backgroundColor: "white",
-  paddingHorizontal: Layout.screen.paddingHorizontal,
   paddingTop: Layout.screen.paddingVertical,
 } satisfies ViewStyle;
 
