@@ -85,7 +85,20 @@ const VARIANT_CONFIG = {
 };
 
 /**
- * A customizable alert component with different variants and styling options
+ * A customizable alert component with different variants and styling options.
+ * 
+ * ## Features
+ * - **4 Built-in Variants**: info, success, warning, error with appropriate colors and icons
+ * - **Custom Styling**: Override colors, borders, and background
+ * - **Optional Icon**: Show/hide the variant-specific icon
+ * - **Flexible Layout**: Title and message with proper spacing
+ * - **Type Safety**: TypeScript validates variant types and props
+ * 
+ * ## Variants
+ * - `info` - Blue theme with information icon
+ * - `success` - Green theme with checkmark icon  
+ * - `warning` - Orange theme with warning icon
+ * - `error` - Red theme with alert icon
  *
  * @example
  * ```tsx
@@ -93,30 +106,54 @@ const VARIANT_CONFIG = {
  * <AlertComponent
  *   variant="info"
  *   title="Information"
- *   message="This is an info alert"
+ *   message="This is an info alert with title and message"
  * />
  * ```
  *
  * @example
  * ```tsx
- * // Custom styled alert
+ * // Success alert without title
  * <AlertComponent
  *   variant="success"
- *   message="Operation successful"
- *   backgroundColor="#E8F5E9"
- *   textColor="#2E7D32"
- *   borderColor="#A5D6A7"
+ *   message="Your changes have been saved successfully!"
  * />
  * ```
  *
  * @example
  * ```tsx
- * // Alert without icon
+ * // Custom styled warning alert
  * <AlertComponent
  *   variant="warning"
- *   title="Warning"
- *   message="Please review your changes"
+ *   title="Attention Required"
+ *   message="Please review your changes before proceeding"
+ *   backgroundColor="#FFF8E1"
+ *   textColor="#E65100"
+ *   borderColor="#FFB74D"
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Error alert with custom styling
+ * <AlertComponent
+ *   variant="error"
+ *   title="Error"
+ *   message="Something went wrong. Please try again."
+ *   backgroundColor="#FFEBEE"
+ *   textColor="#B71C1C"
+ *   borderColor="#EF9A9A"
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Alert without icon for custom designs
+ * <AlertComponent
+ *   variant="info"
+ *   title="Custom Design"
+ *   message="This alert has no icon for a cleaner look"
  *   showIcon={false}
+ *   style={{ borderRadius: 12, marginHorizontal: 16 }}
  * />
  * ```
  */

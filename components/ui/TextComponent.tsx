@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TextStyle, StyleProp } from "react-native";
+import { StyleProp, Text, TextStyle } from "react-native";
 
 /**
  * Font weight options based on the loaded Afacad Flux font family
@@ -86,10 +86,25 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
 };
 
 /**
- * A customizable Text component with TypeScript support
+ * A customizable Text component with TypeScript support and consistent typography.
+ * 
+ * ## Features
+ * - **Font Weight Support**: All Afacad Flux font weights (light to black)
+ * - **Flexible Sizing**: Preset sizes or custom numeric values
+ * - **Color Customization**: Any valid color string support
+ * - **Style Layering**: Base styles, custom styles, and override styles
+ * - **Type Safety**: TypeScript validates all font weights and sizes
+ * - **Performance Optimized**: Efficient text rendering
+ * 
+ * ## Font Weights
+ * - `light`, `regular`, `medium`, `semi_bold`, `bold`, `extra_bold`, `black`, `variable`
+ * 
+ * ## Font Sizes
+ * - `xs` (12), `sm` (14), `base` (16), `lg` (18), `xl` (20), `xxl` (24), `xxxl` (32)
  *
  * @example
  * ```tsx
+ * // Basic text with custom styling
  * <TextComponent
  *   weight="bold"
  *   color="#007AFF"
@@ -102,12 +117,56 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
  *
  * @example
  * ```tsx
+ * // Text with override styles
  * <TextComponent
  *   weight="semi_bold"
  *   size={18}
  *   overrideStyles={{ fontStyle: 'italic' }}
  * >
  *   Custom styled text
+ * </TextComponent>
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Large heading text
+ * <TextComponent
+ *   weight="bold"
+ *   size="xxxl"
+ *   color="#1a1a1a"
+ *   styles={{ marginBottom: 16 }}
+ * >
+ *   Page Title
+ * </TextComponent>
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Small caption text
+ * <TextComponent
+ *   weight="light"
+ *   size="xs"
+ *   color="#666666"
+ *   styles={{ fontStyle: 'italic' }}
+ * >
+ *   This is a small caption
+ * </TextComponent>
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Text with complex styling
+ * <TextComponent
+ *   weight="medium"
+ *   size="base"
+ *   color="#333333"
+ *   styles={{
+ *     textDecorationLine: 'underline',
+ *     textDecorationColor: '#007AFF',
+ *     letterSpacing: 0.5
+ *   }}
+ * >
+ *   Underlined text with letter spacing
  * </TextComponent>
  * ```
  */

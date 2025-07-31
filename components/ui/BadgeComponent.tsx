@@ -39,20 +39,68 @@ export interface BadgeComponentProps {
 }
 
 /**
- * A badge component for notifications and status indicators
+ * A badge component for notifications and status indicators.
+ * 
+ * ## Features
+ * - **Multiple Sizes**: small, medium, large with proportional scaling
+ * - **Dot Mode**: Show as a simple dot without text content
+ * - **Custom Colors**: Override background and text colors
+ * - **Flexible Content**: Display numbers, text, or just a dot
+ * - **Responsive Design**: Automatically adjusts padding and font size
+ * - **Type Safety**: TypeScript validates all props and content types
+ * 
+ * ## Size Variants
+ * - `small` - 16px height (dot: 8px)
+ * - `medium` - 20px height (dot: 10px) 
+ * - `large` - 24px height (dot: 12px)
  *
  * @example
  * ```tsx
+ * // Basic notification badge
  * <BadgeComponent content="5" />
  * ```
  *
  * @example
  * ```tsx
+ * // Custom styled badge
  * <BadgeComponent
  *   content="New"
  *   backgroundColor="#4CD964"
+ *   textColor="#FFFFFF"
  *   size="large"
- *   dot={false}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Small dot indicator
+ * <BadgeComponent
+ *   dot={true}
+ *   size="small"
+ *   backgroundColor="#FF3B30"
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Large badge with custom styling
+ * <BadgeComponent
+ *   content="99+"
+ *   size="large"
+ *   backgroundColor="#007AFF"
+ *   textColor="#FFFFFF"
+ *   style={{ marginLeft: 8 }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Medium badge with number
+ * <BadgeComponent
+ *   content={42}
+ *   size="medium"
+ *   backgroundColor="#FF9500"
+ *   textColor="#FFFFFF"
  * />
  * ```
  */

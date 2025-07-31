@@ -4,10 +4,10 @@ import {
   ImageProps,
   ImageStyle,
   StyleSheet,
+  Text,
   View,
   ViewStyle,
 } from "react-native";
-import IconComponent from "./IconComponent";
 import LoadingComponent from "./LoadingComponent";
 
 export interface ImageComponentProps extends Omit<ImageProps, "style"> {
@@ -47,10 +47,24 @@ export interface ImageComponentProps extends Omit<ImageProps, "style"> {
 }
 
 /**
- * An enhanced image component with loading and error states
+ * An enhanced image component with loading and error states.
+ * 
+ * ## Features
+ * - **Loading States**: Built-in loading indicator with customizable display
+ * - **Error Handling**: Graceful error states with custom icons
+ * - **Flexible Styling**: Custom container and image styles
+ * - **Performance Optimized**: Efficient image loading and caching
+ * - **Type Safety**: TypeScript validates all image sources and props
+ * - **Fallback Support**: Error icon when image fails to load
+ * 
+ * ## States
+ * - **Loading**: Shows spinner while image loads
+ * - **Loaded**: Displays the image normally
+ * - **Error**: Shows error icon when loading fails
  *
  * @example
  * ```tsx
+ * // Basic image with default loading/error states
  * <ImageComponent
  *   source={{ uri: 'https://example.com/image.jpg' }}
  *   style={{ width: 200, height: 200 }}
@@ -59,12 +73,53 @@ export interface ImageComponentProps extends Omit<ImageProps, "style"> {
  *
  * @example
  * ```tsx
+ * // Image with custom loading and error handling
  * <ImageComponent
  *   source={{ uri: 'https://example.com/image.jpg' }}
  *   showLoading={true}
  *   showError={true}
  *   errorIconSize={32}
  *   errorIconColor="#FF0000"
+ *   containerStyle={{ borderRadius: 8 }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Local image with custom styling
+ * <ImageComponent
+ *   source={require('../../assets/images/logo.png')}
+ *   style={{ width: 150, height: 150 }}
+ *   imageStyle={{ borderRadius: 75 }}
+ *   showLoading={false}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Image with custom container styling
+ * <ImageComponent
+ *   source={{ uri: 'https://example.com/avatar.jpg' }}
+ *   style={{ width: 100, height: 100 }}
+ *   containerStyle={{
+ *     borderRadius: 50,
+ *     shadowColor: '#000',
+ *     shadowOffset: { width: 0, height: 2 },
+ *     shadowOpacity: 0.25,
+ *     shadowRadius: 3.84,
+ *     elevation: 5
+ *   }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Image with disabled error handling
+ * <ImageComponent
+ *   source={{ uri: 'https://example.com/image.jpg' }}
+ *   showError={false}
+ *   showLoading={true}
+ *   style={{ width: 300, height: 200 }}
  * />
  * ```
  */
@@ -110,12 +165,9 @@ export default function ImageComponent({
       )}
       {hasError && showError && (
         <View style={styles.errorContainer}>
-          <IconComponent
-            name="image"
-            library="Feather"
-            size={errorIconSize}
-            color={errorIconColor}
-          />
+          <Text style={{ fontSize: errorIconSize, color: errorIconColor }}>
+            📷
+          </Text>
         </View>
       )}
     </View>

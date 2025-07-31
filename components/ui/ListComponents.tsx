@@ -80,16 +80,82 @@ export interface ListItemProps {
 }
 
 /**
- * A list item component with consistent styling
+ * A list item component with consistent styling and flexible layout options.
+ * 
+ * ## Features
+ * - **Flexible Layout**: Left/right icons, title, and subtitle support
+ * - **Pressable Mode**: Optional touch interaction with callback
+ * - **Icon Support**: Type-safe icon integration with all icon libraries
+ * - **Custom Styling**: Override container and content styles
+ * - **Type Safety**: TypeScript validates all icon names and props
+ * - **Consistent Design**: Standardized list item appearance
+ * 
+ * ## Layout Options
+ * - **Left Icon**: Icon displayed before title/subtitle
+ * - **Right Icon**: Icon displayed after content
+ * - **Title**: Primary text (required)
+ * - **Subtitle**: Secondary text (optional)
+ * - **Pressable**: Touch interaction with visual feedback
  *
  * @example
  * ```tsx
+ * // Basic list item with icon
  * <ListItem
  *   title="Settings"
  *   subtitle="Manage your preferences"
  *   leftIcon={{ name: "settings", library: "Ionicons" }}
  *   pressable={true}
  *   onPress={() => {}}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // List item with right icon
+ * <ListItem
+ *   title="Notifications"
+ *   subtitle="3 new messages"
+ *   rightIcon={{ name: "chevron-forward", library: "Ionicons", color: "#666" }}
+ *   pressable={true}
+ *   onPress={() => navigation.navigate('Notifications')}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // List item with both icons
+ * <ListItem
+ *   title="Profile"
+ *   subtitle="john@example.com"
+ *   leftIcon={{ name: "person", library: "Ionicons", color: "#007AFF" }}
+ *   rightIcon={{ name: "edit", library: "Ionicons", color: "#666" }}
+ *   pressable={true}
+ *   onPress={() => navigation.navigate('EditProfile')}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Non-pressable list item
+ * <ListItem
+ *   title="Version"
+ *   subtitle="1.2.3"
+ *   leftIcon={{ name: "information-circle", library: "Ionicons" }}
+ *   pressable={false}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // List item with custom styling
+ * <ListItem
+ *   title="Custom Item"
+ *   subtitle="With custom colors"
+ *   leftIcon={{ name: "star", library: "Ionicons", color: "#FFD700" }}
+ *   style={{ backgroundColor: '#F8F9FA', borderRadius: 8 }}
+ *   contentStyle={{ marginLeft: 16 }}
+ *   pressable={true}
+ *   onPress={() => console.log('Custom item pressed')}
  * />
  * ```
  */
@@ -165,10 +231,24 @@ export interface ListProps<T> extends Omit<FlatListProps<T>, "renderItem"> {
 }
 
 /**
- * A list component with consistent styling and item rendering
+ * A list component with consistent styling and item rendering using FlatList.
+ * 
+ * ## Features
+ * - **FlatList Integration**: High-performance list rendering with virtualization
+ * - **Flexible Data**: Accepts any data type with custom rendering function
+ * - **Divider Support**: Optional dividers between list items
+ * - **Custom Styling**: Override list container styles
+ * - **Type Safety**: TypeScript validates data types and rendering functions
+ * - **Performance Optimized**: Efficient rendering for large datasets
+ * 
+ * ## Rendering Pattern
+ * - Uses renderItem function to convert data to ListItemProps
+ * - Supports all FlatList props for advanced customization
+ * - Automatic key generation and item separation
  *
  * @example
  * ```tsx
+ * // Basic list with simple data
  * <List
  *   data={items}
  *   renderItem={(item) => ({
@@ -176,6 +256,86 @@ export interface ListProps<T> extends Omit<FlatListProps<T>, "renderItem"> {
  *     subtitle: item.description,
  *     leftIcon: { name: item.icon, library: "Ionicons" }
  *   })}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // List with custom dividers and styling
+ * <List
+ *   data={menuItems}
+ *   renderItem={(item) => ({
+ *     title: item.title,
+ *     subtitle: item.subtitle,
+ *     leftIcon: { name: item.icon, library: "Ionicons", color: item.color },
+ *     pressable: true,
+ *     onPress: () => navigation.navigate(item.route)
+ *   })}
+ *   showDivider={true}
+ *   dividerColor="#E5E5E5"
+ *   containerStyle={{ backgroundColor: '#F8F9FA' }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // List with complex data transformation
+ * <List
+ *   data={users}
+ *   renderItem={(user) => ({
+ *     title: `${user.firstName} ${user.lastName}`,
+ *     subtitle: user.email,
+ *     leftIcon: { 
+ *       name: "person", 
+ *       library: "Ionicons", 
+ *       color: user.isOnline ? "#4CD964" : "#666" 
+ *     },
+ *     rightIcon: { name: "chevron-forward", library: "Ionicons" },
+ *     pressable: true,
+ *     onPress: () => navigation.navigate('UserProfile', { userId: user.id })
+ *   })}
+ *   showsVerticalScrollIndicator={false}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // List with FlatList props
+ * <List
+ *   data={notifications}
+ *   renderItem={(notification) => ({
+ *     title: notification.title,
+ *     subtitle: notification.message,
+ *     leftIcon: { 
+ *       name: notification.type === 'error' ? 'alert-circle' : 'checkmark-circle',
+ *       library: "Ionicons",
+ *       color: notification.type === 'error' ? '#FF3B30' : '#4CD964'
+ *     },
+ *     pressable: true,
+ *     onPress: () => handleNotificationPress(notification.id)
+ *   })}
+ *   refreshControl={
+ *     <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+ *   }
+ *   onEndReached={loadMoreNotifications}
+ *   onEndReachedThreshold={0.1}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // List without dividers for compact design
+ * <List
+ *   data={settings}
+ *   renderItem={(setting) => ({
+ *     title: setting.name,
+ *     subtitle: setting.description,
+ *     leftIcon: { name: setting.icon, library: "Ionicons" },
+ *     pressable: true,
+ *     onPress: () => handleSettingPress(setting.key)
+ *   })}
+ *   showDivider={false}
+ *   contentContainerStyle={{ paddingVertical: 8 }}
  * />
  * ```
  */

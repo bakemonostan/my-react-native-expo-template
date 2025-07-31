@@ -39,21 +39,72 @@ export interface LoadingComponentProps {
 }
 
 /**
- * A loading spinner component with optional message
+ * A loading spinner component with optional message and flexible display options.
+ * 
+ * ## Features
+ * - **Multiple Sizes**: small and large spinner sizes
+ * - **Custom Colors**: Override default spinner color
+ * - **Optional Message**: Display loading text below spinner
+ * - **Full Screen Mode**: Overlay the entire screen with loading state
+ * - **Visibility Control**: Show/hide loading state programmatically
+ * - **Type Safety**: TypeScript validates all props and styling
+ * 
+ * ## Size Variants
+ * - `small` - Compact spinner for inline loading
+ * - `large` - Standard size for full loading states
  *
  * @example
  * ```tsx
+ * // Basic loading with message
  * <LoadingComponent message="Loading..." />
  * ```
  *
  * @example
  * ```tsx
+ * // Full screen loading overlay
  * <LoadingComponent
  *   visible={isLoading}
- *   size="small"
- *   color="#FF0000"
+ *   size="large"
+ *   color="#007AFF"
  *   fullScreen={true}
- *   message="Please wait..."
+ *   message="Please wait while we load your data..."
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Small inline loading
+ * <LoadingComponent
+ *   size="small"
+ *   color="#FF9500"
+ *   message="Saving..."
+ *   style={{ padding: 8 }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Conditional loading with custom styling
+ * <LoadingComponent
+ *   visible={isLoading}
+ *   size="large"
+ *   color="#4CD964"
+ *   message="Processing your request"
+ *   style={{
+ *     backgroundColor: 'rgba(255, 255, 255, 0.9)',
+ *     borderRadius: 12,
+ *     padding: 24
+ *   }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Loading without message
+ * <LoadingComponent
+ *   size="small"
+ *   color="#FF3B30"
+ *   style={{ marginLeft: 8 }}
  * />
  * ```
  */

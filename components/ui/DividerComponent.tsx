@@ -33,20 +33,67 @@ export interface DividerComponentProps {
 }
 
 /**
- * A simple divider component for visual separation
+ * A simple divider component for visual separation between content sections.
+ * 
+ * ## Features
+ * - **Horizontal & Vertical**: Support for both orientations
+ * - **Custom Styling**: Color, thickness, and spacing control
+ * - **Flexible Layout**: Works in any container with proper spacing
+ * - **Type Safety**: TypeScript validates all styling props
+ * - **Performance Optimized**: Lightweight component with minimal overhead
+ * 
+ * ## Orientation Modes
+ * - **Horizontal**: Default mode for separating content vertically
+ * - **Vertical**: For separating content horizontally (requires container with height)
  *
  * @example
  * ```tsx
+ * // Basic horizontal divider
  * <DividerComponent />
  * ```
  *
  * @example
  * ```tsx
+ * // Custom styled horizontal divider
  * <DividerComponent
  *   color="#007AFF"
  *   thickness={2}
  *   spacing={24}
- *   vertical={true}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Vertical divider in a row layout
+ * <View style={{ flexDirection: 'row', height: 40, alignItems: 'center' }}>
+ *   <Text>Left Content</Text>
+ *   <DividerComponent
+ *     vertical={true}
+ *     color="#E1E1E1"
+ *     thickness={1}
+ *     spacing={16}
+ *   />
+ *   <Text>Right Content</Text>
+ * </View>
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Thick colored divider
+ * <DividerComponent
+ *   color="#FF3B30"
+ *   thickness={3}
+ *   spacing={32}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Minimal spacing divider
+ * <DividerComponent
+ *   color="#CCCCCC"
+ *   thickness={1}
+ *   spacing={8}
  * />
  * ```
  */

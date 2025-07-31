@@ -21,17 +21,32 @@ interface DrawerComponentProps {
 }
 
 /**
- * A drawer component that provides a sliding panel from the edge of the screen
+ * A drawer component that provides a sliding panel from the edge of the screen.
+ * 
+ * ## Features
+ * - **Sliding Animation**: Smooth slide-in/out animations
+ * - **Built-in Menu**: Pre-configured menu items with close functionality
+ * - **Custom Content**: Accepts any React components as drawer content
+ * - **State Management**: Controlled open/close state with callbacks
+ * - **Safe Area Handling**: Proper spacing for device notches
+ * - **Type Safety**: TypeScript validates all props and callbacks
+ * 
+ * ## Built-in Menu Items
+ * - Home, Settings, Profile navigation options
+ * - Close button with proper state management
+ * - Consistent styling and touch feedback
  *
  * @example
  * ```tsx
- * // Basic drawer usage
+ * // Basic drawer usage with state management
+ * const [drawerOpen, setDrawerOpen] = useState(false);
+ * 
  * <DrawerComponent
  *   isOpen={drawerOpen}
  *   onToggle={setDrawerOpen}
  * >
  *   <View>
- *     <Text>Drawer Content</Text>
+ *     <Text>Main App Content</Text>
  *   </View>
  * </DrawerComponent>
  * ```
@@ -44,7 +59,7 @@ interface DrawerComponentProps {
  *   onToggle={setDrawerOpen}
  * >
  *   <View style={{ padding: 16 }}>
- *     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Menu</Text>
+ *     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Custom Menu</Text>
  *     <TouchableOpacity onPress={() => console.log('Option 1')}>
  *       <Text>Option 1</Text>
  *     </TouchableOpacity>
@@ -53,6 +68,61 @@ interface DrawerComponentProps {
  *     </TouchableOpacity>
  *   </View>
  * </DrawerComponent>
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Drawer with complex content layout
+ * <DrawerComponent
+ *   isOpen={drawerOpen}
+ *   onToggle={setDrawerOpen}
+ * >
+ *   <View style={{ flex: 1, padding: 16 }}>
+ *     <View style={{ alignItems: 'center', marginBottom: 24 }}>
+ *       <AvatarComponent source={{ uri: 'https://example.com/avatar.jpg' }} size={60} />
+ *       <Text style={{ marginTop: 8, fontWeight: 'bold' }}>John Doe</Text>
+ *       <Text style={{ color: '#666' }}>john@example.com</Text>
+ *     </View>
+ *     
+ *     <View style={{ flex: 1 }}>
+ *       <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 12 }}>
+ *         <IconComponent name="home" library="Ionicons" size={20} />
+ *         <Text style={{ marginLeft: 12 }}>Home</Text>
+ *       </TouchableOpacity>
+ *       <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 12 }}>
+ *         <IconComponent name="settings" library="Ionicons" size={20} />
+ *         <Text style={{ marginLeft: 12 }}>Settings</Text>
+ *       </TouchableOpacity>
+ *     </View>
+ *   </View>
+ * </DrawerComponent>
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Drawer with navigation integration
+ * const navigation = useNavigation();
+ * 
+ * <DrawerComponent
+ *   isOpen={drawerOpen}
+ *   onToggle={setDrawerOpen}
+ * >
+ *   <View style={{ padding: 16 }}>
+ *     <TouchableOpacity onPress={() => {
+ *       navigation.navigate('Home');
+ *       setDrawerOpen(false);
+ *     }}>
+ *       <Text>Home</Text>
+ *     </TouchableOpacity>
+ *     <TouchableOpacity onPress={() => {
+ *       navigation.navigate('Profile');
+ *       setDrawerOpen(false);
+ *     }}>
+ *       <Text>Profile</Text>
+ *     </TouchableOpacity>
+ *   </View>
+ * </DrawerComponent>
+ * ```
  */
 export default function DrawerComponent({
   children,

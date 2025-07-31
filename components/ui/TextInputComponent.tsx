@@ -84,10 +84,25 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
 };
 
 /**
- * A customizable TextInput component with consistent typography
+ * A customizable TextInput component with consistent typography and error handling.
+ * 
+ * ## Features
+ * - **Font Weight Support**: All Afacad Flux font weights
+ * - **Flexible Sizing**: Preset sizes or custom numeric values
+ * - **Error Display**: Built-in error message display below input
+ * - **Custom Styling**: Override input and error styles
+ * - **Type Safety**: TypeScript validates all font weights and sizes
+ * - **Consistent Design**: Matches TextComponent typography system
+ * 
+ * ## Font Weights
+ * - `light`, `regular`, `medium`, `semi_bold`, `bold`, `extra_bold`, `black`
+ * 
+ * ## Font Sizes
+ * - `xs` (12), `sm` (14), `base` (16), `lg` (18), `xl` (20), `xxl` (24)
  *
  * @example
  * ```tsx
+ * // Basic text input with error handling
  * <TextInputComponent
  *   weight="medium"
  *   color="#007AFF"
@@ -100,12 +115,64 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
  *
  * @example
  * ```tsx
+ * // Multiline text input
  * <TextInputComponent
- *   weight="bold"
+ *   weight="regular"
  *   size={18}
  *   multiline
  *   numberOfLines={4}
  *   placeholder="Enter description..."
+ *   inputStyle={{ padding: 16, textAlignVertical: 'top' }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Text input with custom error styling
+ * <TextInputComponent
+ *   weight="medium"
+ *   size="base"
+ *   placeholder="Email address"
+ *   error="Please enter a valid email"
+ *   errorColor="#FF3B30"
+ *   inputStyle={{
+ *     borderWidth: 2,
+ *     borderRadius: 8,
+ *     padding: 12
+ *   }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Secure text input for passwords
+ * <TextInputComponent
+ *   weight="medium"
+ *   size="base"
+ *   placeholder="Password"
+ *   secureTextEntry
+ *   inputStyle={{
+ *     borderWidth: 1,
+ *     borderRadius: 8,
+ *     padding: 12,
+ *     backgroundColor: '#F8F9FA'
+ *   }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Large text input for titles
+ * <TextInputComponent
+ *   weight="bold"
+ *   size="xl"
+ *   placeholder="Enter title"
+ *   inputStyle={{
+ *     fontSize: 24,
+ *     padding: 16,
+ *     borderBottomWidth: 2,
+ *     borderBottomColor: '#007AFF'
+ *   }}
  * />
  * ```
  */

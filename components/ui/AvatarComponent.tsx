@@ -56,10 +56,24 @@ export interface AvatarComponentProps {
 }
 
 /**
- * An avatar component that supports images, initials, and fallback states
+ * An avatar component that supports images, initials, and fallback states.
+ * 
+ * ## Features
+ * - **Multiple Display Modes**: Image, initials, or empty state
+ * - **Flexible Sizing**: Custom size with proportional scaling
+ * - **Border Support**: Optional border with custom color
+ * - **Fallback Handling**: Graceful fallback when image fails to load
+ * - **Custom Styling**: Override container and image styles
+ * - **Type Safety**: TypeScript validates all props and image sources
+ * 
+ * ## Display Modes
+ * - **Image Avatar**: Shows user profile picture with proper scaling
+ * - **Initials Avatar**: Shows user initials when no image is available
+ * - **Empty Avatar**: Shows background color when no content is provided
  *
  * @example
  * ```tsx
+ * // Image avatar with custom size
  * <AvatarComponent
  *   source={{ uri: 'https://example.com/avatar.jpg' }}
  *   size={50}
@@ -68,11 +82,45 @@ export interface AvatarComponentProps {
  *
  * @example
  * ```tsx
+ * // Initials avatar with custom styling
  * <AvatarComponent
  *   initials="JD"
  *   size={40}
  *   backgroundColor="#007AFF"
  *   bordered={true}
+ *   borderColor="#FFFFFF"
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Large avatar with local image
+ * <AvatarComponent
+ *   source={require('../../assets/images/default-avatar.png')}
+ *   size={80}
+ *   style={{ marginRight: 12 }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Small avatar with initials and custom colors
+ * <AvatarComponent
+ *   initials="AB"
+ *   size={32}
+ *   backgroundColor="#E3F2FD"
+ *   style={{ borderWidth: 2, borderColor: '#2196F3' }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Avatar with custom image styling
+ * <AvatarComponent
+ *   source={{ uri: 'https://example.com/avatar.jpg' }}
+ *   size={60}
+ *   imageStyle={{ borderRadius: 30 }}
+ *   style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25 }}
  * />
  * ```
  */

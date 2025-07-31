@@ -6,94 +6,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React from "react";
-import { Image, ImageSourcePropType, StyleSheet } from "react-native";
+import { Image, ImageSourcePropType } from "react-native";
 
-export type IconLibrary =
-  | "FontAwesome"
-  | "MaterialIcons"
-  | "Ionicons"
-  | "Feather"
-  | "AntDesign"
-  | "Entypo"
-  | "MaterialCommunityIcons"
-  | "custom";
-
-// Type assertions for icon names
-type FontAwesomeIconName = React.ComponentProps<typeof FontAwesome>["name"];
-type MaterialIconsName = React.ComponentProps<typeof MaterialIcons>["name"];
-type IoniconsName = React.ComponentProps<typeof Ionicons>["name"];
-type FeatherIconName = React.ComponentProps<typeof Feather>["name"];
-type AntDesignIconName = React.ComponentProps<typeof AntDesign>["name"];
-type EntypoIconName = React.ComponentProps<typeof Entypo>["name"];
-type MaterialCommunityIconsName = React.ComponentProps<
-  typeof MaterialCommunityIcons
->["name"];
-
-interface BaseIconProps {
-  /**
-   * Size of the icon
-   * @default 24
-   */
-  size?: number;
-}
-
-interface FontAwesomeIconProps extends BaseIconProps {
-  library: "FontAwesome";
-  name: FontAwesomeIconName;
-  color?: string;
-}
-
-interface MaterialIconsProps extends BaseIconProps {
-  library: "MaterialIcons";
-  name: MaterialIconsName;
-  color?: string;
-}
-
-interface IoniconsProps extends BaseIconProps {
-  library: "Ionicons";
-  name: IoniconsName;
-  color?: string;
-}
-
-interface FeatherIconProps extends BaseIconProps {
-  library: "Feather";
-  name: FeatherIconName;
-  color?: string;
-}
-
-interface AntDesignIconProps extends BaseIconProps {
-  library: "AntDesign";
-  name: AntDesignIconName;
-  color?: string;
-}
-
-interface EntypoIconProps extends BaseIconProps {
-  library: "Entypo";
-  name: EntypoIconName;
-  color?: string;
-}
-
-interface MaterialCommunityIconsProps extends BaseIconProps {
-  library: "MaterialCommunityIcons";
-  name: MaterialCommunityIconsName;
-  color?: string;
-}
-
-interface CustomIconProps extends BaseIconProps {
-  library: "custom";
-  source: ImageSourcePropType;
-}
-
-export type IconComponentProps =
-  | FontAwesomeIconProps
-  | MaterialIconsProps
-  | IoniconsProps
-  | FeatherIconProps
-  | AntDesignIconProps
-  | EntypoIconProps
-  | MaterialCommunityIconsProps
-  | CustomIconProps;
-
+// Create a type-safe icon components object for vector icons
 const IconComponents = {
   FontAwesome,
   MaterialIcons,
@@ -104,15 +19,60 @@ const IconComponents = {
   MaterialCommunityIcons,
 } as const;
 
+// Infer everything from the objects
+type VectorIconName<L extends keyof typeof IconComponents> =
+  React.ComponentProps<(typeof IconComponents)[L]>["name"];
+
+interface BaseIconProps {
+  /**
+   * Size of the icon
+   * @default 24
+   */
+  size?: number;
+}
+
+interface VectorIconProps<L extends keyof typeof IconComponents>
+  extends BaseIconProps {
+  library: L;
+  name: VectorIconName<L>;
+  color?: string;
+}
+
+interface CustomIconProps extends BaseIconProps {
+  library: "custom";
+  source: ImageSourcePropType;
+}
+
+export type IconLibrary = keyof typeof IconComponents | "custom";
+
+export type IconComponentProps =
+  | VectorIconProps<keyof typeof IconComponents>
+  | CustomIconProps;
+
 /**
- * A flexible Icon component that supports multiple icon libraries and custom image icons
+ * A flexible Icon component that supports multiple vector icon libraries and custom image icons.
+ *
+ * ## Features
+ * - **Type Safety**: TypeScript validates icon names for each library
+ * - **Multiple Libraries**: Supports 7 popular icon libraries
+ * - **Custom Icons**: Use your own image files as icons
+ * - **Consistent API**: Same props interface across all icon types
+ *
+ * ## Supported Libraries
+ * - `FontAwesome` - Classic font awesome icons
+ * - `MaterialIcons` - Google Material Design icons
+ * - `Ionicons` - Ionic framework icons
+ * - `Feather` - Feather icon set
+ * - `AntDesign` - Ant Design icon library
+ * - `Entypo` - Entypo icon set
+ * - `MaterialCommunityIcons` - Extended Material Design icons
  *
  * @example
  * ```tsx
- * // Vector Icon with type-safe name
+ * // Vector Icon with type-safe name validation
  * <IconComponent
- *   name="home" // TypeScript will validate this exists in Ionicons
  *   library="Ionicons"
+ *   name="home" // TypeScript autocomplete and validation
  *   size={24}
  *   color="#007AFF"
  * />
@@ -120,11 +80,30 @@ const IconComponents = {
  *
  * @example
  * ```tsx
- * // Custom Image Icon
+ * // Different icon libraries
+ * <IconComponent library="FontAwesome" name="heart" size={20} color="red" />
+ * <IconComponent library="MaterialIcons" name="settings" size={28} />
+ * <IconComponent library="Feather" name="search" size={16} color="#666" />
+ * <IconComponent library="AntDesign" name="plus" size={32} />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Custom image icon from local assets
  * <IconComponent
  *   library="custom"
- *   source={require('./assets/custom-icon.png')}
+ *   source={require('../../assets/images/custom-icon.png')}
  *   size={24}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Custom icon from remote URL
+ * <IconComponent
+ *   library="custom"
+ *   source={{ uri: 'https://example.com/icon.png' }}
+ *   size={32}
  * />
  * ```
  */
@@ -136,13 +115,8 @@ export default function IconComponent(props: IconComponentProps) {
     return (
       <Image
         source={props.source}
-        style={[
-          styles.image,
-          {
-            width: size,
-            height: size,
-          },
-        ]}
+        style={{ width: size, height: size }}
+        resizeMode="contain"
       />
     );
   }
@@ -162,9 +136,3 @@ export default function IconComponent(props: IconComponentProps) {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  image: {
-    resizeMode: "contain",
-  },
-});
