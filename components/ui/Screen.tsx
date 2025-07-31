@@ -12,6 +12,7 @@ import {
   Keyboard,
   KeyboardEvent,
   Platform,
+  RefreshControl,
   ScrollView,
   ScrollViewProps,
   StyleProp,
@@ -166,6 +167,46 @@ export interface ScreenProps {
   floatingFooter?: ReactNode;
 
   /**
+   * Floating header component that stays at the top with blur effect
+   * Useful for action buttons or search bars that should always be visible
+   * @example
+   * ```tsx
+   * // Floating search bar
+   * <Screen
+   *   floatingHeader={
+   *     <View style={{
+   *       backgroundColor: 'rgba(255, 255, 255, 0.9)',
+   *       borderRadius: 12,
+   *       marginHorizontal: 16,
+   *       paddingHorizontal: 16,
+   *       paddingVertical: 12
+   *     }}>
+   *       <TextInput
+   *         placeholder="Search..."
+   *         style={{ fontSize: 16 }}
+   *       />
+   *     </View>
+   *   }
+   * >
+   *   <ItemList />
+   * </Screen>
+   *
+   * // Floating header with multiple actions
+   * <Screen
+   *   floatingHeader={
+   *     <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16 }}>
+   *       <Button title="Filter" onPress={handleFilter} />
+   *       <Button title="Sort" onPress={handleSort} />
+   *       <Button title="View" onPress={handleViewChange} />
+   *     </View>
+   *   }
+   * >
+   *   <Content />
+   * </Screen>
+   */
+  floatingHeader?: ReactNode;
+
+  /**
    * Main body content of the screen
    * @example
    * ```tsx
@@ -271,6 +312,26 @@ export interface ScreenProps {
    * </Screen>
    */
   floatingFooterStyle?: StyleProp<ViewStyle>;
+
+  /**
+   * Style for the floating header container
+   * @example
+   * ```tsx
+   * <Screen
+   *   floatingHeader={<SearchBar />}
+   *   floatingHeaderStyle={{
+   *     paddingTop: 20,
+   *     shadowColor: '#000',
+   *     shadowOffset: { width: 0, height: 2 },
+   *     shadowOpacity: 0.1,
+   *     shadowRadius: 4,
+   *     elevation: 5
+   *   }}
+   * >
+   *   <Content />
+   * </Screen>
+   */
+  floatingHeaderStyle?: StyleProp<ViewStyle>;
 
   /**
    * Style for the entire screen container
@@ -437,11 +498,33 @@ export interface ScreenProps {
   disableKeyboardSpacer?: boolean;
 
   /**
+   * Additional space to add between keyboard and footer
+   * @default 8
+   */
+  keyboardSpacerPadding?: number;
+
+  /**
    * Whether to enable keyboard animations
    * @default false
    * @description Set to true for screens without bottom sheets to enable smooth keyboard animations
    */
   enableKeyboardAnimations?: boolean;
+
+  /**
+   * Whether to enable pull-to-refresh functionality
+   * @default false
+   */
+  enablePullToRefresh?: boolean;
+
+  /**
+   * Callback function to be called when refreshing
+   */
+  onRefresh?: () => void;
+
+  /**
+   * Whether the refresh control is currently refreshing
+   */
+  refreshing?: boolean;
 }
 
 /**
@@ -509,6 +592,26 @@ export interface ScreenProps {
  *   <ItemList />
  * </Screen>
  *
+ * // Screen with floating header (search bar)
+ * <Screen
+ *   floatingHeader={
+ *     <View style={{
+ *       backgroundColor: 'rgba(255, 255, 255, 0.9)',
+ *       borderRadius: 12,
+ *       marginHorizontal: 16,
+ *       paddingHorizontal: 16,
+ *       paddingVertical: 12
+ *     }}>
+ *       <TextInput
+ *         placeholder="Search..."
+ *         style={{ fontSize: 16 }}
+ *       />
+ *     </View>
+ *   }
+ * >
+ *   <ItemList />
+ * </Screen>
+ *
  * // Non-scrollable form with keyboard handling
  * <Screen
  *   scrollable={false}
@@ -568,6 +671,7 @@ export function Screen({
   header,
   footer,
   floatingFooter,
+  floatingHeader,
   children,
   scrollable = true,
   headerStyle,
@@ -575,14 +679,19 @@ export function Screen({
   footerStyle,
   footerWithPadding = true,
   floatingFooterStyle,
+  floatingHeaderStyle,
   style,
   backgroundColor = "#ffffff",
-  safeAreaEdges = ["top", "bottom"],
+  safeAreaEdges,
   statusBarStyle = "auto",
   StatusBarProps,
   ScrollViewProps,
   disableKeyboardSpacer = false,
   enableKeyboardAnimations = true,
+  enablePullToRefresh = true,
+  onRefresh,
+  refreshing,
+  keyboardSpacerPadding = 8,
 }: ScreenProps) {
   const scrollRef = useRef<ScrollView>(null);
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges);
@@ -594,11 +703,10 @@ export function Screen({
   // Animated style for keyboard spacing
   const keyboardSpacerStyle = useAnimatedStyle(() => {
     return {
-      height: keyboardHeight.value,
+      height: keyboardHeight.value + keyboardSpacerPadding,
     };
   });
 
-  // Filter out backgroundColor from StatusBarProps to avoid edge-to-edge warning
   const {
     backgroundColor: statusBarBackgroundColor,
     ...filteredStatusBarProps
@@ -608,9 +716,18 @@ export function Screen({
     <ScrollView
       ref={scrollRef}
       style={[$bodyContainer, bodyStyle]}
-      contentContainerStyle={{ flexGrow: 1, paddingVertical: mScale(8) }}
+      contentContainerStyle={{ flexGrow: 1 }}
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets={true}
       nestedScrollEnabled={true}
+      refreshControl={
+        enablePullToRefresh && onRefresh ? (
+          <RefreshControl
+            refreshing={refreshing || false}
+            onRefresh={onRefresh}
+          />
+        ) : undefined
+      }
       {...ScrollViewProps}>
       {children}
     </ScrollView>
@@ -642,9 +759,18 @@ export function Screen({
 
         {bodyContent}
 
+        {floatingHeader && (
+          <BlurView
+            intensity={100}
+            tint={Platform.OS === "ios" ? "light" : "systemChromeMaterialLight"}
+            style={[$floatingHeaderContainer, floatingHeaderStyle]}>
+            {floatingHeader}
+          </BlurView>
+        )}
+
         {floatingFooter && (
           <BlurView
-            intensity={85}
+            intensity={95}
             tint="systemChromeMaterialLight"
             style={[$floatingFooterContainer, floatingFooterStyle]}>
             {floatingFooter}
@@ -687,10 +813,18 @@ const $bodyContainer: ViewStyle = {
 };
 
 const $footerContainer: ViewStyle = {
-  backgroundColor: "white",
+  backgroundColor: "transparent",
   width: "100%",
   position: "relative",
   zIndex: 0,
+};
+
+const $floatingHeaderContainer: ViewStyle = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  zIndex: 1,
 };
 
 const $floatingFooterContainer: ViewStyle = {
@@ -699,7 +833,7 @@ const $floatingFooterContainer: ViewStyle = {
   bottom: 0,
   left: 0,
   right: 0,
-  padding: mScale(8),
+  paddingTop: mScale(8),
   zIndex: 1,
 };
 
@@ -708,6 +842,6 @@ const $statusBarBackground: ViewStyle = {
   top: 0,
   left: 0,
   right: 0,
-  height: mScale(35),
+  height: mScale(40),
   zIndex: 2,
 };

@@ -59,6 +59,7 @@ const $screenContainerStyle = {
   flex: 1,
   backgroundColor: "white",
   paddingTop: Layout.screen.paddingVertical,
+  paddingHorizontal: Layout.screen.paddingHorizontal,
 } satisfies ViewStyle;
 
 // Export preset styles that can be used with style arrays

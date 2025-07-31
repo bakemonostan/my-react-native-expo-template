@@ -1,6 +1,6 @@
 import PressableComponent from "@/components/ui/PressableComponent";
 import ResponsiveText from "@/components/ui/ResponsiveText";
-import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
+import { Screen } from "@/components/ui/Screen";
 import { PresetStyles } from "@/theme/presets";
 import { useRouter } from "expo-router";
 import { View } from "react-native";
@@ -8,7 +8,7 @@ import { View } from "react-native";
 export default function Index() {
   const router = useRouter();
   return (
-    <SafeAreaViewComponent style={PresetStyles.screenContainer}>
+    <Screen style={PresetStyles.screenContainer}>
       <View
         style={{
           gap: 10,
@@ -28,6 +28,6 @@ export default function Index() {
           buttonText="Go to Tabs screen"
         />
       </View>
-    </SafeAreaViewComponent>
+    </Screen>
   );
 }
