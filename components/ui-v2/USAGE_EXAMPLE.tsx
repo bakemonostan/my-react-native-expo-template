@@ -1,0 +1,308 @@
+/**
+ * Usage Examples for UI-V2 Components
+ *
+ * Copy these examples to get started quickly
+ */
+
+import React, { useState } from "react";
+import { View } from "react-native";
+import {
+  AlertComponent,
+  AvatarComponent,
+  BadgeComponent,
+  FONT_FAMILY_MAP,
+  IconComponent,
+  ImageComponent,
+  LoadingComponent,
+  ModalComponent,
+  PressableComponent,
+  ResponsiveText,
+  ScreenV2,
+  TextComponent,
+  TextInputComponent,
+} from "./index";
+
+// ============================================
+// STEP 1: Configure Fonts (Do this once in your app entry point)
+// ============================================
+
+// Option A: Use system fonts (default - no configuration needed)
+// Components will use "System" font
+
+// Option B: Use custom fonts
+FONT_FAMILY_MAP.regular = "Inter-Regular";
+FONT_FAMILY_MAP.medium = "Inter-Medium";
+FONT_FAMILY_MAP.semi_bold = "Inter-SemiBold";
+FONT_FAMILY_MAP.bold = "Inter-Bold";
+
+// ============================================
+// STEP 2: Use Components
+// ============================================
+
+export function ExampleScreen() {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  return (
+    <ScreenV2
+      header={
+        <View style={{ padding: 16 }}>
+          <TextComponent
+            weight="bold"
+            size="xl">
+            UI Components Demo
+          </TextComponent>
+        </View>
+      }>
+      {/* Text Components */}
+      <TextComponent
+        weight="bold"
+        size="lg"
+        color="#007AFF">
+        Basic Text Component
+      </TextComponent>
+
+      <ResponsiveText
+        variant="h1"
+        color="#000000">
+        Responsive Heading
+      </ResponsiveText>
+
+      {/* Buttons */}
+      <PressableComponent
+        variant="primary"
+        size="lg"
+        buttonText="Primary Button"
+        onPress={() => console.log("Pressed")}
+      />
+
+      <PressableComponent
+        variant="secondary"
+        buttonText="With Icon"
+        leftAccessory={{
+          library: "Ionicons",
+          name: "heart",
+          color: "#007AFF",
+        }}
+        onPress={() => console.log("Pressed")}
+      />
+
+      {/* Alerts */}
+      <AlertComponent
+        variant="success"
+        title="Success"
+        message="Your action was completed successfully!"
+      />
+
+      <AlertComponent
+        variant="error"
+        message="Something went wrong"
+        showIcon={true}
+      />
+
+      {/* Avatars */}
+      <View style={{ flexDirection: "row", gap: 12 }}>
+        <AvatarComponent
+          initials="JD"
+          size={40}
+          backgroundColor="#007AFF"
+        />
+
+        <AvatarComponent
+          source={{ uri: "https://example.com/avatar.jpg" }}
+          size={60}
+          bordered
+        />
+      </View>
+
+      {/* Badges */}
+      <View style={{ flexDirection: "row", gap: 12 }}>
+        <BadgeComponent content="5" />
+        <BadgeComponent
+          content="New"
+          backgroundColor="#4CD964"
+        />
+        <BadgeComponent
+          dot
+          size="small"
+        />
+      </View>
+
+      {/* Icons */}
+      <View style={{ flexDirection: "row", gap: 12 }}>
+        <IconComponent
+          library="Ionicons"
+          name="home"
+          size={24}
+          color="#007AFF"
+        />
+        <IconComponent
+          library="Feather"
+          name="search"
+          size={24}
+          color="#666"
+        />
+        <IconComponent
+          library="MaterialIcons"
+          name="settings"
+          size={24}
+        />
+      </View>
+
+      {/* Text Input */}
+      <TextInputComponent
+        placeholder="Enter your name"
+        weight="medium"
+        size="base"
+        inputStyle={{
+          borderWidth: 1,
+          borderColor: "#DDD",
+          borderRadius: 8,
+          padding: 12,
+        }}
+      />
+
+      <TextInputComponent
+        placeholder="Email"
+        error="Please enter a valid email"
+        inputStyle={{
+          borderWidth: 1,
+          borderRadius: 8,
+          padding: 12,
+        }}
+      />
+
+      {/* Loading */}
+      <LoadingComponent message="Loading..." />
+
+      {/* Image with loading/error states */}
+      <ImageComponent
+        source={{ uri: "https://example.com/image.jpg" }}
+        imageStyle={{ width: 200, height: 200, borderRadius: 8 }}
+        showLoading={true}
+        showError={true}
+      />
+
+      {/* Modal Trigger */}
+      <PressableComponent
+        variant="outline"
+        buttonText="Open Modal"
+        onPress={() => setModalVisible(true)}
+      />
+
+      {/* Modal */}
+      <ModalComponent
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        title="Example Modal">
+        <TextComponent>This is a modal. Tap outside to close.</TextComponent>
+
+        <PressableComponent
+          variant="primary"
+          buttonText="Close"
+          onPress={() => setModalVisible(false)}
+          pressableStyle={{ marginTop: 16 }}
+        />
+      </ModalComponent>
+    </ScreenV2>
+  );
+}
+
+// ============================================
+// Common Patterns
+// ============================================
+
+// Form with validation
+export function FormExample() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  return (
+    <ScreenV2>
+      <TextComponent
+        weight="bold"
+        size="xl"
+        styles={{ marginBottom: 24 }}>
+        Login
+      </TextComponent>
+
+      <TextInputComponent
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        inputStyle={{
+          borderWidth: 1,
+          borderColor: "#DDD",
+          borderRadius: 8,
+          padding: 12,
+          marginBottom: 16,
+        }}
+      />
+
+      <TextInputComponent
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        error={error}
+        inputStyle={{
+          borderWidth: 1,
+          borderColor: "#DDD",
+          borderRadius: 8,
+          padding: 12,
+          marginBottom: 16,
+        }}
+      />
+
+      <PressableComponent
+        variant="primary"
+        size="lg"
+        buttonText="Login"
+        onPress={() => {
+          if (!email || !password) {
+            setError("Please fill in all fields");
+          }
+        }}
+      />
+    </ScreenV2>
+  );
+}
+
+// List with avatars and badges
+export function ListExample() {
+  const users = [
+    { id: 1, name: "John Doe", initials: "JD", unread: 3 },
+    { id: 2, name: "Jane Smith", initials: "JS", unread: 0 },
+  ];
+
+  return (
+    <ScreenV2>
+      {users.map((user) => (
+        <PressableComponent
+          key={user.id}
+          variant="ghost"
+          pressableStyle={{
+            flexDirection: "row",
+            alignItems: "center",
+            padding: 12,
+          }}
+          onPress={() => console.log("User pressed:", user.name)}>
+          <AvatarComponent
+            initials={user.initials}
+            size={48}
+            backgroundColor="#007AFF"
+          />
+
+          <TextComponent
+            weight="medium"
+            size="base"
+            styles={{ flex: 1, marginLeft: 12 }}>
+            {user.name}
+          </TextComponent>
+
+          {user.unread > 0 && <BadgeComponent content={user.unread} />}
+        </PressableComponent>
+      ))}
+    </ScreenV2>
+  );
+}
