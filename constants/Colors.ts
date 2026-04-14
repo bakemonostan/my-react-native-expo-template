@@ -1,194 +1,116 @@
-// TODO: write documentation for colors and palette in own markdown file and add links from here
+/**
+ * Color system for the app.
+ *
+ * Structure:
+ *  - `palette`      — raw color values (don't use directly in components)
+ *  - `lightColors`  — semantic tokens for light mode
+ *  - `darkColors`   — semantic tokens for dark mode
+ *  - `colors`       — alias for `lightColors` (backwards-compatible, for static/non-theme-aware usage)
+ *
+ * In components, prefer `useTheme().colors` over importing `colors` directly,
+ * so your UI responds to dark/light mode automatically.
+ *
+ * Replace the `primary` scale with your brand color before shipping.
+ */
 
 const palette = {
-  neutral100: "#FFFFFF",
-  neutral200: "#F4F2F1",
-  neutral300: "#D7CEC9",
-  neutral400: "#B6ACA6",
-  neutral500: "#978F8A",
-  neutral600: "#564E4A",
-  neutral700: "#3C3836",
-  neutral800: "#191015",
-  neutral900: "#000000",
+  white: "#FFFFFF",
+  black: "#000000",
 
-  takersBlue5: "rgba(37, 29, 75, 0.05)",
-  takersBlue10: "rgba(37, 29, 75, 0.1)",
-  takersBlue20: "rgba(37, 29, 75, 0.2)",
-  takersBlue30: "rgba(37, 29, 75, 0.3)",
-  takersBluel40: "rgba(37, 29, 75, 0.4)",
-  takersBlue50: "rgba(37, 29, 75, 0.5)",
-  takersBlue60: "rgba(37, 29, 75, 0.6)",
-  takersBlue70: "rgba(37, 29, 75, 0.7)",
-  takersBlue75: "rgba(37, 29, 75, 0.75)",
-  takersBlue80: "rgba(37, 29, 75, 0.8)",
-  takersBlue90: "rgba(37, 29, 75, 0.9)",
-  takersBlue100: "#251D4B",
+  neutral50: "#FAFAFA",
+  neutral100: "#F5F5F5",
+  neutral200: "#E5E5E5",
+  neutral300: "#D4D4D4",
+  neutral400: "#A3A3A3",
+  neutral500: "#737373",
+  neutral600: "#525252",
+  neutral700: "#404040",
+  neutral800: "#262626",
+  neutral900: "#171717",
 
-  takerDark10: "rgba(0, 0, 0, 0.1)",
-  takersDark20: "rgba(0, 0, 0, 0.2)",
-  takersDark30: "rgba(0, 0, 0, 0.3)",
-  takersDark40: "rgba(0, 0, 0, 0.4)",
-  takersDark50: "rgba(0, 0, 0, 0.5)",
-  takersDark60: "rgba(0, 0, 0, 0.6)",
-  takersDark70: "rgba(0, 0, 0, 0.7)",
-  takersDark80: "rgba(0, 0, 0, 0.8)",
-  takersDark90: "rgba(0, 0, 0, 0.9)",
-  takersDark100: "rgba(0, 0, 0, 1)",
+  // Primary brand scale — swap these for your brand color
+  primary100: "#EFF6FF",
+  primary200: "#BFDBFE",
+  primary300: "#93C5FD",
+  primary400: "#60A5FA",
+  primary500: "#3B82F6",
+  primary600: "#2563EB",
+  primary700: "#1D4ED8",
+  primary800: "#1E40AF",
+  primary900: "#1E3A8A",
 
-  takersSoap20: "rgba(243, 242, 252, 1)",
-  takersSoap30: "rgba(195, 190, 239, 0.3)",
-  takersSoap50: "rgba(195, 190, 239, 0.5)",
-  takersSoap60: "rgba(195, 190, 239, 0.6)",
-  takersSoap70: "rgba(195, 190, 239, 0.7)",
-  takersSoap80: "rgba(195, 190, 239, 0.9)",
-  takersSoap90: "rgba(195, 190, 239, 0.9)",
-  takersSoap100: "rgba(195, 190, 239, 1)",
+  // Status colors
+  success100: "#DCFCE7",
+  success500: "#22C55E",
+  warning100: "#FEF9C3",
+  warning500: "#EAB308",
+  error100: "#FEE2E2",
+  error500: "#EF4444",
 
-  // takersSky
-  takersSky10: "rgba(202, 223, 253, 0.1)",
-  takersSky15: "rgba(202, 223, 253, 0.15)",
-  takersSky20: "rgba(202, 223, 253, 0.2)",
-  takersSky25: "rgba(202, 223, 253, 0.25)",
-  takersSky30: "rgba(202, 223, 253, 0.3)",
-  takersSky40: "rgba(202, 223, 253, 0.4)",
-  takersSky50: "rgba(202, 223, 253, 0.5)",
-  takersSky60: "rgba(202, 223, 253, 0.6)",
-  takersSky70: "rgba(202, 223, 253, 0.7)",
-  takersSky80: "rgba(202, 223, 253, 0.8)",
-  takersSky90: "rgba(202, 223, 253, 0.9)",
-  takersSky100: "rgba(202, 223, 253, 1)",
-
-  // Neon
-  neon40: "rgba(3, 255, 230, 0.4)",
-  neon50: "rgba(3, 255, 230, 0.5)",
-  neon60: "rgba(3, 255, 230, 0.6)",
-  neon70: "rgba(3, 255, 230, 0.7)",
-  neon80: "rgba(3, 255, 230, 0.8)",
-  neon90: "rgba(3, 255, 230, 0.9)",
-  neon100: "rgba(3, 255, 230, 1)",
-
-  // wisty
-  wisty10: "rgba(204, 169, 232, 0.1)",
-  wisty20: "rgba(204, 169, 232, 0.2)",
-  wisty25: "rgba(237, 224, 247, 1)",
-  wisty30: "rgba(204, 169, 232, 0.3)",
-  wisty40: "rgba(235, 221, 246, 1))",
-  wisty50: "rgba(229, 212, 243, 1)",
-  wisty100: "rgba(204, 169, 232, 1)",
-  wisty200: "#BC8EE0",
-
-  // pasty
-  pasty50: "rgba(222, 253, 249, 0.9)",
-  pasty100: "rgba(222, 253, 249, 1)",
-
-  // alert
-  alert50: "rgba(255, 250, 242, 1)",
-  alert100: "rgba(163, 92, 0, 1)",
-
-  cleaningIconBackground: "rgba(255, 239, 217, 0.3)",
-  cleaningIconBorder: "rgba(245, 163, 56, 1)",
-
-  secondary100: "#DCDDE9",
-  secondary200: "#BCC0D6",
-  secondary300: "#9196B9",
-  secondary400: "#626894",
-  secondary500: "#41476E",
-
-  accent100: "#FFEED4",
-  accent200: "#FFE1B2",
-  accent300: "#FDD495",
-  accent400: "#FBC878",
-  accent500: "#FFBB50",
-  violet: "#C3BEEF",
-  purple: "#CCA9E8", // wisty
-  wisty: "#CCA9E84D",
-  darkPurple: "#251D4B",
-  takersSkyBlue: "#CADFFD",
-  takersDarkSkyBlue: "#A7C4EF",
-  lightBlue: "#F2F7FF",
-
-  angry100: "#F2D6CD",
-  angry500: "#C03403",
-
-  overlay20: "rgba(25, 16, 21, 0.2)",
-  overlay50: "rgba(25, 16, 21, 0.5)",
-
-  // Profile
-  moneyGreen: "#0B6E27",
-  moneyBrown: "#A35C00",
-  bloodRed: "#D10028",
-  accountHeaderBackground: "#F2F7FF",
-  accountCardsBackground: "#F3F2FC",
-
-  // Category Card
-  category1: "#E64C3C0D",
-  category2: "#55D8D80D",
-  category3: "#FFEFD940",
-  category4: "#00A79D0D",
-  category5: "#00A79D0D",
-  category6: "#F9B44D0D",
-  category7: "#0034810D",
-  category8: "#FFA91A0D",
-  category9: "#3CC8B40D",
-  category10: "#F097D00D",
-
-  // Gradient colors for borders
-  gradientBorder: {
-    start: "#CADFFD", // takersSky
-    middle1: "#C3BEEF",
-    middle2: "#CCA9E8", // wisty
-    end: "#CCA9E8",
-  },
+  transparent: "rgba(0, 0, 0, 0)",
+  overlay20: "rgba(0, 0, 0, 0.2)",
+  overlay50: "rgba(0, 0, 0, 0.5)",
 } as const;
 
-export const colors = {
-  /**
-   * The palette is available to use, but prefer using the name.
-   * This is only included for rare, one-off cases. Try to use
-   * semantic names as much as possible.
-   */
+export const lightColors = {
   palette,
+  transparent: palette.transparent,
 
-  backgroundGray: "rgba(242, 242, 242, 1)",
+  background: palette.white,
+  backgroundSecondary: palette.neutral100,
+  surface: palette.white,
 
-  primary: palette.takersBlue100,
-  /**
-   * A helper for making something see-thru.
-   */
-  transparent: "rgba(0, 0, 0, 0)",
-  /**
-   * The default text color in many components.
-   */
-  text: palette.takersBlue100,
-  /**
-   * Secondary text information.
-   */
-  textDim: "#251D4B4D",
-  /**
-   * The default color of the screen background.
-   */
-  background: palette.neutral100,
-  backgroundAuth: "#F1F6FE",
-  /**
-   * The default border color.
-   */
-  border: palette.neutral400,
-  borderNav: palette.takersBlue100,
-  /**
-   * The main tinting color.
-   */
-  tint: palette.takersBlue100,
-  /**
-   * A subtle color used for lines.
-   */
-  separator: palette.neutral300,
-  /**
-   * Error messages.
-   */
-  error: palette.angry500,
-  /**
-   * Error Background.
-   *
-   */
-  errorBackground: palette.angry100,
-};
+  text: palette.neutral900,
+  textSecondary: palette.neutral500,
+  textDim: palette.neutral400,
+
+  border: palette.neutral200,
+  separator: palette.neutral200,
+
+  primary: palette.primary600,
+  primaryText: palette.white,
+  tint: palette.primary600,
+
+  error: palette.error500,
+  errorBackground: palette.error100,
+  success: palette.success500,
+  successBackground: palette.success100,
+  warning: palette.warning500,
+  warningBackground: palette.warning100,
+
+  overlay: palette.overlay20,
+} as const;
+
+export const darkColors = {
+  palette,
+  transparent: palette.transparent,
+
+  background: palette.neutral900,
+  backgroundSecondary: palette.neutral800,
+  surface: palette.neutral800,
+
+  text: palette.white,
+  textSecondary: palette.neutral400,
+  textDim: palette.neutral500,
+
+  border: palette.neutral700,
+  separator: palette.neutral700,
+
+  primary: palette.primary400,
+  primaryText: palette.neutral900,
+  tint: palette.primary400,
+
+  error: palette.error500,
+  errorBackground: "#3B1515",
+  success: palette.success500,
+  successBackground: "#0F2A1A",
+  warning: palette.warning500,
+  warningBackground: "#2A2000",
+
+  overlay: palette.overlay50,
+} as const;
+
+/** Backwards-compatible alias — points to lightColors. */
+export const colors = lightColors;
+
+export type AppColors = typeof lightColors;

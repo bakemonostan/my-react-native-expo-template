@@ -1,4 +1,5 @@
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { customFontsToLoad } from "@/theme/typography";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import {
@@ -87,6 +88,7 @@ export default function RootLayout() {
   }
   return (
     <ErrorBoundary catchErrors="always">
+    <ThemeProvider>
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <BottomSheetModalProvider>
@@ -116,6 +118,7 @@ export default function RootLayout() {
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
     </QueryClientProvider>
+    </ThemeProvider>
     </ErrorBoundary>
   );
 }

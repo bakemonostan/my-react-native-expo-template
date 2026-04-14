@@ -13,7 +13,8 @@
     "ios:prod-env": "NODE_ENV=production APP_ENV=production expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "bump-version": "node scripts/bump-version.js"
+    "bump-version": "node scripts/bump-version.js",
+    "theme-mode": "node scripts/theme-mode.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",

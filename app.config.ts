@@ -17,6 +17,15 @@ const isStaging =
   process.env.APP_ENV === "staging" ||
   process.env.EXPO_PUBLIC_APP_ENV === "staging";
 
+/**
+ * Controls the native UI mode.
+ * Set THEME_MODE=light to opt out of dark mode entirely.
+ * Or run: node scripts/theme-mode.js [light|dark|auto]
+ */
+const themeMode = process.env.THEME_MODE ?? "auto";
+const userInterfaceStyle =
+  themeMode === "light" ? "light" : themeMode === "dark" ? "dark" : "automatic";
+
 const APP_NAME = process.env.APP_DISPLAY_NAME ?? "my-rn-template";
 const SLUG = process.env.EXPO_PUBLIC_SLUG ?? "my-rn-template";
 const SCHEME = process.env.EXPO_PUBLIC_SCHEME ?? "myrntemplate";
@@ -52,7 +61,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   scheme: SCHEME,
-  userInterfaceStyle: "automatic",
+  userInterfaceStyle,
   newArchEnabled: true,
 
   splash: {

@@ -1,3 +1,4 @@
+import { useTheme } from "@/context/ThemeContext";
 import { useScrollToTop } from "@react-navigation/native";
 import { StatusBar, StatusBarProps, StatusBarStyle } from "expo-status-bar";
 import { ReactNode, useRef } from "react";
@@ -66,8 +67,9 @@ export interface ScreenProps {
   scrollable?: boolean;
 
   /**
-   * Background color for the screen
-   * @default "#ffffff"
+   * Background color for the screen.
+   * Defaults to the active theme's background color.
+   * Pass an explicit string to override.
    */
   backgroundColor?: string;
 
@@ -129,7 +131,7 @@ export function Screen({
   header,
   footer,
   scrollable = true,
-  backgroundColor = "#ffffff",
+  backgroundColor,
   safeAreaEdges = ["top"],
   statusBarStyle = "auto",
   StatusBarProps,
@@ -139,6 +141,8 @@ export function Screen({
   bodyStyle,
   footerStyle,
 }: ScreenProps) {
+  const { colors } = useTheme();
+  const bgColor = backgroundColor ?? colors.background;
   const scrollRef = useRef<ScrollView>(null);
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges);
 
@@ -159,7 +163,7 @@ export function Screen({
 
   return (
     <KeyboardAvoidingView
-      style={[$screenContainer, { backgroundColor }, $containerInsets, style]}
+      style={[$screenContainer, { backgroundColor: bgColor }, $containerInsets, style]}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={0}>
       <StatusBar
