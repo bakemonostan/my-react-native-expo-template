@@ -1,4 +1,3 @@
-import { colors } from "@/constants/Colors";
 import React, { useRef } from "react";
 import {
   ActivityIndicator,
@@ -26,15 +25,7 @@ export type PressableSize =
 /**
  * Common pressable variants
  */
-export type PressableVariant =
-  | "primary"
-  | "secondary"
-  | "ghost"
-  | "alert"
-  | "login"
-  | "outline"
-  | "wisty"
-  | "social";
+export type PressableVariant = "primary" | "secondary" | "ghost" | "outline";
 
 /**
  * Props interface for the PressableComponent
@@ -80,7 +71,7 @@ export interface PressableComponentProps extends PressableProps {
   buttonTextColor?: string;
 
   /**
-   * Whether the pressable is rounded
+   * Whether the pressable is rounded (pill shape)
    * @default false
    */
   rounded?: boolean;
@@ -141,62 +132,34 @@ const VARIANT_TEXT_STYLES: Record<PressableVariant, { color: string }> = {
     color: "#FFFFFF",
   },
   secondary: {
-    color: colors.palette.takersBlue100,
-  },
-  login: {
-    color: "#FFFFFF",
+    color: "#007AFF",
   },
   outline: {
-    color: colors.palette.takersBlue100,
+    color: "#007AFF",
   },
   ghost: {
-    color: colors.palette.takersBlue100,
-  },
-  alert: {
-    color: colors.palette.takersBlue100,
-  },
-  wisty: {
-    color: colors.palette.takersBlue100,
-  },
-  social: {
-    color: colors.palette.takersBlue100,
+    color: "#007AFF",
   },
 };
+
 const VARIANT_STYLES: Record<PressableVariant, ViewStyle> = {
   primary: {
-    backgroundColor: colors.palette.takersBlue100,
+    backgroundColor: "#007AFF",
     borderWidth: 0,
   },
   secondary: {
-    backgroundColor: colors.palette.takersSky100,
+    backgroundColor: "#E3F2FD",
     borderWidth: 1,
-    borderColor: colors.palette.takersSky100,
+    borderColor: "#90CAF9",
   },
   ghost: {
     backgroundColor: "transparent",
     borderWidth: 0,
   },
-  alert: {
-    backgroundColor: colors.palette.takersSky25,
-    borderWidth: 1,
-    borderColor: colors.palette.alert100,
-  },
-  wisty: {
-    backgroundColor: colors.palette.wisty25,
-    borderWidth: 0,
-  },
-  login: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: "#CADFFD",
-  },
   outline: {
     backgroundColor: "#FFFFFF",
-  },
-  social: {
-    backgroundColor: colors.palette.takersSky15,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: "#007AFF",
   },
 };
 
@@ -286,7 +249,7 @@ export default function PressableComponent({
   variant = "primary",
   backgroundColor,
   borderRadius = 8,
-  rounded = true,
+  rounded = false,
   buttonText,
   labelVariant = "body1Bold",
   buttonTextColor,
@@ -359,8 +322,8 @@ export default function PressableComponent({
   };
 
   const disabledStyles: ViewStyle = {
-    opacity: 0.9,
-    backgroundColor: variant === "ghost" ? undefined : "#251D4B1A", // Light gray background
+    opacity: 0.5,
+    backgroundColor: variant === "ghost" ? undefined : "#CCCCCC",
   };
 
   // Override background color if provided
@@ -370,7 +333,6 @@ export default function PressableComponent({
 
   // Handle loading and disabled states
   const isInteractionDisabled = loading || disabled;
-  // const finalOpacity = isInteractionDisabled ? 0.5 : 1;
 
   /**
    * Render button content
@@ -388,7 +350,7 @@ export default function PressableComponent({
                   size={leftAccessory.size || 20}
                   {...(leftAccessory.library !== "custom" && {
                     color: isInteractionDisabled
-                      ? "#00000033"
+                      ? "#999999"
                       : leftAccessory.color,
                   })}
                 />
@@ -401,7 +363,7 @@ export default function PressableComponent({
             variant={labelVariant}
             color={
               isInteractionDisabled
-                ? "#00000033"
+                ? "#999999"
                 : buttonTextColor || VARIANT_TEXT_STYLES[variant].color
             }
             text={buttonText}
@@ -410,7 +372,7 @@ export default function PressableComponent({
             <View style={{ marginLeft: accessorySpacing }}>
               <ActivityIndicator
                 size="small"
-                color={colors.textDim}
+                color="#999999"
               />
             </View>
           ) : (
@@ -423,7 +385,7 @@ export default function PressableComponent({
                     size={rightAccessory.size || 20}
                     {...(rightAccessory.library !== "custom" && {
                       color: isInteractionDisabled
-                        ? "#00000033"
+                        ? "#999999"
                         : rightAccessory.color,
                     })}
                   />
@@ -449,7 +411,7 @@ export default function PressableComponent({
         style={[
           baseStyles,
           isInteractionDisabled && disabledStyles,
-          { opacity: isInteractionDisabled ? 0.9 : opacityAnim },
+          { opacity: isInteractionDisabled ? 0.5 : opacityAnim },
           pressableStyle,
           typeof style === "function"
             ? style({ pressed: false, hovered: false })

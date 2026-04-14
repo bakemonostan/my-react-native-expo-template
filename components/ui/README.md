@@ -1,4 +1,4 @@
-# UI Components V2 - Project Agnostic
+# Shared UI components (project-agnostic)
 
 This folder contains project-agnostic versions of UI components that can be easily copied to other React Native projects without dependencies on project-specific constants, utilities, or configurations.
 
@@ -12,7 +12,7 @@ This folder contains project-agnostic versions of UI components that can be easi
 
 ### Layout & Structure
 
-- **ScreenV2** - Screen layout component with header/body/footer, safe areas, and keyboard handling
+- **Screen** - Screen layout component with header/body/footer, safe areas, and keyboard handling
 - **ScrollViewComponent** - Enhanced ScrollView with customizable indicators
 - **SimpleKeyboardAvoidingView** - Keyboard avoiding view with scroll support
 
@@ -48,7 +48,7 @@ This folder contains project-agnostic versions of UI components that can be easi
   - Expo packages (expo-router, expo-status-bar, expo-web-browser)
   - @expo/vector-icons
   - react-native-safe-area-context
-  - @react-navigation/native (only ScreenV2)
+  - @react-navigation/native (only Screen)
 
 ### ✅ Fully Documented
 
@@ -64,7 +64,7 @@ This folder contains project-agnostic versions of UI components that can be easi
 
 ```tsx
 // In your app entry point (App.tsx or _layout.tsx)
-import { FONT_FAMILY_MAP } from "./components/ui-v2";
+import { FONT_FAMILY_MAP } from "./components/ui";
 
 // Option 1: Use system fonts (default)
 // No configuration needed - components will use "System" font
@@ -87,15 +87,15 @@ FONT_FAMILY_MAP.bold = "MyFont";
 ### Import Individual Components
 
 ```tsx
-import { AlertComponent, PressableComponent } from "./components/ui-v2";
+import { AlertComponent, PressableComponent } from "./components/ui";
 
 // Or import directly
-import AlertComponent from "./components/ui-v2/AlertComponent";
+import AlertComponent from "./components/ui/AlertComponent";
 ```
 
 ### Copy to Another Project
 
-1. Copy the entire `ui-v2` folder to your new project
+1. Copy the entire `ui` folder to your new project
 2. Install required dependencies:
    ```bash
    npm install expo-router expo-status-bar expo-web-browser
@@ -133,11 +133,11 @@ All components accept style props and can be customized:
 
 - `react-native` - Core React Native components
 - `expo-router` - Navigation (ExternalLink only)
-- `expo-status-bar` - Status bar (ScreenV2 only)
+- `expo-status-bar` - Status bar (Screen only)
 - `expo-web-browser` - Web browser (ExternalLink only)
 - `@expo/vector-icons` - Icon libraries (IconComponent)
-- `react-native-safe-area-context` - Safe area handling (ScreenV2, SimpleKeyboardAvoidingView)
-- `@react-navigation/native` - Navigation utilities (ScreenV2 only)
+- `react-native-safe-area-context` - Safe area handling (Screen, SimpleKeyboardAvoidingView)
+- `@react-navigation/native` - Navigation utilities (Screen only)
 
 ### Internal Dependencies
 
@@ -158,7 +158,7 @@ Some components depend on other components in this folder:
 All text components use a centralized font configuration in `fontConfig.ts`:
 
 ```tsx
-// components/ui-v2/fontConfig.ts
+// components/ui/fontConfig.ts
 export const FONT_FAMILY_MAP: Record<FontWeight, string> = {
   regular: "System",
   light: "System",
@@ -190,7 +190,7 @@ You can customize fonts in two ways:
 **Method 1: Direct modification (recommended)**
 
 ```tsx
-import { FONT_FAMILY_MAP } from "./components/ui-v2";
+import { FONT_FAMILY_MAP } from "./components/ui";
 
 FONT_FAMILY_MAP.regular = "YourFont-Regular";
 FONT_FAMILY_MAP.bold = "YourFont-Bold";
@@ -199,7 +199,7 @@ FONT_FAMILY_MAP.bold = "YourFont-Bold";
 **Method 2: Edit fontConfig.ts directly**
 
 ```tsx
-// Edit components/ui-v2/fontConfig.ts
+// Edit components/ui/fontConfig.ts
 export const FONT_FAMILY_MAP: Record<FontWeight, string> = {
   regular: "YourFont-Regular",
   light: "YourFont-Light",
@@ -214,7 +214,7 @@ If you're migrating from the original `ui` folder components:
 
 1. **Colors**: Replace project-specific colors with inline hex values
 2. **Typography**: Configure FONT_FAMILY_MAP instead of using theme imports
-3. **Utilities**: Replace `useSafeAreaInsetsStyle` with inline implementation (included in ScreenV2)
+3. **Utilities**: Replace `useSafeAreaInsetsStyle` with inline implementation (included in Screen)
 4. **Scaling**: ResponsiveText includes its own `mScale` function (now with rotation support)
 
 ## Notes
@@ -222,7 +222,7 @@ If you're migrating from the original `ui` folder components:
 - **Default fonts**: Components use "System" font by default (works on all platforms)
 - **Custom fonts**: Configure FONT_FAMILY_MAP before using components
 - **Rotation support**: ResponsiveText now properly handles device rotation
-- Some components use `@react-navigation/native` - if not using React Navigation, you may need to adjust ScreenV2
+- Some components use `@react-navigation/native` - if not using React Navigation, you may need to adjust Screen
 
 ## License
 

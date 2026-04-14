@@ -57,7 +57,7 @@ export interface AvatarComponentProps {
 
 /**
  * An avatar component that supports images, initials, and fallback states.
- * 
+ *
  * ## Features
  * - **Multiple Display Modes**: Image, initials, or empty state
  * - **Flexible Sizing**: Custom size with proportional scaling
@@ -65,7 +65,7 @@ export interface AvatarComponentProps {
  * - **Fallback Handling**: Graceful fallback when image fails to load
  * - **Custom Styling**: Override container and image styles
  * - **Type Safety**: TypeScript validates all props and image sources
- * 
+ *
  * ## Display Modes
  * - **Image Avatar**: Shows user profile picture with proper scaling
  * - **Initials Avatar**: Shows user initials when no image is available
@@ -169,14 +169,16 @@ export default function AvatarComponent({
   }
 
   if (initials) {
+    // Scale font size based on avatar size (40% of avatar size, min 12px)
+    const fontSize = Math.max(Math.round(size * 0.4), 12);
+
     return (
       <View style={containerStyle}>
         <TextComponent
           style={styles.initials}
           color="#FFFFFF"
           weight="semi_bold"
-          size="base"
-        >
+          size={fontSize}>
           {initials}
         </TextComponent>
       </View>

@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Image,
   ImageProps,
   ImageStyle,
   StyleSheet,
-  Text,
   View,
   ViewStyle,
-} from 'react-native';
-import LoadingComponent from './LoadingComponent';
+} from "react-native";
+import IconComponent from "./IconComponent";
+import LoadingComponent from "./LoadingComponent";
 
-export interface ImageComponentProps extends Omit<ImageProps, 'style'> {
+export interface ImageComponentProps extends Omit<ImageProps, "style"> {
   /**
    * Custom styles for the image container
    */
@@ -126,10 +126,10 @@ export interface ImageComponentProps extends Omit<ImageProps, 'style'> {
 export default function ImageComponent({
   containerStyle,
   imageStyle,
-  showLoading,
+  showLoading = true,
   showError = true,
   errorIconSize = 24,
-  errorIconColor = '#FF3B30',
+  errorIconColor = "#FF3B30",
   ...restProps
 }: ImageComponentProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -160,14 +160,17 @@ export default function ImageComponent({
       />
       {isLoading && showLoading && (
         <View style={styles.loadingContainer}>
-          <LoadingComponent size='small' />
+          <LoadingComponent size="small" />
         </View>
       )}
       {hasError && showError && (
         <View style={styles.errorContainer}>
-          <Text style={{ fontSize: errorIconSize, color: errorIconColor }}>
-            📷
-          </Text>
+          <IconComponent
+            library="Ionicons"
+            name="image-outline"
+            size={errorIconSize}
+            color={errorIconColor}
+          />
         </View>
       )}
     </View>
@@ -176,22 +179,22 @@ export default function ImageComponent({
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
+    position: "relative",
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   loadingContainer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   errorContainer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#F5F5F5',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#F5F5F5",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

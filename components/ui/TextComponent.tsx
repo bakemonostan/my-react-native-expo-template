@@ -1,18 +1,6 @@
 import React from "react";
 import { StyleProp, Text, TextStyle } from "react-native";
-
-/**
- * Font weight options based on the loaded Afacad Flux font family
- */
-export type FontWeight =
-  | "regular"
-  | "light"
-  | "medium"
-  | "semi_bold"
-  | "bold"
-  | "extra_bold"
-  | "black"
-  | "variable";
+import { FontWeight, getFontFamily } from "./fontConfig";
 
 /**
  * Font size presets for consistent typography
@@ -61,6 +49,11 @@ export interface TextComponentProps {
   styles?: StyleProp<TextStyle>;
 
   /**
+   * Same as `styles` — merged so native `style={}` usage from lists/cards keeps working.
+   */
+  style?: StyleProp<TextStyle>;
+
+  /**
    * Override styles that take precedence over all other styles
    * Use this when you need to completely override specific style properties
    */
@@ -87,7 +80,7 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
 
 /**
  * A customizable Text component with TypeScript support and consistent typography.
- * 
+ *
  * ## Features
  * - **Font Weight Support**: All Afacad Flux font weights (light to black)
  * - **Flexible Sizing**: Preset sizes or custom numeric values
@@ -95,10 +88,10 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
  * - **Style Layering**: Base styles, custom styles, and override styles
  * - **Type Safety**: TypeScript validates all font weights and sizes
  * - **Performance Optimized**: Efficient text rendering
- * 
+ *
  * ## Font Weights
  * - `light`, `regular`, `medium`, `semi_bold`, `bold`, `extra_bold`, `black`, `variable`
- * 
+ *
  * ## Font Sizes
  * - `xs` (12), `sm` (14), `base` (16), `lg` (18), `xl` (20), `xxl` (24), `xxxl` (32)
  *
@@ -176,6 +169,7 @@ export default function TextComponent({
   color = "#000000",
   size = "base",
   styles,
+  style,
   overrideStyles,
   ...restProps
 }: TextComponentProps) {
@@ -190,7 +184,7 @@ export default function TextComponent({
    * Base styles for the text component
    */
   const baseStyles: TextStyle = {
-    fontFamily: weight,
+    fontFamily: getFontFamily(weight),
     fontSize: getFontSize(size),
     color: color,
   };
@@ -202,11 +196,14 @@ export default function TextComponent({
   const combinedStyles: StyleProp<TextStyle> = [
     baseStyles,
     styles,
+    style,
     overrideStyles,
   ];
 
   return (
-    <Text style={combinedStyles} {...restProps}>
+    <Text
+      style={combinedStyles}
+      {...restProps}>
       {children}
     </Text>
   );

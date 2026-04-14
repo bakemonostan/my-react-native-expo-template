@@ -4,11 +4,16 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
+    "start:staging": "APP_ENV=staging expo start --clear",
+    "start:prod": "NODE_ENV=production APP_ENV=production expo start --clear",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "ios:staging": "APP_ENV=staging expo run:ios",
+    "ios:prod-env": "NODE_ENV=production APP_ENV=production expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "bump-version": "node scripts/bump-version.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",

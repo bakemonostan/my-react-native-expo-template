@@ -1,12 +1,12 @@
 import React from "react";
 import {
-  KeyboardAvoidingView,
-  KeyboardAvoidingViewProps,
-  Platform,
-  ScrollView,
-  StyleProp,
-  View,
-  ViewStyle,
+    KeyboardAvoidingView,
+    KeyboardAvoidingViewProps,
+    Platform,
+    ScrollView,
+    StyleProp,
+    View,
+    ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

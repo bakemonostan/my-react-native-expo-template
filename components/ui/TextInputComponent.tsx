@@ -7,18 +7,7 @@ import {
   TextStyle,
   View,
 } from "react-native";
-
-/**
- * Font weight options based on the loaded Afacad Flux font family
- */
-export type FontWeight =
-  | "regular"
-  | "light"
-  | "medium"
-  | "semi_bold"
-  | "bold"
-  | "extra_bold"
-  | "black";
+import { FontWeight, getFontFamily } from "./fontConfig";
 
 /**
  * Font size presets for consistent typography
@@ -85,7 +74,7 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
 
 /**
  * A customizable TextInput component with consistent typography and error handling.
- * 
+ *
  * ## Features
  * - **Font Weight Support**: All Afacad Flux font weights
  * - **Flexible Sizing**: Preset sizes or custom numeric values
@@ -93,10 +82,10 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
  * - **Custom Styling**: Override input and error styles
  * - **Type Safety**: TypeScript validates all font weights and sizes
  * - **Consistent Design**: Matches TextComponent typography system
- * 
+ *
  * ## Font Weights
  * - `light`, `regular`, `medium`, `semi_bold`, `bold`, `extra_bold`, `black`
- * 
+ *
  * ## Font Sizes
  * - `xs` (12), `sm` (14), `base` (16), `lg` (18), `xl` (20), `xxl` (24)
  *
@@ -197,7 +186,7 @@ export default function TextInputComponent({
    * Base styles for the text input component
    */
   const baseStyles: TextStyle = {
-    fontFamily: weight,
+    fontFamily: getFontFamily(weight),
     fontSize: getFontSize(size),
     color: error ? errorColor : color,
     borderWidth: 1,
@@ -215,7 +204,7 @@ export default function TextInputComponent({
     <View>
       <TextInput
         style={combinedStyles}
-        placeholderTextColor={color + "80"} // 50% opacity of text color
+        placeholderTextColor="rgba(0, 0, 0, 0.4)"
         {...restProps}
       />
       {error && (
@@ -224,9 +213,8 @@ export default function TextInputComponent({
             color: errorColor,
             fontSize: 12,
             marginTop: 4,
-            fontFamily: weight,
-          }}
-        >
+            fontFamily: getFontFamily("regular"),
+          }}>
           {error}
         </Text>
       )}

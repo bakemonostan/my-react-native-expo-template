@@ -1,10 +1,10 @@
 import { ErrorInfo } from "react";
 import { ScrollView, TextStyle, View, ViewStyle } from "react-native";
 
-import IconComponent from "@/components/ui-v2/IconComponent";
-import PressableComponent from "@/components/ui-v2/PressableComponent";
-import { ScreenV2 } from "@/components/ui-v2/ScreenV2";
-import TextComponent from "@/components/ui-v2/TextComponent";
+import IconComponent from "@/components/ui/IconComponent";
+import PressableComponent from "@/components/ui/PressableComponent";
+import { Screen } from "@/components/ui/Screen";
+import TextComponent from "@/components/ui/TextComponent";
 
 export interface ErrorDetailsProps {
   error: Error;
@@ -19,7 +19,7 @@ export interface ErrorDetailsProps {
  */
 export function ErrorDetails(props: ErrorDetailsProps) {
   return (
-    <ScreenV2
+    <Screen
       scrollable={false}
       safeAreaEdges={["top", "bottom"]}
       backgroundColor="#ffffff"
@@ -75,7 +75,7 @@ export function ErrorDetails(props: ErrorDetailsProps) {
         pressableStyle={$resetButton}
         onPress={props.onReset}
       />
-    </ScreenV2>
+    </Screen>
   );
 }
 

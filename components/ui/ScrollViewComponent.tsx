@@ -1,9 +1,9 @@
 import React from "react";
 import {
-  ScrollView,
-  ScrollViewProps,
-  StyleProp,
-  ViewStyle,
+    ScrollView,
+    ScrollViewProps,
+    StyleProp,
+    ViewStyle,
 } from "react-native";
 
 /**

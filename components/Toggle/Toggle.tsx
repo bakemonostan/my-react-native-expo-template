@@ -13,7 +13,7 @@ import {
   ViewStyle,
 } from "react-native";
 
-import TextComponent from "@/components/ui-v2/TextComponent";
+import TextComponent from "@/components/ui/TextComponent";
 
 interface TextProps {
   text?: string;

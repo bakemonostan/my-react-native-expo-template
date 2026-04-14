@@ -1,4 +1,4 @@
-# Fixes Applied to UI-V2 Components
+# Fixes applied to shared UI components
 
 ## ✅ Critical Fixes (DONE)
 
@@ -184,7 +184,7 @@
 1. **Configure fonts** (optional, defaults to "System"):
 
    ```tsx
-   import { FONT_FAMILY_MAP } from "./components/ui-v2";
+   import { FONT_FAMILY_MAP } from "./components/ui";
 
    FONT_FAMILY_MAP.regular = "Inter-Regular";
    FONT_FAMILY_MAP.bold = "Inter-Bold";
@@ -194,7 +194,7 @@
 2. **Import and use components**:
 
    ```tsx
-   import { TextComponent, PressableComponent } from "./components/ui-v2";
+   import { TextComponent, PressableComponent } from "./components/ui";
 
    <TextComponent
      weight="bold"

@@ -30,25 +30,27 @@ export type { ModalComponentProps } from "./ModalComponent";
 
 export { default as PressableComponent } from "./PressableComponent";
 export type {
-    PressableComponentProps,
-    PressableSize,
-    PressableVariant
+  PressableComponentProps,
+  PressableSize,
+  PressableVariant,
 } from "./PressableComponent";
 
 export { default as ResponsiveText, TEXT_VARIANTS, mScale } from "./ResponsiveText";
 export type { FontSize, ResponsiveTextProps } from "./ResponsiveText";
 
-export { ScreenV2 } from "./ScreenV2";
-export type { ExtendedEdge, ScreenV2Props } from "./ScreenV2";
+export { Screen } from "./Screen";
+export type { ExtendedEdge, ScreenProps } from "./Screen";
 
 export { default as ScrollViewComponent } from "./ScrollViewComponent";
 
 export { default as SimpleKeyboardAvoidingView } from "./SimpleKeyboardAvoidingView";
 export type { SimpleKeyboardAvoidingViewProps } from "./SimpleKeyboardAvoidingView";
 
-export { TEXT_VARIANTS as TEXT_COMPONENT_VARIANTS, default as TextComponent } from "./TextComponent";
+export {
+  TEXT_VARIANTS as TEXT_COMPONENT_VARIANTS,
+  default as TextComponent,
+} from "./TextComponent";
 export type { TextComponentProps } from "./TextComponent";
 
 export { default as TextInputComponent } from "./TextInputComponent";
 export type { TextInputComponentProps } from "./TextInputComponent";
-

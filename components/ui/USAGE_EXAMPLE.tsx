@@ -1,7 +1,7 @@
 /**
- * Usage Examples for UI-V2 Components
+ * Usage examples for shared UI components.
  *
- * Copy these examples to get started quickly
+ * Copy these patterns to get started quickly.
  */
 
 import React, { useState } from "react";
@@ -17,7 +17,7 @@ import {
   ModalComponent,
   PressableComponent,
   ResponsiveText,
-  ScreenV2,
+  Screen,
   TextComponent,
   TextInputComponent,
 } from "./index";
@@ -43,7 +43,7 @@ export function ExampleScreen() {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <ScreenV2
+    <Screen
       header={
         <View style={{ padding: 16 }}>
           <TextComponent
@@ -203,7 +203,7 @@ export function ExampleScreen() {
           pressableStyle={{ marginTop: 16 }}
         />
       </ModalComponent>
-    </ScreenV2>
+    </Screen>
   );
 }
 
@@ -218,7 +218,7 @@ export function FormExample() {
   const [error, setError] = useState("");
 
   return (
-    <ScreenV2>
+    <Screen>
       <TextComponent
         weight="bold"
         size="xl"
@@ -264,7 +264,7 @@ export function FormExample() {
           }
         }}
       />
-    </ScreenV2>
+    </Screen>
   );
 }
 
@@ -276,7 +276,7 @@ export function ListExample() {
   ];
 
   return (
-    <ScreenV2>
+    <Screen>
       {users.map((user) => (
         <PressableComponent
           key={user.id}
@@ -303,6 +303,6 @@ export function ListExample() {
           {user.unread > 0 && <BadgeComponent content={user.unread} />}
         </PressableComponent>
       ))}
-    </ScreenV2>
+    </Screen>
   );
 }

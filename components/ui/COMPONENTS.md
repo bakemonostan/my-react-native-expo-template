@@ -1,6 +1,6 @@
 # Component List
 
-## All Components in ui-v2
+## All components in `components/ui`
 
 ### ✅ AlertComponent
 - Alert/notification with 4 variants (info, success, warning, error)
@@ -55,7 +55,7 @@
 - Custom typography
 - Text decoration and transforms
 
-### ✅ ScreenV2
+### ✅ Screen
 - Header/body/footer layout
 - Safe area handling
 - Keyboard avoidance
@@ -88,7 +88,7 @@
 - ❌ Divider
 - ❌ Drawer
 - ❌ List
-- ❌ SafeAreaView (already exists as ScreenV2)
+- ❌ SafeAreaView (already exists as Screen)
 
 ## Total: 16 Components
 

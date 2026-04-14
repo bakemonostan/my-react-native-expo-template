@@ -4,7 +4,7 @@ Project-agnostic toggle/checkbox/radio/switch components for React Native applic
 
 ## Features
 
-- ✅ **No external dependencies** - Only uses ui-v2 TextComponent
+- ✅ **No external dependencies** - Only uses `@/components/ui/TextComponent`
 - ✅ **Self-contained** - No theme or i18n dependencies
 - ✅ **Animated** - Smooth transitions
 - ✅ **Accessible** - Proper accessibility roles and states
@@ -126,4 +126,4 @@ All colors are defined inline and can be easily customized:
 
 ## Dependencies
 
-- `@/components/ui-v2/TextComponent`
+- `@/components/ui/TextComponent`

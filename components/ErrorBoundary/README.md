@@ -4,7 +4,7 @@ Project-agnostic error boundary components for React Native applications.
 
 ## Features
 
-- ✅ **No external dependencies** - Only uses ui-v2 components
+- ✅ **No external dependencies** - Only uses shared `@/components/ui` primitives
 - ✅ **Self-contained** - No theme or i18n dependencies
 - ✅ **Customizable** - Easy to modify colors and styles
 - ✅ **TypeScript** - Full type safety
@@ -50,7 +50,7 @@ All colors and styles are defined inline and can be easily customized:
 
 ## Dependencies
 
-- `@/components/ui-v2/IconComponent`
-- `@/components/ui-v2/PressableComponent`
-- `@/components/ui-v2/ScreenV2`
-- `@/components/ui-v2/TextComponent`
+- `@/components/ui/IconComponent`
+- `@/components/ui/PressableComponent`
+- `@/components/ui/Screen`
+- `@/components/ui/TextComponent`
