@@ -1,26 +1,47 @@
-import ResponsiveText from "@/components/ui/ResponsiveText";
-import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
-import { useTheme } from "@/hooks/useTheme";
-import { PresetStyles } from "@/theme/presets";
-import { View } from "react-native";
+import { PressableComponent, TextInputComponent } from '@/components/ui';
+import ResponsiveText from '@/components/ui/ResponsiveText';
+import { Screen } from '@/components/ui/Screen';
+import { useTheme } from '@/hooks/useTheme';
+import { useState } from 'react';
+import { View } from 'react-native';
 
 export default function TabOneScreen() {
   const { colors } = useTheme();
-
+  const [name, setName] = useState('');
   return (
-    <SafeAreaViewComponent
-      style={[PresetStyles.screenContainer, { backgroundColor: colors.background }]}>
+    <Screen
+      safeAreaEdges={['top', 'bottom']}
+      withDefaultPadding={false}
+      footer={
+        <PressableComponent
+          buttonText='Save'
+          onPress={() => {}}
+        />
+      }>
       <View style={{ gap: 16, padding: 16 }}>
-        <ResponsiveText size="xl" weight="bold" color={colors.text}>
+        <ResponsiveText
+          size='xl'
+          weight='bold'
+          color={colors.text}>
           Welcome
         </ResponsiveText>
-        <ResponsiveText size="base" color={colors.text}>
-          This is your starting screen. Replace this content with your app's home view.
+        <ResponsiveText
+          size='base'
+          color={colors.text}>
+          This is your starting screen. Replace this content with your app's
+          home view.
         </ResponsiveText>
-        <ResponsiveText size="sm" color={colors.textSecondary}>
+        <ResponsiveText
+          size='sm'
+          color={colors.textSecondary}>
           Browse the Components tab to explore the available UI primitives.
         </ResponsiveText>
+        <TextInputComponent
+          placeholder='Enter your name'
+          value={name}
+          onChangeText={setName}
+        />
       </View>
-    </SafeAreaViewComponent>
+    </Screen>
   );
 }

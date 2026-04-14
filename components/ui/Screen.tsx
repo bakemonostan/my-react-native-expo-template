@@ -1,7 +1,8 @@
-import { useTheme } from "@/context/ThemeContext";
-import { useScrollToTop } from "@react-navigation/native";
-import { StatusBar, StatusBarProps, StatusBarStyle } from "expo-status-bar";
-import { ReactNode, useRef } from "react";
+import { useTheme } from '@/context/ThemeContext';
+import { Layout } from '@/theme/layout-dimensions';
+import { useScrollToTop } from '@react-navigation/native';
+import { StatusBar, StatusBarProps, StatusBarStyle } from 'expo-status-bar';
+import { ReactNode, useRef } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,23 +11,23 @@ import {
   StyleProp,
   View,
   ViewStyle,
-} from "react-native";
-import { Edge, useSafeAreaInsets } from "react-native-safe-area-context";
+} from 'react-native';
+import { Edge, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export type ExtendedEdge = Edge | "start" | "end";
+export type ExtendedEdge = Edge | 'start' | 'end';
 
 const propertySuffixMap = {
-  top: "Top",
-  bottom: "Bottom",
-  left: "Start",
-  right: "End",
-  start: "Start",
-  end: "End",
+  top: 'Top',
+  bottom: 'Bottom',
+  left: 'Start',
+  right: 'End',
+  start: 'Start',
+  end: 'End',
 } as const;
 
 const edgeInsetMap: Record<string, Edge> = {
-  start: "left",
-  end: "right",
+  start: 'left',
+  end: 'right',
 };
 
 /**
@@ -34,7 +35,7 @@ const edgeInsetMap: Record<string, Edge> = {
  */
 function useSafeAreaInsetsStyle(
   safeAreaEdges: ExtendedEdge[] = [],
-  property: "padding" | "margin" = "padding"
+  property: 'padding' | 'margin' = 'padding',
 ): Record<string, number> {
   const insets = useSafeAreaInsets();
 
@@ -114,6 +115,7 @@ export interface ScreenProps {
    * Style for footer container
    */
   footerStyle?: StyleProp<ViewStyle>;
+  withDefaultPadding?: boolean;
 }
 
 /**
@@ -132,14 +134,15 @@ export function Screen({
   footer,
   scrollable = true,
   backgroundColor,
-  safeAreaEdges = ["top"],
-  statusBarStyle = "auto",
+  safeAreaEdges,
+  statusBarStyle = 'auto',
   StatusBarProps,
   ScrollViewProps,
   style,
   headerStyle,
   bodyStyle,
   footerStyle,
+  withDefaultPadding,
 }: ScreenProps) {
   const { colors } = useTheme();
   const bgColor = backgroundColor ?? colors.background;
@@ -153,7 +156,7 @@ export function Screen({
       ref={scrollRef}
       style={[$bodyContainer, bodyStyle]}
       contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
+      keyboardShouldPersistTaps='handled'
       {...ScrollViewProps}>
       {children}
     </ScrollView>
@@ -163,8 +166,18 @@ export function Screen({
 
   return (
     <KeyboardAvoidingView
-      style={[$screenContainer, { backgroundColor: bgColor }, $containerInsets, style]}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={[
+        $screenContainer,
+        {
+          paddingHorizontal: withDefaultPadding
+            ? Layout.screen.paddingHorizontal
+            : 0,
+        },
+        { backgroundColor: bgColor },
+        $containerInsets,
+        style,
+      ]}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={0}>
       <StatusBar
         style={statusBarStyle}
@@ -191,6 +204,6 @@ const $bodyContainer: ViewStyle = {
 };
 
 const $footerContainer: ViewStyle = {
-  backgroundColor: "transparent",
-  width: "100%",
+  paddingVertical: Layout.screen.paddingVertical,
+  paddingHorizontal: Layout.screen.paddingHorizontal,
 };

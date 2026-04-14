@@ -1,11 +1,11 @@
-import { mScale, scale } from "@/constants/mixins";
-import { heightToDp } from "@/constants/responsive";
+import { mScale, scale } from '@/constants/mixins';
+import { heightToDp } from '@/constants/responsive';
 
 export const Layout = {
   // Screen padding
   screen: {
-    paddingHorizontal: mScale(20),
-    paddingVertical: mScale(16),
+    paddingHorizontal: mScale(12),
+    paddingVertical: mScale(12),
   },
 
   // Container max widths
@@ -34,7 +34,7 @@ export const Layout = {
   heights: {
     searchBar: mScale(44),
     // toolbar: mSpace(56),
-    banner: heightToDp("25%"),
+    banner: heightToDp('25%'),
     footer: mScale(60),
   },
 } as const;
