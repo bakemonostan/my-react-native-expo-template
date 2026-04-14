@@ -2,6 +2,38 @@
 
 A comprehensive React Native template with a rich set of pre-built components, utilities, and best practices for building modern mobile applications.
 
+## ⚡ Scripts
+
+```bash
+# Dev
+npm start                  # Start Expo dev server
+npm run start:staging      # Start with APP_ENV=staging
+npm run start:prod         # Start with NODE_ENV=production
+
+# Run on device/simulator
+npm run ios                # Run on iOS simulator
+npm run ios:staging        # Run on iOS (staging env)
+npm run android            # Run on Android (default: debug variant)
+npm run android:debug      # Explicit debug build & install
+npm run android:release    # Release build (installs on emulator / default target)
+npm run android:release:device   # Release build on a connected physical device
+npm run android:build      # Build & install on a connected Android device (debug)
+npm run android:staging    # Android with APP_ENV=staging (debug)
+npm run android:staging:debug    # Staging + debug variant
+npm run android:staging:release  # Staging + release variant
+
+# Code quality
+npm run lint               # Run Expo lint
+
+# Versioning
+npm run bump-version       # Bump version across package.json, iOS & Android
+
+# Theming
+npm run theme-mode light   # Force light mode (opt out of dark mode)
+npm run theme-mode dark    # Force dark mode
+npm run theme-mode auto    # Follow system preference (default)
+```
+
 ## 🚀 Features
 
 - **Component Library**: A rich set of pre-built, customizable components
