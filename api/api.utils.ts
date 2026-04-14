@@ -46,12 +46,13 @@ const isAuthenticated = async (): Promise<boolean> => {
 };
 
 /**
- * Logs the current authentication token to console (for debugging)
+ * Logs the current authentication token to console (for debugging only)
  * @returns {Promise<void>}
  * @example
  * await logToken(); // Logs: Token: eyJhbGciOiJIUzI1NiIs...
  */
 const logToken = async (): Promise<void> => {
+    if (!__DEV__) return;
     const token = await tokenUtils.getToken();
     if (token) {
       console.log('Token:', token);

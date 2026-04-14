@@ -51,7 +51,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@expo/webpack-config": "^19.0.1",
     "@tanstack/eslint-plugin-query": "^5.78.0",
     "@types/react": "~19.0.10",
     "eslint": "^9.25.0",

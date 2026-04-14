@@ -1,4 +1,3 @@
-import ImageComponent from "@/components/ui/ImageComponent";
 import ResponsiveText from "@/components/ui/ResponsiveText";
 import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
 import { colors } from "@/constants/Colors";
@@ -9,26 +8,15 @@ export default function TabOneScreen() {
   return (
     <SafeAreaViewComponent style={PresetStyles.screenContainer}>
       <View style={{ gap: 16, padding: 16 }}>
-        <ResponsiveText
-          size="lg"
-          color={colors.text}>
-          Hello
+        <ResponsiveText size="xl" weight="bold" color={colors.text}>
+          Welcome
         </ResponsiveText>
-        <ResponsiveText
-          size="lg"
-          color={colors.text}>
-          To see examples of components, navigate to the components tab. We have
-          a lot of components to show you. We have the following components: -
-          Icons - Buttons - Inputs - Lists - Modals - Images - Texts - Safe
-          Areas - and more! 😀😀
+        <ResponsiveText size="base" color={colors.text}>
+          This is your starting screen. Replace this content with your app's home view.
         </ResponsiveText>
-        <ImageComponent
-          source={require("@/assets/images/splash-icon.png")}
-          showError={false}
-          errorIconSize={0}
-          errorIconColor="transparent"
-          containerStyle={{ width: 100, height: 100 }}
-        />
+        <ResponsiveText size="sm" color={colors.text}>
+          Browse the Components tab to explore the available UI primitives.
+        </ResponsiveText>
       </View>
     </SafeAreaViewComponent>
   );

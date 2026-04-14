@@ -3,10 +3,10 @@ import { StateCreator, StoreApi } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 /**
- * Creates a persistence middleware using SecureStore
+ * Creates a persistence middleware using AsyncStorage
  * @template T - The type of the store state
  * @param {StateCreator<T>} store - The store to persist
- * @param {string} [storeName='app-store'] - The name of the store in SecureStore
+ * @param {string} [storeName='app-store'] - The name of the store in AsyncStorage
  * @returns {StateCreator<T>} The store with persistence middleware
  * @example
  * const useStore = create(
@@ -70,7 +70,7 @@ export const createSelectors = <T extends object>(store: StoreApi<T>) => {
   const storeState = store.getState();
   return Object.keys(storeState).reduce((acc, key) => {
     const typedKey = key as keyof T;
-    acc[typedKey] = () => storeState[typedKey];
+    acc[typedKey] = () => store.getState()[typedKey];
     return acc;
   }, {} as { [K in keyof T]: () => T[K] });
 };

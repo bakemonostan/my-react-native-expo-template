@@ -1,15 +1,14 @@
 /**
- * Base URL for API endpoints
- * @constant
- * @type {string}
- * @example
- * // Development
- * BASE_URL === 'http://localhost:3000/api'
- * // Production
- * BASE_URL === 'https://your-production-api.com/api'
+ * Base URL for API endpoints.
+ *
+ * REPLACE THESE before shipping:
+ *  - Dev:  replace 'http://localhost:3000/api' with your local/ngrok/dev tunnel URL
+ *  - Prod: replace 'https://your-production-api.com/api' with your real API URL
+ *
+ * Tip: move these to app.json `extra` + expo-constants so they can vary per EAS build profile.
  */
-const BASE_URL = __DEV__ 
-  ? 'http://localhost:3000/api' 
+const BASE_URL = __DEV__
+  ? 'http://localhost:3000/api'
   : 'https://your-production-api.com/api';
 
 /**

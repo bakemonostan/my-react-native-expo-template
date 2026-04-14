@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Image,
   ImageProps,
@@ -7,10 +7,10 @@ import {
   Text,
   View,
   ViewStyle,
-} from "react-native";
-import LoadingComponent from "./LoadingComponent";
+} from 'react-native';
+import LoadingComponent from './LoadingComponent';
 
-export interface ImageComponentProps extends Omit<ImageProps, "style"> {
+export interface ImageComponentProps extends Omit<ImageProps, 'style'> {
   /**
    * Custom styles for the image container
    */
@@ -48,7 +48,7 @@ export interface ImageComponentProps extends Omit<ImageProps, "style"> {
 
 /**
  * An enhanced image component with loading and error states.
- * 
+ *
  * ## Features
  * - **Loading States**: Built-in loading indicator with customizable display
  * - **Error Handling**: Graceful error states with custom icons
@@ -56,7 +56,7 @@ export interface ImageComponentProps extends Omit<ImageProps, "style"> {
  * - **Performance Optimized**: Efficient image loading and caching
  * - **Type Safety**: TypeScript validates all image sources and props
  * - **Fallback Support**: Error icon when image fails to load
- * 
+ *
  * ## States
  * - **Loading**: Shows spinner while image loads
  * - **Loaded**: Displays the image normally
@@ -126,10 +126,10 @@ export interface ImageComponentProps extends Omit<ImageProps, "style"> {
 export default function ImageComponent({
   containerStyle,
   imageStyle,
-  showLoading = true,
+  showLoading,
   showError = true,
   errorIconSize = 24,
-  errorIconColor = "#FF3B30",
+  errorIconColor = '#FF3B30',
   ...restProps
 }: ImageComponentProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -160,7 +160,7 @@ export default function ImageComponent({
       />
       {isLoading && showLoading && (
         <View style={styles.loadingContainer}>
-          <LoadingComponent size="small" />
+          <LoadingComponent size='small' />
         </View>
       )}
       {hasError && showError && (
@@ -176,22 +176,22 @@ export default function ImageComponent({
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
+    position: 'relative',
   },
   image: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   loadingContainer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   errorContainer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#F5F5F5",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#F5F5F5',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
