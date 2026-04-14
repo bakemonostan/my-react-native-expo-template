@@ -55,9 +55,9 @@ const $centerContainerStyle = {
   justifyContent: "center",
 } satisfies ViewStyle;
 
+/** No backgroundColor — let Screen / navigator theme control it (dark mode). */
 const $screenContainerStyle = {
   flex: 1,
-  backgroundColor: "white",
   paddingTop: Layout.screen.paddingVertical,
   paddingHorizontal: Layout.screen.paddingHorizontal,
 } satisfies ViewStyle;

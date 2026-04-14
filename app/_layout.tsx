@@ -1,7 +1,12 @@
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { ThemeProvider } from "@/context/ThemeContext";
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { customFontsToLoad } from "@/theme/typography";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider as NavigationThemeProvider,
+} from "@react-navigation/native";
 import {
   QueryClient,
   QueryClientProvider,
@@ -11,7 +16,7 @@ import {
 import { useFonts } from "expo-font";
 import * as Network from "expo-network";
 import { SplashScreen, Stack } from "expo-router";
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useMemo, useRef } from "react";
 import { AppState, AppStateStatus, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -48,6 +53,39 @@ function onAppStateChange(status: AppStateStatus) {
   if (Platform.OS !== "web") {
     focusManager.setFocused(status === "active");
   }
+}
+
+/**
+ * Syncs React Navigation (tabs, stack, headers) with app light/dark colors.
+ * Without this, navigators keep the default light gray/white chrome.
+ */
+function ThemedNavigationShell({ children }: { children: ReactNode }) {
+  const { colors, isDark } = useTheme();
+  const navigationTheme = useMemo(
+    () => ({
+      ...(isDark ? DarkTheme : DefaultTheme),
+      dark: isDark,
+      colors: {
+        ...(isDark ? DarkTheme : DefaultTheme).colors,
+        primary: colors.primary,
+        background: colors.background,
+        card: colors.surface,
+        text: colors.text,
+        border: colors.border,
+        notification: colors.error,
+      },
+    }),
+    [colors, isDark],
+  );
+
+  return (
+    <NavigationThemeProvider value={navigationTheme}>
+      <GestureHandlerRootView
+        style={{ flex: 1, backgroundColor: colors.background }}>
+        {children}
+      </GestureHandlerRootView>
+    </NavigationThemeProvider>
+  );
 }
 
 export default function RootLayout() {
@@ -90,7 +128,7 @@ export default function RootLayout() {
     <ErrorBoundary catchErrors="always">
     <ThemeProvider>
     <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemedNavigationShell>
         <BottomSheetModalProvider>
           <Stack>
             <Stack.Screen
@@ -116,7 +154,7 @@ export default function RootLayout() {
             />
           </Stack>
         </BottomSheetModalProvider>
-      </GestureHandlerRootView>
+      </ThemedNavigationShell>
     </QueryClientProvider>
     </ThemeProvider>
     </ErrorBoundary>

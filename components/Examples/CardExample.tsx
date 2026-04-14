@@ -4,7 +4,7 @@ import CardComponent from "@/components/ui/CardComponent";
 import IconComponent from "@/components/ui/IconComponent";
 import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
 import TextComponent from "@/components/ui/TextComponent";
-import { colors } from "@/constants/Colors";
+import { useTheme } from "@/hooks/useTheme";
 import { scale, vScale } from "@/constants/mixins";
 import { heightToDp, SPACING } from "@/constants/responsive";
 import { PresetStyles } from "@/theme/presets";
@@ -13,6 +13,16 @@ import { Image, StyleSheet, View } from "react-native";
 import ScrollViewComponent from "../ui/ScrollViewComponent";
 
 export default function CardExample() {
+  const { colors } = useTheme();
+
+  const cardSurface = [
+    styles.card,
+    {
+      backgroundColor: colors.surface,
+      shadowColor: colors.text,
+    },
+  ];
+
   return (
     <SafeAreaViewComponent withEdges={false}>
       <ScrollViewComponent
@@ -32,7 +42,11 @@ export default function CardExample() {
           style={styles.sectionTitle}>
           Basic Card
         </TextComponent>
-        <CardComponent style={[PresetStyles.card, { borderWidth: 0 }]}>
+        <CardComponent
+          style={[
+            PresetStyles.card,
+            { borderWidth: 0, backgroundColor: colors.surface },
+          ]}>
           <TextComponent>This is a basic card component</TextComponent>
         </CardComponent>
 
@@ -43,7 +57,7 @@ export default function CardExample() {
           style={styles.sectionTitle}>
           Product Card
         </TextComponent>
-        <CardComponent style={styles.card}>
+        <CardComponent style={cardSurface}>
           <Image
             source={{
               uri: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
@@ -63,7 +77,7 @@ export default function CardExample() {
               />
             </View>
             <TextComponent
-              color={colors.background}
+              color={colors.textSecondary}
               style={styles.productDescription}>
               Latest model with health tracking features
             </TextComponent>
@@ -90,7 +104,7 @@ export default function CardExample() {
           style={styles.sectionTitle}>
           Profile Card
         </TextComponent>
-        <CardComponent style={styles.card}>
+        <CardComponent style={cardSurface}>
           <View style={styles.profileHeader}>
             <AvatarComponent
               size={scale(40)}
@@ -107,14 +121,18 @@ export default function CardExample() {
               <TextComponent>Product Designer</TextComponent>
             </View>
           </View>
-          <View style={styles.profileStats}>
+          <View
+            style={[
+              styles.profileStats,
+              { borderTopColor: colors.separator },
+            ]}>
             <View style={styles.statItem}>
               <TextComponent
                 size="lg"
                 weight="bold">
                 245
               </TextComponent>
-              <TextComponent color={colors.backgroundGray}>Posts</TextComponent>
+              <TextComponent color={colors.textSecondary}>Posts</TextComponent>
             </View>
             <View style={styles.statItem}>
               <TextComponent
@@ -122,7 +140,7 @@ export default function CardExample() {
                 weight="bold">
                 12.5K
               </TextComponent>
-              <TextComponent color={colors.backgroundGray}>
+              <TextComponent color={colors.textSecondary}>
                 Followers
               </TextComponent>
             </View>
@@ -132,7 +150,7 @@ export default function CardExample() {
                 weight="bold">
                 1.2K
               </TextComponent>
-              <TextComponent color={colors.backgroundGray}>
+              <TextComponent color={colors.textSecondary}>
                 Following
               </TextComponent>
             </View>
@@ -146,7 +164,7 @@ export default function CardExample() {
           style={styles.sectionTitle}>
           Blog Post Card
         </TextComponent>
-        <CardComponent style={styles.card}>
+        <CardComponent style={cardSurface}>
           <Image
             source={{
               uri: "https://images.unsplash.com/photo-1499750310107-5fef28a66643",
@@ -160,7 +178,7 @@ export default function CardExample() {
               The Future of Technology
             </TextComponent>
             <TextComponent
-              color={colors.backgroundGray}
+              color={colors.textSecondary}
               style={styles.blogDescription}>
               Exploring the latest trends in AI and machine learning...
             </TextComponent>
@@ -176,7 +194,7 @@ export default function CardExample() {
                   John Doe
                 </TextComponent>
               </View>
-              <TextComponent color={colors.backgroundGray}>
+              <TextComponent color={colors.textSecondary}>
                 5 min read
               </TextComponent>
             </View>
@@ -190,7 +208,7 @@ export default function CardExample() {
           style={styles.sectionTitle}>
           Event Card
         </TextComponent>
-        <CardComponent style={styles.card}>
+        <CardComponent style={cardSurface}>
           <Image
             source={{
               uri: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622",
@@ -200,7 +218,7 @@ export default function CardExample() {
           <View style={styles.eventContent}>
             <BadgeComponent
               content="Upcoming"
-              backgroundColor={colors.palette.alert50}
+              backgroundColor={colors.error}
             />
             <TextComponent
               size="lg"
@@ -213,6 +231,7 @@ export default function CardExample() {
                 name="calendar"
                 library="Ionicons"
                 size={scale(16)}
+                color={colors.text}
               />
               <TextComponent>March 15, 2024</TextComponent>
             </View>
@@ -221,17 +240,19 @@ export default function CardExample() {
                 name="location"
                 library="Ionicons"
                 size={scale(16)}
+                color={colors.text}
               />
               <TextComponent>San Francisco, CA</TextComponent>
             </View>
             <View style={styles.eventFooter}>
-              <TextComponent color={colors.backgroundGray}>
+              <TextComponent color={colors.textSecondary}>
                 120 attendees
               </TextComponent>
               <IconComponent
                 name="arrow-forward"
                 library="Ionicons"
                 size={scale(20)}
+                color={colors.text}
               />
             </View>
           </View>
@@ -252,9 +273,7 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: vScale(16),
     padding: SPACING,
-    backgroundColor: colors.background,
     borderRadius: scale(8),
-    shadowColor: colors.text,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -296,7 +315,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     padding: SPACING,
     borderTopWidth: 1,
-    borderTopColor: colors.background,
   },
   statItem: {
     alignItems: "center",
@@ -342,6 +360,7 @@ const styles = StyleSheet.create({
   eventDetails: {
     flexDirection: "row",
     alignItems: "center",
+    gap: scale(8),
     marginBottom: vScale(8),
   },
   eventFooter: {

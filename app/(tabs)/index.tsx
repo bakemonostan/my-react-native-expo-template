@@ -1,5 +1,5 @@
 import { PressableComponent, TextInputComponent } from '@/components/ui';
-import ResponsiveText from '@/components/ui/ResponsiveText';
+import TextComponent from '@/components/ui/TextComponent';
 import { Screen } from '@/components/ui/Screen';
 import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
@@ -19,23 +19,23 @@ export default function TabOneScreen() {
         />
       }>
       <View style={{ gap: 16, padding: 16 }}>
-        <ResponsiveText
+        <TextComponent
           size='xl'
           weight='bold'
           color={colors.text}>
           Welcome
-        </ResponsiveText>
-        <ResponsiveText
+        </TextComponent>
+        <TextComponent
           size='base'
           color={colors.text}>
           This is your starting screen. Replace this content with your app's
           home view.
-        </ResponsiveText>
-        <ResponsiveText
+        </TextComponent>
+        <TextComponent
           size='sm'
           color={colors.textSecondary}>
           Browse the Components tab to explore the available UI primitives.
-        </ResponsiveText>
+        </TextComponent>
         <TextInputComponent
           placeholder='Enter your name'
           value={name}

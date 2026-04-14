@@ -35,9 +35,6 @@ export type {
   PressableVariant,
 } from "./PressableComponent";
 
-export { default as ResponsiveText, TEXT_VARIANTS, mScale } from "./ResponsiveText";
-export type { FontSize, ResponsiveTextProps } from "./ResponsiveText";
-
 export { Screen } from "./Screen";
 export type { ExtendedEdge, ScreenProps } from "./Screen";
 
@@ -47,10 +44,17 @@ export { default as SimpleKeyboardAvoidingView } from "./SimpleKeyboardAvoidingV
 export type { SimpleKeyboardAvoidingViewProps } from "./SimpleKeyboardAvoidingView";
 
 export {
-  TEXT_VARIANTS as TEXT_COMPONENT_VARIANTS,
   default as TextComponent,
+  mScale,
+  ResponsiveText,
+  TEXT_VARIANTS,
+  TEXT_VARIANTS as TEXT_COMPONENT_VARIANTS,
 } from "./TextComponent";
-export type { TextComponentProps } from "./TextComponent";
+export type {
+  FontSize,
+  ResponsiveTextProps,
+  TextComponentProps,
+} from "./TextComponent";
 
 export { default as TextInputComponent } from "./TextInputComponent";
 export type { TextInputComponentProps } from "./TextInputComponent";

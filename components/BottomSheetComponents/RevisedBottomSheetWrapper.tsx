@@ -9,7 +9,7 @@ import {
 import React, { ReactNode, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import PressableComponent from "../ui/PressableComponent";
-import ResponsiveText from "../ui/ResponsiveText";
+import TextComponent from "../ui/TextComponent";
 
 export interface RevisedBottomSheetWrapperProps
   extends Omit<BottomSheetModalProps, "children"> {
@@ -210,7 +210,7 @@ const RevisedBottomSheetWrapper = React.forwardRef<
             customHeader
           ) : (
             <>
-              <ResponsiveText
+              <TextComponent
                 variant="h4"
                 text={title}
               />

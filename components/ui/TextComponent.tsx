@@ -1,200 +1,163 @@
-import React from "react";
-import { StyleProp, Text, TextStyle } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Dimensions,
+  StyleProp,
+  Text,
+  TextProps,
+  TextStyle,
+  useColorScheme,
+} from "react-native";
 import { FontWeight, getFontFamily } from "./fontConfig";
 
-/**
- * Font size presets for consistent typography
- */
-export type FontSize =
-  | "xs" // 12
-  | "sm" // 14
-  | "base" // 16
-  | "lg" // 18
-  | "xl" // 20
-  | "xxl" // 24
-  | "xxxl" // 32
-  | number;
+const guidelineBaseWidth = 375;
 
-/**
- * Props interface for the TextComponent
- */
-export interface TextComponentProps {
-  /**
-   * The text content to display
-   */
-  children: React.ReactNode;
+function useScreenWidth() {
+  const [width, setWidth] = useState(Dimensions.get("window").width);
 
-  /**
-   * Font weight using the loaded Afacad Flux font variants
-   * @default 'regular'
-   */
-  weight?: FontWeight;
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener("change", ({ window }) => {
+      setWidth(window.width);
+    });
+    return () => subscription?.remove();
+  }, []);
 
-  /**
-   * Text color - can be any valid color string (hex, rgb, named colors, etc.)
-   * @default '#000000'
-   */
-  color?: string;
-
-  /**
-   * Font size - can be a preset size or custom number
-   * @default 'base'
-   */
-  size?: FontSize;
-
-  /**
-   * Default styles applied to the text component
-   * These are merged with the component's base styles
-   */
-  styles?: StyleProp<TextStyle>;
-
-  /**
-   * Same as `styles` — merged so native `style={}` usage from lists/cards keeps working.
-   */
-  style?: StyleProp<TextStyle>;
-
-  /**
-   * Override styles that take precedence over all other styles
-   * Use this when you need to completely override specific style properties
-   */
-  overrideStyles?: StyleProp<TextStyle>;
-
-  /**
-   * Additional props passed to the underlying Text component
-   */
-  [key: string]: any;
+  return width;
 }
 
-/**
- * Font size mapping for consistent typography scale
- */
+export const mScale = (size: number, screenWidth: number, factor = 0.5) => {
+  return size + (screenWidth / guidelineBaseWidth - 1) * size * factor;
+};
+
+export type FontSize =
+  | "xs"
+  | "sm"
+  | "base"
+  | "md"
+  | "lg"
+  | "xl"
+  | "xxl"
+  | "xxxl"
+  | "huge"
+  | "mega"
+  | "giant"
+  | number;
+
+export interface TextComponentProps extends TextProps {
+  text?: string;
+  weight?: FontWeight;
+  /** Omit to follow light/dark foreground */
+  color?: string;
+  size?: FontSize;
+  responsive?: boolean;
+  variant?: keyof typeof TEXT_VARIANTS;
+  textAlign?: "auto" | "left" | "right" | "center" | "justify";
+  textDecoration?:
+    | "none"
+    | "underline"
+    | "line-through"
+    | "underline line-through";
+  textDecorationColor?: string;
+  fontStyle?: "normal" | "italic";
+  textTransform?: "none" | "uppercase" | "lowercase" | "capitalize";
+  textStyles?: StyleProp<TextStyle>;
+  /** Same as `textStyles` (legacy name) */
+  styles?: StyleProp<TextStyle>;
+  overrideStyles?: StyleProp<TextStyle>;
+}
+
 const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
-  xs: 12,
-  sm: 14,
-  base: 16,
+  xs: 10,
+  sm: 12,
+  base: 14,
+  md: 16,
   lg: 18,
   xl: 20,
   xxl: 24,
-  xxxl: 32,
+  xxxl: 28,
+  huge: 32,
+  mega: 40,
+  giant: 48,
 };
 
-/**
- * A customizable Text component with TypeScript support and consistent typography.
- *
- * ## Features
- * - **Font Weight Support**: All Afacad Flux font weights (light to black)
- * - **Flexible Sizing**: Preset sizes or custom numeric values
- * - **Color Customization**: Any valid color string support
- * - **Style Layering**: Base styles, custom styles, and override styles
- * - **Type Safety**: TypeScript validates all font weights and sizes
- * - **Performance Optimized**: Efficient text rendering
- *
- * ## Font Weights
- * - `light`, `regular`, `medium`, `semi_bold`, `bold`, `extra_bold`, `black`, `variable`
- *
- * ## Font Sizes
- * - `xs` (12), `sm` (14), `base` (16), `lg` (18), `xl` (20), `xxl` (24), `xxxl` (32)
- *
- * @example
- * ```tsx
- * // Basic text with custom styling
- * <TextComponent
- *   weight="bold"
- *   color="#007AFF"
- *   size="lg"
- *   styles={{ textAlign: 'center' }}
- * >
- *   Hello World
- * </TextComponent>
- * ```
- *
- * @example
- * ```tsx
- * // Text with override styles
- * <TextComponent
- *   weight="semi_bold"
- *   size={18}
- *   overrideStyles={{ fontStyle: 'italic' }}
- * >
- *   Custom styled text
- * </TextComponent>
- * ```
- *
- * @example
- * ```tsx
- * // Large heading text
- * <TextComponent
- *   weight="bold"
- *   size="xxxl"
- *   color="#1a1a1a"
- *   styles={{ marginBottom: 16 }}
- * >
- *   Page Title
- * </TextComponent>
- * ```
- *
- * @example
- * ```tsx
- * // Small caption text
- * <TextComponent
- *   weight="light"
- *   size="xs"
- *   color="#666666"
- *   styles={{ fontStyle: 'italic' }}
- * >
- *   This is a small caption
- * </TextComponent>
- * ```
- *
- * @example
- * ```tsx
- * // Text with complex styling
- * <TextComponent
- *   weight="medium"
- *   size="base"
- *   color="#333333"
- *   styles={{
- *     textDecorationLine: 'underline',
- *     textDecorationColor: '#007AFF',
- *     letterSpacing: 0.5
- *   }}
- * >
- *   Underlined text with letter spacing
- * </TextComponent>
- * ```
- */
+export const TEXT_VARIANTS = {
+  h1: { weight: "bold" as FontWeight, size: "giant" as FontSize },
+  h2: { weight: "bold" as FontWeight, size: "mega" as FontSize },
+  h3: { weight: "semi_bold" as FontWeight, size: "huge" as FontSize },
+  h4: { weight: "semi_bold" as FontWeight, size: "xxxl" as FontSize },
+  h5: { weight: "medium" as FontWeight, size: "xxl" as FontSize },
+  h6: { weight: "medium" as FontWeight, size: "xl" as FontSize },
+  body1Bold: { weight: "bold" as FontWeight, size: "base" as FontSize },
+  body1Medium: { weight: "medium" as FontWeight, size: "base" as FontSize },
+  body1Regular: { weight: "regular" as FontWeight, size: "base" as FontSize },
+  body2Bold: { weight: "bold" as FontWeight, size: "sm" as FontSize },
+  body2Medium: { weight: "medium" as FontWeight, size: "sm" as FontSize },
+  body2Regular: { weight: "regular" as FontWeight, size: "sm" as FontSize },
+  caption: { weight: "regular" as FontWeight, size: "xs" as FontSize },
+  button: { weight: "semi_bold" as FontWeight, size: "base" as FontSize },
+} as const;
+
 export default function TextComponent({
-  children,
   weight = "regular",
-  color = "#000000",
+  color,
   size = "base",
+  responsive = false,
+  variant,
+  textAlign,
+  textDecoration,
+  textDecorationColor,
+  fontStyle,
+  textTransform,
+  text,
+  textStyles,
   styles,
-  style,
   overrideStyles,
+  children,
+  style,
   ...restProps
 }: TextComponentProps) {
-  /**
-   * Get the numeric font size value
-   */
+  const colorScheme = useColorScheme();
+  const resolvedColor =
+    color ?? (colorScheme === "dark" ? "#FFFFFF" : "#000000");
+  const screenWidth = useScreenWidth();
+
   const getFontSize = (sizeValue: FontSize): number => {
-    return typeof sizeValue === "number" ? sizeValue : FONT_SIZE_MAP[sizeValue];
+    let fontSize: number;
+    if (typeof sizeValue === "number") {
+      fontSize = sizeValue;
+    } else {
+      fontSize = FONT_SIZE_MAP[sizeValue];
+    }
+
+    return responsive ? mScale(fontSize, screenWidth) : fontSize;
   };
 
-  /**
-   * Base styles for the text component
-   */
-  const baseStyles: TextStyle = {
-    fontFamily: getFontFamily(weight),
-    fontSize: getFontSize(size),
-    color: color,
+  const getVariantStyles = () => {
+    if (!variant) return {};
+
+    const variantConfig = TEXT_VARIANTS[variant];
+    return {
+      fontFamily: getFontFamily(variantConfig.weight),
+      fontSize: getFontSize(variantConfig.size),
+    };
   };
 
-  /**
-   * Combine all styles in the correct order of precedence:
-   * baseStyles < styles < overrideStyles
-   */
+  const baseStyles: TextStyle = variant
+    ? getVariantStyles()
+    : {
+        fontFamily: getFontFamily(weight),
+        fontSize: getFontSize(size),
+      };
+
+  baseStyles.color = resolvedColor;
+  if (textAlign) baseStyles.textAlign = textAlign;
+  if (textDecoration) baseStyles.textDecorationLine = textDecoration;
+  if (textDecorationColor) baseStyles.textDecorationColor = textDecorationColor;
+  if (fontStyle) baseStyles.fontStyle = fontStyle;
+  if (textTransform) baseStyles.textTransform = textTransform;
+
   const combinedStyles: StyleProp<TextStyle> = [
     baseStyles,
+    textStyles,
     styles,
     style,
     overrideStyles,
@@ -204,48 +167,13 @@ export default function TextComponent({
     <Text
       style={combinedStyles}
       {...restProps}>
-      {children}
+      {text || children}
     </Text>
   );
 }
 
-/**
- * Additional utility types for advanced usage
- */
 export type TextComponentRef = React.ComponentRef<typeof Text>;
 
-/**
- * Predefined text style variants for common use cases
- */
-export const TEXT_VARIANTS = {
-  heading1: {
-    weight: "bold" as FontWeight,
-    size: "xxxl" as FontSize,
-    color: "#1a1a1a",
-  },
-  heading2: {
-    weight: "semi_bold" as FontWeight,
-    size: "xxl" as FontSize,
-    color: "#1a1a1a",
-  },
-  heading3: {
-    weight: "medium" as FontWeight,
-    size: "xl" as FontSize,
-    color: "#1a1a1a",
-  },
-  body: {
-    weight: "regular" as FontWeight,
-    size: "base" as FontSize,
-    color: "#333333",
-  },
-  caption: {
-    weight: "light" as FontWeight,
-    size: "sm" as FontSize,
-    color: "#666666",
-  },
-  button: {
-    weight: "semi_bold" as FontWeight,
-    size: "base" as FontSize,
-    color: "#007AFF",
-  },
-} as const;
+/** @deprecated Use `TextComponent` — same component, kept for gradual migration */
+export const ResponsiveText = TextComponent;
+export type ResponsiveTextProps = TextComponentProps;

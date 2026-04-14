@@ -16,7 +16,6 @@ import {
   LoadingComponent,
   ModalComponent,
   PressableComponent,
-  ResponsiveText,
   Screen,
   TextComponent,
   TextInputComponent,
@@ -61,11 +60,11 @@ export function ExampleScreen() {
         Basic Text Component
       </TextComponent>
 
-      <ResponsiveText
+      <TextComponent
         variant="h1"
         color="#000000">
         Responsive Heading
-      </ResponsiveText>
+      </TextComponent>
 
       {/* Buttons */}
       <PressableComponent

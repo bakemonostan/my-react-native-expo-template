@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from "react-native";
 import IconComponent, { IconComponentProps } from "./IconComponent";
-import ResponsiveText, { TEXT_VARIANTS } from "./ResponsiveText";
+import TextComponent, { TEXT_VARIANTS } from "./TextComponent";
 
 /**
  * Pressable size presets for consistent touch targets
@@ -60,7 +60,7 @@ export interface PressableComponentProps extends PressableProps {
   buttonText?: string;
 
   /**
-   * Button label variant from ResponsiveText variants
+   * Button label variant from TextComponent variants
    * @default 'body1Bold'
    */
   labelVariant?: keyof typeof TEXT_VARIANTS;
@@ -359,7 +359,7 @@ export default function PressableComponent({
               )}
             </View>
           )}
-          <ResponsiveText
+          <TextComponent
             variant={labelVariant}
             color={
               isInteractionDisabled

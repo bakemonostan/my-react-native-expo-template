@@ -10,7 +10,7 @@ import { BlurView } from "expo-blur";
 import React, { useCallback, useMemo, useRef } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import PressableComponent from "../ui/PressableComponent";
-import ResponsiveText from "../ui/ResponsiveText";
+import TextComponent from "../ui/TextComponent";
 
 interface ScrollableBottomSheetProps {
   onClose: () => void;
@@ -55,7 +55,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
             borderWidth: 0,
           },
         ]}>
-        <ResponsiveText variant="body1Regular">{item}</ResponsiveText>
+        <TextComponent variant="body1Regular">{item}</TextComponent>
       </View>
     ),
     []
@@ -114,7 +114,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
       handleStyle={styles.handleStyle}
       handleIndicatorStyle={styles.indicator}>
       <View style={styles.header}>
-        <ResponsiveText variant="h4">{title}</ResponsiveText>
+        <TextComponent variant="h4">{title}</TextComponent>
         <PressableComponent
           buttonText="Close"
           style={styles.closeButton}

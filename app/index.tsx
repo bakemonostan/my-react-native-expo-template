@@ -1,5 +1,5 @@
 import PressableComponent from '@/components/ui/PressableComponent';
-import ResponsiveText from '@/components/ui/ResponsiveText';
+import TextComponent from '@/components/ui/TextComponent';
 import { Screen } from '@/components/ui/Screen';
 import { PresetStyles } from '@/theme/presets';
 import { useRouter } from 'expo-router';
@@ -17,9 +17,9 @@ export default function Index() {
           justifyContent: 'center',
           flex: 1,
         }}>
-        <ResponsiveText size='lg'>
+        <TextComponent size='lg'>
           Edit app/index.tsx to edit this screen.
-        </ResponsiveText>
+        </TextComponent>
         <PressableComponent
           onPress={() => router.push('/Modal')}
           buttonText='Show Modal'
