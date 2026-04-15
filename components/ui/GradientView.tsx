@@ -1,3 +1,4 @@
+import { useTheme } from "@/context/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { View, ViewStyle } from "react-native";
@@ -6,20 +7,15 @@ import { View, ViewStyle } from "react-native";
  * Props for the GradientView component
  */
 export interface GradientViewProps {
-  /** Child components to render inside the gradient view */
   children: React.ReactNode;
-  /** Width of the gradient border in pixels. Defaults to 1.5 */
   borderWidth?: number;
-  /** Array of color strings for the gradient. Defaults to a purple/blue gradient */
   colors?: string[];
-  /** Additional styles to apply to the container */
   style?: ViewStyle;
-  /** Whether to show the gradient border. When false, renders as a simple rounded view */
   showBorder?: boolean;
-  /** Border radius in pixels. Defaults to 6 */
   borderRadius?: number;
-  /** Whether to show shadow (currently not implemented). Defaults to false */
   showShadow?: boolean;
+  /** Override the inner background color. Defaults to theme background. */
+  backgroundColor?: string;
 }
 
 /**
@@ -86,7 +82,11 @@ export default function GradientView({
   showBorder = false,
   borderRadius = 6,
   showShadow = false,
+  backgroundColor,
 }: GradientViewProps) {
+  const { colors } = useTheme();
+  const innerBg = backgroundColor ?? colors.background;
+
   const lineColors = (
     gradientColors?.length ? gradientColors : [...DEFAULT_GRADIENT]
   ) as [string, string, ...string[]];
@@ -94,7 +94,9 @@ export default function GradientView({
   if (!showBorder) {
     return (
       <View style={[$container, style, { borderRadius }]}>
-        <View style={[$content, { borderRadius }]}>{children}</View>
+        <View style={[$content, { borderRadius, backgroundColor: innerBg }]}>
+          {children}
+        </View>
       </View>
     );
   }
@@ -109,14 +111,17 @@ export default function GradientView({
       ]}>
       <LinearGradient
         colors={lineColors}
-        locations={[0, 0.3, 0.7, 1]}
+        locations={[0, 0.5, 1]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={[$gradient, { padding: borderWidth, borderRadius }]}>
         <View
           style={[
             $content,
-            { borderRadius: Math.max(0, borderRadius - borderWidth) },
+            {
+              borderRadius: Math.max(0, borderRadius - borderWidth),
+              backgroundColor: innerBg,
+            },
           ]}>
           {children}
         </View>
@@ -147,6 +152,5 @@ const $gradient: ViewStyle = {
 };
 
 const $content: ViewStyle = {
-  backgroundColor: "white",
   overflow: "hidden",
 };

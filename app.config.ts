@@ -6,49 +6,49 @@
  * @see https://docs.expo.dev/guides/environment-variables/
  * @see https://docs.expo.dev/guides/deep-linking/ (for intentFilters / associatedDomains when you add them)
  */
-import type { ConfigContext, ExpoConfig } from "expo/config";
+import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const pkg = require("./package.json") as { version: string };
+const pkg = require('./package.json') as { version: string };
 
 // --- Clone & customize (or override via env in CI) -------------------------
 
 const isStaging =
-  process.env.APP_ENV === "staging" ||
-  process.env.EXPO_PUBLIC_APP_ENV === "staging";
+  process.env.APP_ENV === 'staging' ||
+  process.env.EXPO_PUBLIC_APP_ENV === 'staging';
 
 /**
  * Controls the native UI mode.
  * Set THEME_MODE=light to opt out of dark mode entirely.
  * Or run: node scripts/theme-mode.js [light|dark|auto]
  */
-const themeMode = process.env.THEME_MODE ?? "auto";
+const themeMode = process.env.THEME_MODE ?? 'auto';
 const userInterfaceStyle =
-  themeMode === "light" ? "light" : themeMode === "dark" ? "dark" : "automatic";
+  themeMode === 'light' ? 'light' : themeMode === 'dark' ? 'dark' : 'automatic';
 
-const APP_NAME = process.env.APP_DISPLAY_NAME ?? "my-rn-template";
-const SLUG = process.env.EXPO_PUBLIC_SLUG ?? "my-rn-template";
-const SCHEME = process.env.EXPO_PUBLIC_SCHEME ?? "myrntemplate";
+const APP_NAME = process.env.APP_DISPLAY_NAME ?? 'my-rn-template';
+const SLUG = process.env.EXPO_PUBLIC_SLUG ?? 'my-rn-template';
+const SCHEME = process.env.EXPO_PUBLIC_SCHEME ?? 'myrntemplate';
 
-const IOS_BUNDLE_DEFAULT = "com.ehizstan.myrntemplate";
-const ANDROID_PACKAGE_DEFAULT = "com.ehizstan.myrntemplate";
+const IOS_BUNDLE_DEFAULT = 'com.ehizstan.myrntemplate';
+const ANDROID_PACKAGE_DEFAULT = 'com.ehizstan.myrntemplate';
 
 /** Staging bundle/package only when you set explicit env vars (avoids breaking a checked-in native project). */
 const iosBundleId =
   isStaging && process.env.IOS_BUNDLE_ID_STAGING
     ? process.env.IOS_BUNDLE_ID_STAGING
-    : process.env.IOS_BUNDLE_ID ?? IOS_BUNDLE_DEFAULT;
+    : (process.env.IOS_BUNDLE_ID ?? IOS_BUNDLE_DEFAULT);
 
 const androidPackage =
   isStaging && process.env.ANDROID_PACKAGE_STAGING
     ? process.env.ANDROID_PACKAGE_STAGING
-    : process.env.ANDROID_PACKAGE ?? ANDROID_PACKAGE_DEFAULT;
+    : (process.env.ANDROID_PACKAGE ?? ANDROID_PACKAGE_DEFAULT);
 
 function resolveApiBaseUrl(): string {
   if (isStaging && process.env.EXPO_PUBLIC_API_BASE_URL_STAGING) {
     return process.env.EXPO_PUBLIC_API_BASE_URL_STAGING;
   }
-  return process.env.EXPO_PUBLIC_API_BASE_URL ?? "";
+  return process.env.EXPO_PUBLIC_API_BASE_URL ?? '';
 }
 
 // -----------------------------------------------------------------------------
@@ -58,17 +58,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   name: APP_NAME,
   slug: SLUG,
   version: pkg.version,
-  orientation: "portrait",
-  icon: "./assets/images/icon.png",
+  orientation: 'portrait',
+  icon: './assets/images/icon.png',
   scheme: SCHEME,
   userInterfaceStyle,
-  newArchEnabled: true,
 
   splash: {
-    image: "./assets/images/splash-icon.png",
+    image: './assets/images/splash-icon.png',
     imageWidth: 200,
-    resizeMode: "contain",
-    backgroundColor: "#ffffff",
+    resizeMode: 'contain',
+    backgroundColor: '#ffffff',
   },
 
   ios: {
@@ -78,32 +77,30 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   android: {
     adaptiveIcon: {
-      foregroundImage: "./assets/images/adaptive-icon.png",
-      backgroundColor: "#ffffff",
+      foregroundImage: './assets/images/adaptive-icon.png',
+      backgroundColor: '#ffffff',
     },
-    // Can re-enable once stable on your target API levels; edge-to-edge has caused native issues on some emulators.
-    edgeToEdgeEnabled: false,
     package: androidPackage,
   },
 
   web: {
-    bundler: "metro",
-    output: "static",
-    favicon: "./assets/images/favicon.png",
+    bundler: 'metro',
+    output: 'static',
+    favicon: './assets/images/favicon.png',
   },
 
   plugins: [
-    "expo-router",
+    'expo-router',
     [
-      "expo-splash-screen",
+      'expo-splash-screen',
       {
-        image: "./assets/images/splash-icon.png",
+        image: './assets/images/splash-icon.png',
         imageWidth: 200,
-        resizeMode: "contain",
-        backgroundColor: "#ffffff",
+        resizeMode: 'contain',
+        backgroundColor: '#ffffff',
       },
     ],
-    "expo-secure-store",
+    'expo-secure-store',
   ],
 
   experiments: {
@@ -112,7 +109,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   extra: {
     router: {},
-    appEnv: process.env.APP_ENV ?? process.env.EXPO_PUBLIC_APP_ENV ?? "development",
+    appEnv:
+      process.env.APP_ENV ?? process.env.EXPO_PUBLIC_APP_ENV ?? 'development',
     apiBaseUrl: resolveApiBaseUrl(),
     ...(process.env.EXPO_PUBLIC_APP_VERSION && {
       EXPO_PUBLIC_APP_VERSION: process.env.EXPO_PUBLIC_APP_VERSION,

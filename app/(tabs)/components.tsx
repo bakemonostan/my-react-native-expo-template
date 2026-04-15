@@ -16,11 +16,26 @@ import {
   TextAreaExample,
   ToggleExample,
 } from "@/components/Examples";
+import { useTheme } from "@/context/ThemeContext";
 import IconComponent from "@/components/ui/IconComponent";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React from "react";
+import { TouchableOpacity } from "react-native";
 
 const Drawer = createDrawerNavigator();
+
+function DrawerToggle() {
+  const navigation = useNavigation();
+  const { colors } = useTheme();
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+      style={{ paddingHorizontal: 16 }}>
+      <IconComponent name="menu" library="Ionicons" color={colors.text} size={24} />
+    </TouchableOpacity>
+  );
+}
 
 export default function ComponentsScreen() {
   return (
@@ -28,6 +43,7 @@ export default function ComponentsScreen() {
       screenOptions={{
         headerShown: true,
         headerTitle: "Components",
+        headerLeft: () => <DrawerToggle />,
       }}>
       <Drawer.Screen
         name="Icons"
