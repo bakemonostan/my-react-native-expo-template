@@ -1,3 +1,4 @@
+import { useTheme } from "@/context/ThemeContext";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
@@ -108,9 +109,9 @@ export type IconComponentProps =
  * ```
  */
 export default function IconComponent(props: IconComponentProps) {
+  const { colors } = useTheme();
   const { size = 24 } = props;
 
-  // Handle custom image icons
   if (props.library === "custom") {
     return (
       <Image
@@ -121,7 +122,6 @@ export default function IconComponent(props: IconComponentProps) {
     );
   }
 
-  // Handle vector icons with type assertion
   const Icon = IconComponents[props.library];
   if (!Icon) {
     console.warn(`Icon library "${props.library}" not found`);
@@ -130,9 +130,9 @@ export default function IconComponent(props: IconComponentProps) {
 
   return (
     <Icon
-      name={props.name as any} // Type assertion needed due to union type complexity
+      name={props.name as any}
       size={size}
-      color={props.color || "#000000"}
+      color={props.color ?? colors.text}
     />
   );
 }
