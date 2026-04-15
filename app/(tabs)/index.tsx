@@ -31,8 +31,9 @@ export default function TabOneScreen() {
         <TextComponent
           size='base'
           color={colors.text}>
-          This is your starting screen. Replace this content with your app's
-          home view.
+          {
+            "This is your starting screen. Replace this content with your app's home view."
+          }
         </TextComponent>
         <TextComponent
           size='sm'

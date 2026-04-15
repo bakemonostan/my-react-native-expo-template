@@ -6,7 +6,7 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import type { BottomSheetModal as BottomSheetModalType } from "@gorhom/bottom-sheet";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 type GorhomSheetProps = {
   children: ReactNode;
@@ -17,11 +17,10 @@ type GorhomSheetProps = {
 export const GorhomSheetModalWrapper = forwardRef<
   BottomSheetModalType,
   GorhomSheetProps
->(
-  (
-    { children, snapPoints = ["25%", "50%"], enablePanDownToClose = true },
-    ref
-  ) => {
+>(function GorhomSheetModalWrapper(
+  { children, snapPoints = ["25%", "50%"], enablePanDownToClose = true },
+  ref
+) {
     const renderBackdrop = useCallback(
       (props: any) => (
         <BottomSheetBackdrop
@@ -47,13 +46,9 @@ export const GorhomSheetModalWrapper = forwardRef<
         </BottomSheetView>
       </BottomSheetModal>
     );
-  }
-);
+});
 
 const styles = StyleSheet.create({
-  backdrop: {
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
   indicator: {
     backgroundColor: "#999",
     width: 40,

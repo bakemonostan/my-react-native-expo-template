@@ -1,5 +1,5 @@
-import React, { forwardRef, useCallback, useMemo, useRef } from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import React, { forwardRef, useCallback, useMemo } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { GorhomSheet } from "./GorhomSheetWrapper";
 
@@ -8,9 +8,7 @@ interface SheetProps {
 }
 
 export const TestBottomSheet = forwardRef<BottomSheet, SheetProps>(
-  ({ onSubmit }, ref) => {
-    const sheetRef = useRef<BottomSheet>(null);
-
+  function TestBottomSheet({ onSubmit: _onSubmit }, ref) {
     const data = useMemo(
       () => [
         { id: "1", title: "Component 1", color: "#FF6B6B" },

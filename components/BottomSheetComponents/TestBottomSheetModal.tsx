@@ -9,7 +9,10 @@ interface SheetProps {
 }
 
 export const TestBottomSheetModal = forwardRef<BottomSheetModal, SheetProps>(
-  ({ onClose, onSubmit }, ref) => {
+  function TestBottomSheetModal(
+    { onClose: _onClose, onSubmit: _onSubmit },
+    ref
+  ) {
     return (
       <GorhomSheetModalWrapper
         ref={ref}

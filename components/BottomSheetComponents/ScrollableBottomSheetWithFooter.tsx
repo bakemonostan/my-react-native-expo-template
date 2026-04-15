@@ -26,7 +26,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
 >(function ScrollableBottomSheetWithFooter(
   {
     onClose,
-    handleSheetChanges,
+    handleSheetChanges: onSheetIndexChange,
     title = "Tips",
     horizontal = true,
     snapPoints = ["50%"],
@@ -58,7 +58,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
         <TextComponent variant="body1Regular">{item}</TextComponent>
       </View>
     ),
-    []
+    [horizontal]
   );
 
   const renderFooter = useCallback(
@@ -106,6 +106,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
       ref={ref}
       footerComponent={renderFooter}
       onClose={onClose}
+      onChange={onSheetIndexChange}
       snapPoints={snapPoints}
       index={-1}
       enableDynamicSizing={false}

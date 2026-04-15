@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DimensionValue, StyleSheet, ViewStyle } from "react-native";
 import Animated, {
   cancelAnimation,
@@ -266,7 +266,7 @@ export default function SkeletonComponent({
       cancelAnimation(translatex);
       cancelAnimation(translatey);
     };
-  }, []);
+  }, [opacity, translatex, translatey]);
 
   // Set coordinates based on direction
   useEffect(() => {
@@ -318,7 +318,7 @@ export default function SkeletonComponent({
   }, [animationType, opacity]);
 
   // Shimmer animation functions
-  const animateAcrossXDirection = () => {
+  const animateAcrossXDirection = useCallback(() => {
     const overflowOffset = parentDimensions.width * 0.75;
     const leftMostEnd = -overflowOffset;
     const rightMostEnd =
@@ -344,9 +344,9 @@ export default function SkeletonComponent({
       ),
       -1
     );
-  };
+  }, [parentDimensions, gradientDimensions, direction, translatex]);
 
-  const animateAcrossYDirection = () => {
+  const animateAcrossYDirection = useCallback(() => {
     const overflowOffset = parentDimensions.height * 0.75;
     const topMostEnd = -overflowOffset;
     const bottomMostEnd =
@@ -372,7 +372,7 @@ export default function SkeletonComponent({
       ),
       -1
     );
-  };
+  }, [parentDimensions, gradientDimensions, direction, translatey]);
 
   // Start shimmer animation when dimensions are ready
   useEffect(() => {
@@ -390,7 +390,16 @@ export default function SkeletonComponent({
         animateAcrossYDirection();
       }
     }
-  }, [parentDimensions, gradientDimensions, direction, animationType]);
+  }, [
+    parentDimensions,
+    gradientDimensions,
+    direction,
+    animationType,
+    isXDirectionAnimation,
+    isYDirectionAnimation,
+    animateAcrossXDirection,
+    animateAcrossYDirection,
+  ]);
 
   const containerStyle: ViewStyle = {
     width,
