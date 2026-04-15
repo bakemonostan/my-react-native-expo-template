@@ -15,6 +15,31 @@ import {
   ToggleProps,
 } from "./Toggle";
 
+/**
+ * Checkbox built on `Toggle`: square control with animated fill and optional **`label`** / **`helper`**.
+ *
+ * @example Controlled checkbox with label
+ * ```tsx
+ * import { Checkbox } from "@/components/Toggle";
+ * import { useState } from "react";
+ *
+ * function Row() {
+ *   const [value, setValue] = useState(false);
+ *   return (
+ *     <Checkbox
+ *       value={value}
+ *       onValueChange={setValue}
+ *       label="Email me updates"
+ *     />
+ *   );
+ * }
+ * ```
+ *
+ * @example Error state
+ * ```tsx
+ * <Checkbox value={false} onValueChange={() => {}} status="error" helper="You must accept" />
+ * ```
+ */
 export interface CheckboxToggleProps extends Omit<
   ToggleProps<CheckboxInputProps>,
   "ToggleInput"
@@ -28,6 +53,7 @@ interface CheckboxInputProps extends BaseToggleInputProps<CheckboxToggleProps> {
   icon?: CheckboxToggleProps["icon"];
 }
 
+/** @see CheckboxToggleProps */
 export function Checkbox(props: CheckboxToggleProps) {
   const { icon, ...rest } = props;
   const checkboxInput = useCallback(

@@ -17,6 +17,32 @@ import {
 
 const isRTL = false;
 
+/**
+ * iOS-style switch on `Toggle`: track, knob, optional **`accessibilityMode`** (`"text"` | `"icon"`).
+ *
+ * @example Basic switch
+ * ```tsx
+ * import { Switch } from "@/components/Toggle";
+ * import { useState } from "react";
+ *
+ * export function Demo() {
+ *   const [on, setOn] = useState(true);
+ *   return (
+ *     <Switch value={on} onValueChange={setOn} label="Notifications" />
+ *   );
+ * }
+ * ```
+ *
+ * @example With accessibility labels on the knob area
+ * ```tsx
+ * <Switch
+ *   value={on}
+ *   onValueChange={setOn}
+ *   accessibilityMode="text"
+ *   label="Airplane mode"
+ * />
+ * ```
+ */
 export interface SwitchToggleProps
   extends Omit<ToggleProps<SwitchInputProps>, "ToggleInput"> {
   accessibilityMode?: "text" | "icon";
@@ -30,6 +56,7 @@ interface SwitchInputProps extends BaseToggleInputProps<SwitchToggleProps> {
   accessibilityMode?: SwitchToggleProps["accessibilityMode"];
 }
 
+/** @see SwitchToggleProps */
 export function Switch(props: SwitchToggleProps) {
   const { accessibilityMode, ...rest } = props;
   const switchInput = useCallback(

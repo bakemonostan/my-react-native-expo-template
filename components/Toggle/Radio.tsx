@@ -8,6 +8,41 @@ import {
   ToggleProps,
 } from "./Toggle";
 
+/**
+ * Radio option built on `Toggle`: circular outer ring and inner dot when selected.
+ * Group options by keeping one piece of state (e.g. selected id) and set each row’s **`value`**
+ * to `selected === thatOptionId`, and **`onValueChange`** to update selection.
+ *
+ * @example Two options sharing parent state
+ * ```tsx
+ * import { Radio } from "@/components/Toggle";
+ * import { useState } from "react";
+ * import { View } from "react-native";
+ *
+ * function PlanPicker() {
+ *   const [plan, setPlan] = useState<"basic" | "pro">("basic");
+ *   return (
+ *     <View>
+ *       <Radio
+ *         value={plan === "basic"}
+ *         onValueChange={() => setPlan("basic")}
+ *         label="Basic"
+ *       />
+ *       <Radio
+ *         value={plan === "pro"}
+ *         onValueChange={() => setPlan("pro")}
+ *         label="Pro"
+ *       />
+ *     </View>
+ *   );
+ * }
+ * ```
+ *
+ * @example Validation error
+ * ```tsx
+ * <Radio value={false} onValueChange={() => {}} status="error" label="Pick one" />
+ * ```
+ */
 export interface RadioToggleProps
   extends Omit<ToggleProps<RadioInputProps>, "ToggleInput"> {
   inputDetailStyle?: ViewStyle;
@@ -15,6 +50,7 @@ export interface RadioToggleProps
 
 type RadioInputProps = BaseToggleInputProps<RadioToggleProps>;
 
+/** @see RadioToggleProps */
 export function Radio(props: RadioToggleProps) {
   return (
     <Toggle

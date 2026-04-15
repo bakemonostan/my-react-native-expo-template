@@ -21,7 +21,37 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 
-interface FileUploadProps {
+/**
+ * Dashed “drop zone” that opens the image library (see **`expo-image-picker`**), enforces **`maxFileSize`**,
+ * and reports selection via **`onFileSelect`**. Shows a thumbnail when a file is chosen.
+ *
+ * @example Persist URI in parent state
+ * ```tsx
+ * import FileUploadComponent from "@/components/ui/FileUploadComponent";
+ * import { useState } from "react";
+ *
+ * function Profile() {
+ *   const [uri, setUri] = useState<string | undefined>();
+ *   return (
+ *     <FileUploadComponent
+ *       value={uri}
+ *       onFileSelect={(u) => setUri(u)}
+ *       message="Upload a profile photo"
+ *     />
+ *   );
+ * }
+ * ```
+ *
+ * @example Custom copy
+ * ```tsx
+ * <FileUploadComponent
+ *   subtitle="PNG or JPG only"
+ *   maxFileSize={2 * 1024 * 1024}
+ *   onError={(msg) => console.warn(msg)}
+ * />
+ * ```
+ */
+export interface FileUploadProps {
   onFileSelect?: (uri: string, fileName: string) => void;
   onError?: (error: string) => void;
   maxFileSize?: number;

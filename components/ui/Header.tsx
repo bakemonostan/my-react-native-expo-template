@@ -6,6 +6,22 @@ import { StyleSheet, View } from 'react-native';
 import GoBack from './GoBack';
 import TextComponent from './TextComponent';
 
+/**
+ * Top bar with back (**`GoBack`**), centered **`title`** / optional **`description`**, and optional **`rightItem`**.
+ * Uses static palette colors from `@/constants/Colors` for defaults — override with **`backgroundColor`** / **`titleColor`** as needed.
+ *
+ * @example Stack screen header
+ * ```tsx
+ * import Header from "@/components/ui/Header";
+ *
+ * <Header title="Settings" description="Account" />
+ * ```
+ *
+ * @example Custom back handler
+ * ```tsx
+ * <Header title="Edit" onPress={() => router.push("/")} />
+ * ```
+ */
 export interface HeaderProps {
   title?: string;
   description?: string;

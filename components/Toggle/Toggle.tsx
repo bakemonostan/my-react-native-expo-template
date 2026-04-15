@@ -103,10 +103,29 @@ export interface BaseToggleInputProps<T> {
 }
 
 /**
- * Renders a boolean input.
- * This is a controlled component that requires an onValueChange callback that updates the value prop in order for the component to reflect user actions. If the value prop is not updated, the component will continue to render the supplied value prop instead of the expected result of any user actions.
- * @param {ToggleProps} props - The props for the `Toggle` component.
- * @returns {JSX.Element} The rendered `Toggle` component.
+ * Low-level controlled boolean control: layout, label, helper, and a **`ToggleInput`** render prop.
+ * Most apps should use **`Checkbox`**, **`Switch`**, or **`Radio`** (same folder) instead of `Toggle` directly.
+ *
+ * @example Custom input render prop
+ * ```tsx
+ * import { Toggle } from "@/components/Toggle";
+ * import { useState } from "react";
+ *
+ * function CustomToggle() {
+ *   const [on, setOn] = useState(false);
+ *   return (
+ *     <Toggle
+ *       value={on}
+ *       onValueChange={setOn}
+ *       label="Feature"
+ *       accessibilityRole="switch"
+ *       ToggleInput={({ on }) => (
+ *         <View style={{ width: 40, height: 24, backgroundColor: on ? "#3B82F6" : "#ccc" }} />
+ *       )}
+ *     />
+ *   );
+ * }
+ * ```
  */
 export function Toggle<T>(props: ToggleProps<T>) {
   const { colors } = useTheme();
@@ -200,10 +219,7 @@ export function Toggle<T>(props: ToggleProps<T>) {
   );
 }
 
-/**
- * @param {ToggleProps} props - The props for the `FieldLabel` component.
- * @returns {JSX.Element} The rendered `FieldLabel` component.
- */
+/** Internal label row for `Toggle`. */
 function FieldLabel<T>(props: ToggleProps<T>) {
   const { colors } = useTheme();
   const {

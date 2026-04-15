@@ -1,12 +1,24 @@
 /**
- * Theme-aware primitive components.
- * These wrap RN's Text and View to automatically pick up the active color scheme.
+ * Theme-aware **`Text`** and **`View`** wrappers: default **foreground** / **background** from `useTheme().colors`.
+ * Prefer calling **`useTheme()`** yourself for full control; these are quick primitives.
  *
- * For most use cases, prefer using `useTheme()` directly in your component:
- *   const { colors } = useTheme();
+ * @example Themed text
+ * ```tsx
+ * import { Text } from "@/components/ui/Themed";
  *
- * See: context/ThemeContext.tsx
- * Docs: https://docs.expo.dev/develop/user-interface/color-themes/
+ * <Text>Uses colors.text</Text>
+ * ```
+ *
+ * @example Themed surface
+ * ```tsx
+ * import { View } from "@/components/ui/Themed";
+ *
+ * <View style={{ padding: 16 }}>
+ *   {children}
+ * </View>
+ * ```
+ *
+ * See `context/ThemeContext.tsx` — https://docs.expo.dev/develop/user-interface/color-themes/
  */
 
 import { useTheme } from "@/context/ThemeContext";

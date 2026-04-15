@@ -5,6 +5,31 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 import IconComponent from "./IconComponent";
 
+/**
+ * Selectable dark card with a top-right check affordance. **`onSelect(value)`** fires when the user taps;
+ * compare **`selectedValue`** to **`value`** to style selection (border uses theme **`primary`**).
+ *
+ * @example List of plans
+ * ```tsx
+ * import RadioButtonCard from "@/components/ui/RadioButtonCard";
+ * import TextComponent from "@/components/ui/TextComponent";
+ * import { useState } from "react";
+ *
+ * function Plans() {
+ *   const [id, setId] = useState("pro");
+ *   return (
+ *     <>
+ *       <RadioButtonCard value="basic" selectedValue={id} onSelect={setId}>
+ *         <TextComponent>Basic</TextComponent>
+ *       </RadioButtonCard>
+ *       <RadioButtonCard value="pro" selectedValue={id} onSelect={setId}>
+ *         <TextComponent>Pro</TextComponent>
+ *       </RadioButtonCard>
+ *     </>
+ *   );
+ * }
+ * ```
+ */
 export interface RadioButtonCardProps {
   value: string;
   selectedValue: string;

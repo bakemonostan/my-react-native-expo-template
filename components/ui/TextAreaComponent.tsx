@@ -46,6 +46,38 @@ const FONT_SIZE_MAP: Record<Exclude<FontSize, number>, number> = {
   xxl: 24,
 };
 
+/**
+ * Multiline field aligned with **`TextComponent`** typography: optional **`label`**, **`error`** line,
+ * character count, and theme-based border / fill from **`useTheme()`**.
+ *
+ * @example Notes field with limit
+ * ```tsx
+ * import TextAreaComponent from "@/components/ui/TextAreaComponent";
+ * import { useState } from "react";
+ *
+ * function Notes() {
+ *   const [text, setText] = useState("");
+ *   return (
+ *     <TextAreaComponent
+ *       label="Notes"
+ *       value={text}
+ *       onChangeText={setText}
+ *       maxLength={200}
+ *       showCharacterCount
+ *     />
+ *   );
+ * }
+ * ```
+ *
+ * @example Validation error
+ * ```tsx
+ * <TextAreaComponent
+ *   value={bio}
+ *   onChangeText={setBio}
+ *   error="Bio is required"
+ * />
+ * ```
+ */
 export default function TextAreaComponent({
   weight = "regular",
   color,

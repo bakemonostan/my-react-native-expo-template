@@ -121,10 +121,28 @@ export interface ScreenProps {
 /**
  * Screen layout: safe areas, status bar, header/body/footer, keyboard avoidance, optional scroll.
  *
- * @example
+ * @example Minimal body
  * ```tsx
  * <Screen>
  *   <Text>Hello World</Text>
+ * </Screen>
+ * ```
+ *
+ * @example Fixed header + scrollable body
+ * ```tsx
+ * <Screen
+ *   header={<Text>Title</Text>}
+ *   scrollable
+ *   safeAreaEdges={["top", "bottom"]}
+ * >
+ *   <Text>Long content...</Text>
+ * </Screen>
+ * ```
+ *
+ * @example Footer CTA
+ * ```tsx
+ * <Screen footer={<PressableComponent buttonText="Save" onPress={save} />}>
+ *   <TextComponent>Form fields</TextComponent>
  * </Screen>
  * ```
  */

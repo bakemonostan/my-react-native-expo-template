@@ -5,6 +5,27 @@ import { StyleSheet, View } from "react-native";
 import PressableComponent from "./PressableComponent";
 import TextComponent from "./TextComponent";
 
+/**
+ * Centered error message with optional **`title`**, optional **`onRetry`** (outline button), and theme-aware text.
+ * Used by **`StateHandler`** when a request fails and no **`errorRenderer`** is provided.
+ *
+ * @example Inline error
+ * ```tsx
+ * import ErrorState from "@/components/ui/ErrorState";
+ *
+ * <ErrorState message="Could not load data" onRetry={() => refetch()} />
+ * ```
+ *
+ * @example Full-screen with title
+ * ```tsx
+ * <ErrorState
+ *   title="Offline"
+ *   message="Check your connection."
+ *   fullScreen
+ *   onRetry={() => {}}
+ * />
+ * ```
+ */
 export interface ErrorStateProps {
   /** Optional heading above the message */
   title?: string;

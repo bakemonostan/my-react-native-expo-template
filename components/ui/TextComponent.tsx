@@ -96,6 +96,32 @@ export const TEXT_VARIANTS = {
   button: { weight: "semi_bold" as FontWeight, size: "base" as FontSize },
 } as const;
 
+/**
+ * App typography primitive: preset **sizes**, **variants** (h1–caption), optional **responsive** scaling,
+ * and a default text color that follows light/dark unless **`color`** is set.
+ *
+ * @example Basic body text
+ * ```tsx
+ * <TextComponent weight="medium" size="base">
+ *   Hello
+ * </TextComponent>
+ * ```
+ *
+ * @example Semantic variant + theme color
+ * ```tsx
+ * const { colors } = useTheme();
+ * <TextComponent variant="h4" color={colors.text}>
+ *   Section title
+ * </TextComponent>
+ * ```
+ *
+ * @example Responsive scaling on small / large screens
+ * ```tsx
+ * <TextComponent size="base" responsive>
+ *   Scales with screen width
+ * </TextComponent>
+ * ```
+ */
 export default function TextComponent({
   weight = "regular",
   color,
