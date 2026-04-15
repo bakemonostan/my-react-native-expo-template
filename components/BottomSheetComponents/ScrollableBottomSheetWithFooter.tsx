@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: mScale(16),
     backgroundColor: "transparent",
     borderRadius: mScale(8),
-    borderColor: colors.backgroundAuth,
+    borderColor: colors.border,
     borderWidth: 1,
   },
   contentContainer: {

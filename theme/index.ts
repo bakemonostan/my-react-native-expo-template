@@ -1,4 +1,4 @@
-import { Colors } from "../constants/Colors";
+import { colors as colorTokens } from "../constants/Colors";
 import {
   AnimationValues,
   BorderRadius,
@@ -11,11 +11,11 @@ import { Layout } from "./layout-dimensions";
 import { PresetStyles } from "./presets";
 import { Spacing } from "./spacing";
 import { TouchTargets } from "./touch-targets";
-import { Typography } from "./typography";
+import { typography as typographyTokens } from "./typography";
 
 export const Theme = {
   Spacing,
-  Typography,
+  Typography: typographyTokens,
   BorderRadius,
   TouchTargets,
   IconSizes,
@@ -25,5 +25,5 @@ export const Theme = {
   Shadows,
   ScaleUtils,
   PresetStyles,
-  Colors,
+  Colors: colorTokens,
 } as const;

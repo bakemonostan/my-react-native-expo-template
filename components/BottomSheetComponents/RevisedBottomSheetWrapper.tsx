@@ -217,7 +217,7 @@ const RevisedBottomSheetWrapper = React.forwardRef<
               <View style={styles.headerButtons}>
                 <PressableComponent
                   buttonText={closeText}
-                  buttonTextColor={colors.palette.takersBlue100}
+                  buttonTextColor={colors.primary}
                   labelVariant="body2Regular"
                   size={"xs"}
                   style={styles.closeButton}
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     gap: mScale(8),
   },
   closeButton: {
-    backgroundColor: colors.palette.takersSoap20,
+    backgroundColor: colors.backgroundSecondary,
   },
   footerContainer: {
     padding: mScale(12),

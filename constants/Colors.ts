@@ -113,4 +113,5 @@ export const darkColors = {
 /** Backwards-compatible alias — points to lightColors. */
 export const colors = lightColors;
 
-export type AppColors = typeof lightColors;
+/** Active theme tokens — either light or dark (same keys, different values). */
+export type AppColors = typeof lightColors | typeof darkColors;
