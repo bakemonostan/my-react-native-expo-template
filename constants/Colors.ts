@@ -1,18 +1,46 @@
 /**
- * Color system for the app.
+ * @fileoverview Central color system: shared **palette**, **light** / **dark** semantic tokens, and **`AppColors`** typing for `ThemeProvider`.
  *
- * Structure:
- *  - `palette`      — raw color values (don't use directly in components)
- *  - `lightColors`  — semantic tokens for light mode
- *  - `darkColors`   — semantic tokens for dark mode
- *  - `colors`       — alias for `lightColors` (backwards-compatible, for static/non-theme-aware usage)
+ * ## Layers
  *
- * In components, prefer `useTheme().colors` over importing `colors` directly,
- * so your UI responds to dark/light mode automatically.
+ * | Layer | Use |
+ * |-------|-----|
+ * | **`palette`** | Raw hex/RGBA scales (neutral, primary brand, status). Shared by both themes. Prefer **semantic** tokens in UI. |
+ * | **`lightColors` / `darkColors`** | Semantic names: `background`, `text`, `primary`, `border`, etc. |
+ * | **`colors`** | Alias of **`lightColors`** — only for static assets or non-theme code. |
  *
- * Replace the `primary` scale with your brand color before shipping.
+ * ## Usage
+ *
+ * - **In screens & components:** use **`useTheme().colors`** (`context/ThemeContext`) so light/dark updates automatically.
+ * - **Avoid** `import { colors }` for surfaces/text that should follow the active scheme; use theme hooks instead.
+ * - **Brand:** replace the **`primary*`** entries in **`palette`** with your product palette before shipping.
+ *
+ * @example Theme-aware (preferred)
+ * ```tsx
+ * import { useTheme } from "@/hooks/useTheme";
+ *
+ * function Card() {
+ *   const { colors } = useTheme();
+ *   return (
+ *     <View style={{ backgroundColor: colors.surface }}>
+ *       <Text style={{ color: colors.text }}>Hello</Text>
+ *     </View>
+ *   );
+ * }
+ * ```
+ *
+ * @example Static light tokens (stories, one-off)
+ * ```tsx
+ * import { colors } from "@/constants/Colors";
+ *
+ * const previewBg = colors.background; // always light palette
+ * ```
  */
 
+/**
+ * Shared raw scales: neutrals, primary brand ramp, status, overlays.
+ * **`lightColors`** / **`darkColors`** reference this object; both themes see the same **`palette`** keys.
+ */
 const palette = {
   white: "#FFFFFF",
   black: "#000000",
@@ -52,6 +80,10 @@ const palette = {
   overlay50: "rgba(0, 0, 0, 0.5)",
 } as const;
 
+/**
+ * Semantic tokens for **light** mode: light backgrounds, dark text, standard borders.
+ * @see {@link darkColors} for the dark counterpart (same keys).
+ */
 export const lightColors = {
   palette,
   transparent: palette.transparent,
@@ -81,6 +113,10 @@ export const lightColors = {
   overlay: palette.overlay20,
 } as const;
 
+/**
+ * Semantic tokens for **dark** mode: dark surfaces, light text, muted borders.
+ * @see {@link lightColors} — identical property names for easy swapping in `ThemeProvider`.
+ */
 export const darkColors = {
   palette,
   transparent: palette.transparent,
@@ -110,8 +146,13 @@ export const darkColors = {
   overlay: palette.overlay50,
 } as const;
 
-/** Backwards-compatible alias — points to lightColors. */
+/**
+ * Fixed **light** semantic map — alias of {@link lightColors}.
+ * Use for legacy code or non-theme contexts; prefer **`useTheme().colors`** in UI.
+ */
 export const colors = lightColors;
 
-/** Active theme tokens — either light or dark (same keys, different values). */
+/**
+ * Union of {@link lightColors} and {@link darkColors} — the shape of **`useTheme().colors`** at runtime.
+ */
 export type AppColors = typeof lightColors | typeof darkColors;
