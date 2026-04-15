@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useTheme";
 import { ComponentType, FC, useMemo } from "react";
 import {
   GestureResponderEvent,
@@ -108,6 +109,7 @@ export interface BaseToggleInputProps<T> {
  * @returns {JSX.Element} The rendered `Toggle` component.
  */
 export function Toggle<T>(props: ToggleProps<T>) {
+  const { colors } = useTheme();
   const {
     editable = true,
     status,
@@ -139,7 +141,7 @@ export function Toggle<T>(props: ToggleProps<T>) {
   const $inputWrapperStyles = [$row, $inputWrapper, $inputWrapperStyleOverride];
   const $helperStyles = [
     $helper,
-    status === "error" && { color: "#DC2626" },
+    status === "error" && { color: colors.error },
     HelperTextProps?.style,
   ];
 
@@ -189,7 +191,7 @@ export function Toggle<T>(props: ToggleProps<T>) {
         <TextComponent
           weight="regular"
           size="sm"
-          color="#666666"
+          color={colors.textSecondary}
           styles={$helperStyles}>
           {helper}
         </TextComponent>
@@ -203,6 +205,7 @@ export function Toggle<T>(props: ToggleProps<T>) {
  * @returns {JSX.Element} The rendered `FieldLabel` component.
  */
 function FieldLabel<T>(props: ToggleProps<T>) {
+  const { colors } = useTheme();
   const {
     status,
     label,
@@ -215,7 +218,7 @@ function FieldLabel<T>(props: ToggleProps<T>) {
 
   const $labelStyle = [
     $label,
-    status === "error" && { color: "#DC2626" },
+    status === "error" && { color: colors.error },
     labelPosition === "right" && $labelRight,
     labelPosition === "left" && $labelLeft,
     $labelStyleOverride,
@@ -226,7 +229,7 @@ function FieldLabel<T>(props: ToggleProps<T>) {
     <TextComponent
       weight="medium"
       size="base"
-      color="#1a1a1a"
+      color={colors.text}
       styles={$labelStyle}>
       {label || LabelTextProps?.children}
     </TextComponent>

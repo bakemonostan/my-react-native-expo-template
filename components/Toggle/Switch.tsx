@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { Animated, Platform, StyleProp, View, ViewStyle } from "react-native";
+import {
+  Animated,
+  ColorValue,
+  Platform,
+  StyleProp,
+  View,
+  ViewStyle,
+} from "react-native";
 
 import {
   $inputOuterBase,
@@ -8,30 +15,11 @@ import {
   ToggleProps,
 } from "./Toggle";
 
-// Simple RTL detection
-const isRTL = false; // You can replace this with your own RTL detection logic
-
-// Icon registry for switch accessibility icons
-const iconRegistry = {
-  hidden:
-    require("@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/Ionicons.json")
-      ? { uri: "eye-off" }
-      : require("@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/Ionicons.json"),
-  view: require("@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/Ionicons.json")
-    ? { uri: "eye" }
-    : require("@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/Ionicons.json"),
-};
+const isRTL = false;
 
 export interface SwitchToggleProps
   extends Omit<ToggleProps<SwitchInputProps>, "ToggleInput"> {
-  /**
-   * Switch-only prop that adds a text/icon label for on/off states.
-   */
   accessibilityMode?: "text" | "icon";
-  /**
-   * Optional style prop that affects the knob View.
-   * Note: `width` and `height` rules should be points (numbers), not percentages.
-   */
   inputDetailStyle?: Omit<ViewStyle, "width" | "height"> & {
     width?: number;
     height?: number;
@@ -42,11 +30,6 @@ interface SwitchInputProps extends BaseToggleInputProps<SwitchToggleProps> {
   accessibilityMode?: SwitchToggleProps["accessibilityMode"];
 }
 
-/**
- * @param {SwitchToggleProps} props - The props for the `Switch` component.
- * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/app/components/Switch}
- * @returns {JSX.Element} The rendered `Switch` component.
- */
 export function Switch(props: SwitchToggleProps) {
   const { accessibilityMode, ...rest } = props;
   const switchInput = useCallback(
@@ -56,7 +39,7 @@ export function Switch(props: SwitchToggleProps) {
         accessibilityMode={accessibilityMode}
       />
     ),
-    [accessibilityMode]
+    [accessibilityMode],
   );
   return (
     <Toggle
@@ -65,6 +48,27 @@ export function Switch(props: SwitchToggleProps) {
       ToggleInput={switchInput}
     />
   );
+}
+
+function resolveKnobColor(
+  on: boolean,
+  disabled: boolean,
+  status: SwitchInputProps["status"],
+  $detailStyleOverride: ViewStyle | undefined,
+  $innerStyleOverride: ViewStyle | undefined,
+): string {
+  if (on) {
+    const custom = $detailStyleOverride?.backgroundColor;
+    if (typeof custom === "string") return custom;
+    if (disabled) return "#6B7280";
+    if (status === "error") return "#DC2626";
+    return "#F3F4F6";
+  }
+  const custom = $innerStyleOverride?.backgroundColor;
+  if (typeof custom === "string") return custom;
+  if (disabled) return "#6B7280";
+  if (status === "error") return "#DC2626";
+  return "#E5E7EB";
 }
 
 function SwitchInput(props: SwitchInputProps) {
@@ -99,46 +103,36 @@ function SwitchInput(props: SwitchInputProps) {
   const knobSizeFallback = 2;
 
   const knobWidth = [
-    $detailStyleOverride?.width,
+    ($detailStyleOverride as ViewStyle)?.width,
     $switchDetail?.width,
     knobSizeFallback,
   ].find((v) => typeof v === "number");
 
   const knobHeight = [
-    $detailStyleOverride?.height,
+    ($detailStyleOverride as ViewStyle)?.height,
     $switchDetail?.height,
     knobSizeFallback,
   ].find((v) => typeof v === "number");
 
-  const offBackgroundColor = [
-    disabled && "#9CA3AF",
-    status === "error" && "#FEE2E2",
-    "#D1D5DB",
-  ].filter(Boolean)[0];
+  const offBackgroundColor = disabled
+    ? "#9CA3AF"
+    : status === "error"
+      ? "#FEE2E2"
+      : "#D1D5DB";
 
-  const onBackgroundColor = [
-    disabled && "transparent",
-    status === "error" && "#FEE2E2",
-    "#3B82F6",
-  ].filter(Boolean)[0];
+  const onBackgroundColor = disabled
+    ? "transparent"
+    : status === "error"
+      ? "#FEE2E2"
+      : "#3B82F6";
 
-  const knobBackgroundColor = (function () {
-    if (on) {
-      return [
-        $detailStyleOverride?.backgroundColor,
-        status === "error" && "#DC2626",
-        disabled && "#6B7280",
-        "#F3F4F6",
-      ].filter(Boolean)[0];
-    } else {
-      return [
-        $innerStyleOverride?.backgroundColor,
-        disabled && "#6B7280",
-        status === "error" && "#DC2626",
-        "#E5E7EB",
-      ].filter(Boolean)[0];
-    }
-  })();
+  const knobBackgroundColor = resolveKnobColor(
+    on,
+    !!disabled,
+    status,
+    $detailStyleOverride as ViewStyle | undefined,
+    $innerStyleOverride as ViewStyle | undefined,
+  );
 
   const rtlAdjustment = isRTL ? -1 : 1;
   const $themedSwitchInner = useMemo(() => [$toggleInner, $switchInner], []);
@@ -174,13 +168,13 @@ function SwitchInput(props: SwitchInputProps) {
     <View
       style={[
         $inputOuter,
-        { backgroundColor: offBackgroundColor },
+        { backgroundColor: offBackgroundColor as ColorValue },
         $outerStyleOverride,
       ]}>
       <Animated.View
         style={[
           ...$themedSwitchInner,
-          { backgroundColor: onBackgroundColor },
+          { backgroundColor: onBackgroundColor as ColorValue },
           $innerStyleOverride,
           { opacity: opacity.current },
         ]}
@@ -201,19 +195,15 @@ function SwitchInput(props: SwitchInputProps) {
           $detailStyleOverride,
           { transform: [{ translateX: $animatedSwitchKnob }] },
           { width: knobWidth, height: knobHeight },
-          { backgroundColor: knobBackgroundColor },
+          { backgroundColor: knobBackgroundColor as ColorValue },
         ]}
       />
     </View>
   );
 }
 
-/**
- * @param {ToggleInputProps & { role: "on" | "off" }} props - The props for the `SwitchAccessibilityLabel` component.
- * @returns {JSX.Element} The rendered `SwitchAccessibilityLabel` component.
- */
 function SwitchAccessibilityLabel(
-  props: SwitchInputProps & { role: "on" | "off" }
+  props: SwitchInputProps & { role: "on" | "off" },
 ) {
   const {
     on,
@@ -235,12 +225,16 @@ function SwitchAccessibilityLabel(
     role === "on" && { left: "5%" },
   ];
 
-  const color = (function () {
-    if (disabled) return "#6B7280";
-    if (status === "error") return "#DC2626";
-    if (!on) return (innerStyle as ViewStyle)?.backgroundColor || "#3B82F6";
-    return (detailStyle as ViewStyle)?.backgroundColor || "#F3F4F6";
-  })();
+  let color = "#F3F4F6";
+  if (disabled) color = "#6B7280";
+  else if (status === "error") color = "#DC2626";
+  else if (!on) {
+    const c = (innerStyle as ViewStyle)?.backgroundColor;
+    color = c != null ? String(c) : "#3B82F6";
+  } else {
+    const c = (detailStyle as ViewStyle)?.backgroundColor;
+    color = c != null ? String(c) : "#F3F4F6";
+  }
 
   return (
     <View style={$switchAccessibilityStyle}>

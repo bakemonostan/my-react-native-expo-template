@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Animated, StyleProp, View, ViewStyle } from "react-native";
+import { Animated, ColorValue, StyleProp, View, ViewStyle } from "react-native";
 
 import {
   $inputOuterBase,
@@ -10,19 +10,11 @@ import {
 
 export interface RadioToggleProps
   extends Omit<ToggleProps<RadioInputProps>, "ToggleInput"> {
-  /**
-   * Optional style prop that affects the dot View.
-   */
   inputDetailStyle?: ViewStyle;
 }
 
-interface RadioInputProps extends BaseToggleInputProps<RadioToggleProps> {}
+type RadioInputProps = BaseToggleInputProps<RadioToggleProps>;
 
-/**
- * @param {RadioToggleProps} props - The props for the `Radio` component.
- * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/app/components/Radio}
- * @returns {JSX.Element} The rendered `Radio` component.
- */
 export function Radio(props: RadioToggleProps) {
   return (
     <Toggle
@@ -53,36 +45,40 @@ function RadioInput(props: RadioInputProps) {
     }).start();
   }, [on]);
 
-  const offBackgroundColor = [
-    disabled && "#9CA3AF",
-    status === "error" && "#FEE2E2",
-    "#E5E7EB",
-  ].filter(Boolean)[0];
+  const offBackgroundColor = disabled
+    ? "#9CA3AF"
+    : status === "error"
+      ? "#FEE2E2"
+      : "#E5E7EB";
 
-  const outerBorderColor = [
-    disabled && "#9CA3AF",
-    status === "error" && "#DC2626",
-    !on && "#1F2937",
-    "#3B82F6",
-  ].filter(Boolean)[0];
+  const outerBorderColor = disabled
+    ? "#9CA3AF"
+    : status === "error"
+      ? "#DC2626"
+      : !on
+        ? "#1F2937"
+        : "#3B82F6";
 
-  const onBackgroundColor = [
-    disabled && "transparent",
-    status === "error" && "#FEE2E2",
-    "#F3F4F6",
-  ].filter(Boolean)[0];
+  const onBackgroundColor = disabled
+    ? "transparent"
+    : status === "error"
+      ? "#FEE2E2"
+      : "#F3F4F6";
 
-  const dotBackgroundColor = [
-    disabled && "#6B7280",
-    status === "error" && "#DC2626",
-    "#3B82F6",
-  ].filter(Boolean)[0];
+  const dotBackgroundColor = disabled
+    ? "#6B7280"
+    : status === "error"
+      ? "#DC2626"
+      : "#3B82F6";
 
   return (
     <View
       style={[
         $inputOuter,
-        { backgroundColor: offBackgroundColor, borderColor: outerBorderColor },
+        {
+          backgroundColor: offBackgroundColor as ColorValue,
+          borderColor: outerBorderColor as ColorValue,
+        },
         $outerStyleOverride,
       ]}>
       <Animated.View

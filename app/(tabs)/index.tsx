@@ -1,6 +1,6 @@
 import { PressableComponent, TextInputComponent } from '@/components/ui';
-import TextComponent from '@/components/ui/TextComponent';
 import { Screen } from '@/components/ui/Screen';
+import TextComponent from '@/components/ui/TextComponent';
 import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -8,6 +8,9 @@ import { View } from 'react-native';
 export default function TabOneScreen() {
   const { colors } = useTheme();
   const [name, setName] = useState('');
+  const throwError = () => {
+    throw new Error('Test error');
+  };
   return (
     <Screen
       safeAreaEdges={['top', 'bottom']}
@@ -15,7 +18,7 @@ export default function TabOneScreen() {
       footer={
         <PressableComponent
           buttonText='Save'
-          onPress={() => {}}
+          onPress={throwError}
         />
       }>
       <View style={{ gap: 16, padding: 16 }}>

@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useRef } from "react";
-import { Animated, ImageStyle, StyleProp, View, ViewStyle } from "react-native";
+import {
+  Animated,
+  ColorValue,
+  ImageStyle,
+  StyleProp,
+  View,
+  ViewStyle,
+} from "react-native";
 
 import {
   $inputOuterBase,
@@ -8,36 +15,19 @@ import {
   ToggleProps,
 } from "./Toggle";
 
-// Simple icon registry for checkbox
-const iconRegistry = {
-  check:
-    require("@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/Ionicons.json")
-      ? { uri: "checkmark" }
-      : require("@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/Ionicons.json"),
-};
-
-type IconTypes = "check";
-
-export interface CheckboxToggleProps
-  extends Omit<ToggleProps<CheckboxInputProps>, "ToggleInput"> {
-  /**
-   * Optional style prop that affects the Image component.
-   */
+export interface CheckboxToggleProps extends Omit<
+  ToggleProps<CheckboxInputProps>,
+  "ToggleInput"
+> {
   inputDetailStyle?: ImageStyle;
-  /**
-   * Checkbox-only prop that changes the icon used for the "on" state.
-   */
-  icon?: IconTypes;
+  /** Reserved for future icon variants */
+  icon?: "check";
 }
 
 interface CheckboxInputProps extends BaseToggleInputProps<CheckboxToggleProps> {
   icon?: CheckboxToggleProps["icon"];
 }
-/**
- * @param {CheckboxToggleProps} props - The props for the `Checkbox` component.
- * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/app/components/Checkbox}
- * @returns {JSX.Element} The rendered `Checkbox` component.
- */
+
 export function Checkbox(props: CheckboxToggleProps) {
   const { icon, ...rest } = props;
   const checkboxInput = useCallback(
@@ -47,7 +37,7 @@ export function Checkbox(props: CheckboxToggleProps) {
         icon={icon}
       />
     ),
-    [icon]
+    [icon],
   );
   return (
     <Toggle
@@ -63,7 +53,6 @@ function CheckboxInput(props: CheckboxInputProps) {
     on,
     status,
     disabled,
-    icon = "check",
     outerStyle: $outerStyleOverride,
     innerStyle: $innerStyleOverride,
     detailStyle: $detailStyleOverride,
@@ -79,36 +68,40 @@ function CheckboxInput(props: CheckboxInputProps) {
     }).start();
   }, [on]);
 
-  const offBackgroundColor = [
-    disabled && "#9CA3AF",
-    status === "error" && "#FEE2E2",
-    "#E5E7EB",
-  ].filter(Boolean)[0];
+  const offBackgroundColor = disabled
+    ? "#9CA3AF"
+    : status === "error"
+      ? "#FEE2E2"
+      : "#E5E7EB";
 
-  const outerBorderColor = [
-    disabled && "#9CA3AF",
-    status === "error" && "#DC2626",
-    !on && "#1F2937",
-    "#3B82F6",
-  ].filter(Boolean)[0];
+  const outerBorderColor = disabled
+    ? "#9CA3AF"
+    : status === "error"
+      ? "#DC2626"
+      : !on
+        ? "#1F2937"
+        : "#3B82F6";
 
-  const onBackgroundColor = [
-    disabled && "transparent",
-    status === "error" && "#FEE2E2",
-    "#3B82F6",
-  ].filter(Boolean)[0];
+  const onBackgroundColor = disabled
+    ? "transparent"
+    : status === "error"
+      ? "#FEE2E2"
+      : "#3B82F6";
 
-  const iconTintColor = [
-    disabled && "#6B7280",
-    status === "error" && "#DC2626",
-    "#FFFFFF",
-  ].filter(Boolean)[0];
+  const iconTintColor = disabled
+    ? "#6B7280"
+    : status === "error"
+      ? "#DC2626"
+      : "#FFFFFF";
 
   return (
     <View
       style={[
         $inputOuter,
-        { backgroundColor: offBackgroundColor, borderColor: outerBorderColor },
+        {
+          backgroundColor: offBackgroundColor as ColorValue,
+          borderColor: outerBorderColor as ColorValue,
+        },
         $outerStyleOverride,
       ]}>
       <Animated.View
@@ -121,7 +114,7 @@ function CheckboxInput(props: CheckboxInputProps) {
         <View
           style={[
             $checkboxDetail,
-            !!iconTintColor && { backgroundColor: iconTintColor },
+            { backgroundColor: iconTintColor },
             $detailStyleOverride as ViewStyle,
           ]}
         />

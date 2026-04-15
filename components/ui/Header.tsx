@@ -1,0 +1,100 @@
+import { colors } from '@/constants/Colors';
+import { mScale } from '@/constants/mixins';
+import { router } from 'expo-router';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import GoBack from './GoBack';
+import TextComponent from './TextComponent';
+
+export interface HeaderProps {
+  title?: string;
+  description?: string;
+  backgroundColor?: string;
+  withChild?: boolean;
+  children?: React.ReactNode;
+  onPress?: () => void;
+  paddingTop?: number;
+  withRightItem?: boolean;
+  rightItem?: React.ReactNode;
+  titleColor?: string;
+}
+
+const Header = ({
+  title,
+  description,
+  backgroundColor = colors.palette.white,
+  withChild,
+  children,
+  onPress,
+  withRightItem = false,
+  rightItem,
+  titleColor = colors.text,
+}: HeaderProps) => {
+  const handleBack = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      router.back();
+    }
+  };
+
+  return (
+    <View style={[styles.container, { backgroundColor }]}>
+      <GoBack onPress={handleBack} />
+      <View style={styles.titleContainer}>
+        <TextComponent
+          text={title}
+          variant='h4'
+          weight='bold'
+          color={titleColor}
+        />
+        {description && (
+          <TextComponent
+            text={description}
+            variant='body2Regular'
+            color={colors.textSecondary}
+            style={styles.description}
+          />
+        )}
+      </View>
+      {rightItem ? (
+        <View style={styles.rightItemContainer}>{rightItem}</View>
+      ) : (
+        <View style={styles.placeholder} />
+      )}
+      {withChild && <View style={styles.childContainer}>{children}</View>}
+    </View>
+  );
+};
+
+export default Header;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: mScale(0),
+    paddingVertical: mScale(12),
+  },
+  titleContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginLeft: mScale(10),
+  },
+  description: {
+    marginTop: mScale(4),
+  },
+  rightItemContainer: {
+    minWidth: mScale(32),
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  placeholder: {
+    width: mScale(32),
+  },
+  childContainer: {
+    width: '100%',
+    marginTop: mScale(12),
+  },
+});
