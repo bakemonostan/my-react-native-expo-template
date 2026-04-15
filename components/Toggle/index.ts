@@ -1,5 +1,11 @@
-// Project-agnostic Toggle components (Checkbox, Radio, Switch + shared Toggle)
-
+/**
+ * Boolean inputs: **`Checkbox`**, **`Radio`**, **`Switch`**, and the shared **`Toggle`** primitive.
+ *
+ * @example
+ * ```tsx
+ * import { Checkbox, Switch } from "@/components/Toggle";
+ * ```
+ */
 export { Toggle } from "./Toggle";
 export type { BaseToggleInputProps, ToggleProps } from "./Toggle";
 

@@ -72,7 +72,7 @@ export interface GradientViewProps {
  *   style={{ margin: 16, width: 200 }}
  *   borderRadius={20}
  *   borderWidth={3}>
- *   <ResponsiveText variant="h2" text="Styled gradient view" />
+ *   <TextComponent variant="h2">Styled gradient view</TextComponent>
  * </GradientView>
  * ```
  */

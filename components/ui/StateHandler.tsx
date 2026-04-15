@@ -45,9 +45,9 @@ export interface StateHandlerProps<T> {
 }
 
 /**
- * Handles loading, error, empty, and data states in a clean, reusable way
+ * Handles loading, error, empty, and success render in one place (common with React Query / fetch hooks).
  *
- * @example
+ * @example List when data is ready
  * ```tsx
  * const { data, isLoading, error, refetch } = useProducts();
  *
@@ -56,24 +56,35 @@ export interface StateHandlerProps<T> {
  *   error={error}
  *   data={data}
  *   onRetry={refetch}
- *   empty={<EmptyState title="No products found" />}
+ *   empty={<Text>No products found</Text>}
  * >
  *   {(products) => (
- *     <FlatList data={products} renderItem={...} />
+ *     <FlatList data={products} renderItem={({ item }) => <Row product={item} />} />
  *   )}
  * </StateHandler>
  * ```
  *
- * @example
+ * @example Custom loading UI
  * ```tsx
- * // With custom loading
  * <StateHandler
  *   isLoading={isLoading}
  *   error={error}
  *   data={data}
- *   loading={<CustomLoader />}
+ *   loading={<ActivityIndicator />}
  * >
  *   {(data) => <Content data={data} />}
+ * </StateHandler>
+ * ```
+ *
+ * @example Custom error UI
+ * ```tsx
+ * <StateHandler
+ *   isLoading={false}
+ *   error={err}
+ *   data={null}
+ *   errorRenderer={(e) => <Text>{String(e)}</Text>}
+ * >
+ *   {() => null}
  * </StateHandler>
  * ```
  */
