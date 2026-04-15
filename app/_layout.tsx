@@ -17,7 +17,11 @@ import { useFonts } from "expo-font";
 import * as Network from "expo-network";
 import { SplashScreen, Stack } from "expo-router";
 import { ReactNode, useEffect, useMemo, useRef } from "react";
-import { AppState, AppStateStatus, Platform } from "react-native";
+import {
+  AppState,
+  AppStateStatus,
+  Platform,
+} from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const queryClient = new QueryClient({
@@ -79,12 +83,12 @@ function ThemedNavigationShell({ children }: { children: ReactNode }) {
   );
 
   return (
-    <NavigationThemeProvider value={navigationTheme}>
-      <GestureHandlerRootView
-        style={{ flex: 1, backgroundColor: colors.background }}>
+    <GestureHandlerRootView
+      style={{ flex: 1, backgroundColor: colors.background }}>
+      <NavigationThemeProvider value={navigationTheme}>
         {children}
-      </GestureHandlerRootView>
-    </NavigationThemeProvider>
+      </NavigationThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -142,14 +146,21 @@ export default function RootLayout() {
             <Stack.Screen
               name="Modal"
               options={{
-                presentation: "formSheet",
                 title: "Modal",
-                sheetCornerRadius: 20,
-                sheetElevation: 34,
-                sheetExpandsWhenScrolledToEdge: true,
-                sheetGrabberVisible: true,
-                sheetAllowedDetents: [0.5],
-                gestureEnabled: false,
+                ...Platform.select({
+                  ios: {
+                    presentation: "formSheet" as const,
+                    sheetCornerRadius: 20,
+                    sheetElevation: 34,
+                    sheetExpandsWhenScrolledToEdge: true,
+                    sheetGrabberVisible: true,
+                    sheetAllowedDetents: [0.5] as [number],
+                    gestureEnabled: false,
+                  },
+                  default: {
+                    presentation: "modal" as const,
+                  },
+                }),
               }}
             />
           </Stack>

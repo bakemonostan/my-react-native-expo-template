@@ -81,7 +81,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
-    edgeToEdgeEnabled: true,
+    // Can re-enable once stable on your target API levels; edge-to-edge has caused native issues on some emulators.
+    edgeToEdgeEnabled: false,
     package: androidPackage,
   },
 
