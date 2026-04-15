@@ -30,7 +30,6 @@ export interface HeaderProps {
   children?: React.ReactNode;
   onPress?: () => void;
   paddingTop?: number;
-  withRightItem?: boolean;
   rightItem?: React.ReactNode;
   titleColor?: string;
 }
@@ -42,7 +41,6 @@ const Header = ({
   withChild,
   children,
   onPress,
-  withRightItem = false,
   rightItem,
   titleColor = colors.text,
 }: HeaderProps) => {
