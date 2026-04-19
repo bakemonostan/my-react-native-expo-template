@@ -1,8 +1,20 @@
-// NOTE: The default React Native styling doesn't support server rendering.
-// Server rendered styles should not change between the first render of the HTML
-// and the first render on the client. Typically, web developers will use CSS media queries
-// to render different styles on the client and server, these aren't directly supported in React Native
-// but can be achieved using a styling library like Nativewind.
+/**
+ * Web implementation of `useColorScheme` for this template (fixed `"light"`).
+ *
+ * @packageDocumentation
+ */
+
+/**
+ * Returns `"light"` on every call so server HTML and the first client render stay aligned.
+ * For real dark mode on web, combine CSS `prefers-color-scheme`, Nativewind, or your design system.
+ *
+ * @returns Always the literal `"light"` in this stub.
+ *
+ * @example
+ * ```tsx
+ * const scheme = useColorScheme(); // "light"
+ * ```
+ */
 export function useColorScheme() {
-  return 'light';
+  return "light";
 }

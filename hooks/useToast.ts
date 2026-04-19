@@ -1,23 +1,29 @@
+/**
+ * Global toast notifications via `react-native-toast-message`.
+ *
+ * @packageDocumentation
+ */
+
 import Toast from "react-native-toast-message";
 
 /**
- * Thin wrapper around `react-native-toast-message` for consistent toast calls.
+ * Typed helpers around `Toast.show` (position top, default visibility 3000 ms).
+ * Requires a single root `<ToastComponent />` (or equivalent) inside `ThemeProvider`.
  *
- * Make sure `<ToastComponent />` is rendered once at the root of your app
- * (inside `ThemeProvider`, outside everything else).
+ * @returns Object with `success`, `error`, `info`, `warning` (each `text1`, optional `text2`, optional `visibilityTime`)
+ * and `hide()` to dismiss the current toast.
+ *
+ * @see {@link https://github.com/calintamas/react-native-toast-message | react-native-toast-message}
  *
  * @example
  * ```tsx
+ * import { useToast } from "@/hooks";
+ *
  * const { success, error, info, warning } = useToast();
  *
- * // Simple
  * success("Saved!");
- *
- * // With subtitle
  * error("Upload failed", "Check your connection and try again.");
- *
- * // Custom duration (ms)
- * info("Version update available", undefined, 5000);
+ * info("Update available", undefined, 5000);
  * ```
  */
 export function useToast() {

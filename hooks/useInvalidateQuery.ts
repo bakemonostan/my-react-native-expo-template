@@ -1,31 +1,39 @@
+/**
+ * TanStack Query v5: invalidate cached queries from components that already have a `QueryClient`.
+ *
+ * @packageDocumentation
+ */
+
 import {
   type InvalidateQueryFilters,
   useQueryClient,
 } from "@tanstack/react-query";
 
 /**
- * Custom hook for invalidating queries
- * @returns Object containing refetchQuery function
+ * Reads the nearest React Query client and exposes `invalidateQueries` with the v5 filter object shape.
+ *
+ * @returns `{ invalidateQueries }` — call with `{ queryKey }`, `{ predicate }`, or other `InvalidateQueryFilters`.
+ *
+ * @see {@link https://tanstack.com/query/v5/docs/framework/react/guides/query-invalidation | Query invalidation}
+ *
  * @example
- * // Invalidate and refetch specific queries
- * const { refetchQuery } = useInvalidateQuery();
- * 
- * // Invalidate a single query
- * refetchQuery({ queryKey: ['users'] });
- * 
- * // Invalidate multiple queries
- * refetchQuery({ 
- *   predicate: (query) => 
- *     query.queryKey[0] === 'users' || 
- *     query.queryKey[0] === 'posts'
+ * ```tsx
+ * const { invalidateQueries } = useInvalidateQuery();
+ *
+ * invalidateQueries({ queryKey: ["users"] });
+ *
+ * invalidateQueries({
+ *   predicate: (q) =>
+ *     q.queryKey[0] === "users" || q.queryKey[0] === "posts",
  * });
+ * ```
  */
-export const useInvalidateQuery = () => {
+export function useInvalidateQuery() {
   const queryClient = useQueryClient();
 
-  const refetchQuery = (queryKey: InvalidateQueryFilters) => {
-    queryClient.invalidateQueries(queryKey);
+  const invalidateQueries = (filters: InvalidateQueryFilters) => {
+    queryClient.invalidateQueries(filters);
   };
 
-  return { refetchQuery };
-}; 
+  return { invalidateQueries };
+}
