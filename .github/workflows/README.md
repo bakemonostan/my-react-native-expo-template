@@ -4,9 +4,9 @@ This folder ships **one** workflow that works for **any** clone with **no** repo
 
 ## Included
 
-| File     | Purpose                                      |
-| -------- | -------------------------------------------- |
-| `ci.yml` | `npm ci` + `npm run lint` on PR / push to `main` or `master` |
+| File     | Purpose |
+| -------- | ------- |
+| `ci.yml` | `npm ci` + `npm run lint` + `npx tsc --noEmit` on PR / push to `main` or `master` |
 
 Rename your default branch if you use something else and update the `branches:` lists in `ci.yml`.
 
@@ -22,7 +22,7 @@ Rename your default branch if you use something else and update the `branches:` 
 ## Optional next steps (not in this template)
 
 1. **EAS Build (optional)** — Run `eas init` in your fork, then use Expo’s EAS workflow + `expo-token` secret if you want cloud builds instead of local `expo run:*` / Xcode / Gradle.
-2. **Typecheck** — Add a step `npx tsc --noEmit` once the project is clean under strict TypeScript.
+2. **Typecheck** — Already in `ci.yml` (`npx tsc --noEmit`).
 3. **Tests** — Add `npm test` and a Jest (or Maestro) workflow when you have tests.
 
 Copy any vendor-specific workflow (Firebase App Distribution, Play upload, etc.) from their docs into **new** files in this directory; do not commit real `appId`, package names, or keystore paths in a public template.

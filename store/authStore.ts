@@ -1,3 +1,7 @@
+/**
+ * MOCK AUTH — swappable boundary: replace `signIn` / `register` / `verifyOtp` (and any token
+ * logic) with your API; screens and gates only read `user` + `hydrated`. See `docs/AUTH_AND_NAVIGATION.md`.
+ */
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";

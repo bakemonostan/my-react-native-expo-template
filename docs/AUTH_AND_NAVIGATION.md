@@ -2,6 +2,10 @@
 
 This template ships a **generic, mock-only** auth flow so clones have a place to plug real APIs.
 
+## Swappable boundary (for wizard downloads)
+
+**UI and routing only depend on** `useAuthStore` state (`user`, `hydrated`, `pendingOtpEmail` for the OTP stub). **All backend behavior lives in** `store/authStore.ts` — replace **`signIn`**, **`register`**, **`verifyOtp`** (and add token / refresh handling as needed) with your API; keep **`app/index.tsx`** and **`app/(app)/_layout.tsx`** aligned with whatever you treat as “signed in.” Tokens should use [**SecureStore**](https://docs.expo.dev/versions/latest/sdk/securestore/), not only AsyncStorage.
+
 ## Official references
 
 - [Authentication in Expo Router](https://docs.expo.dev/router/advanced/authentication/) — session, splash, and stack structure.

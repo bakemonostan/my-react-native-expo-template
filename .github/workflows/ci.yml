@@ -1,5 +1,5 @@
-# Project-agnostic CI: install deps and run Expo ESLint.
-# No secrets, no Firebase, no Android flavors — add those in your fork when needed.
+# Project-agnostic CI: install deps, Expo ESLint, and TypeScript (no emit).
+# No secrets, EAS, or store uploads — add those in your fork when needed.
 
 name: CI
 
@@ -33,3 +33,6 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Typecheck
+        run: npx tsc --noEmit
