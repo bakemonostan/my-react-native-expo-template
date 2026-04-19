@@ -31,3 +31,4 @@ export { default as TextAreaExample } from "./TextAreaExample";
 export { default as TextInputExample } from "./TextInputExample";
 export { default as ToastExample } from "./ToastExample";
 export { default as ToggleExample } from "./ToggleExample";
+export { default as ZodFormExample } from "./ZodFormExample";

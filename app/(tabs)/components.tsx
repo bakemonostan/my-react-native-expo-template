@@ -27,6 +27,7 @@ import {
   TextInputExample,
   ToastExample,
   ToggleExample,
+  ZodFormExample,
 } from "@/components/Examples";
 import { useTheme } from "@/context/ThemeContext";
 import IconComponent from "@/components/ui/IconComponent";
@@ -218,6 +219,20 @@ export default function ComponentsScreen() {
           drawerIcon: ({ color, size }) => (
             <IconComponent
               name="create-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Form + Zod"
+        component={ZodFormExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="shield-checkmark-outline"
               library="Ionicons"
               color={color}
               size={size}

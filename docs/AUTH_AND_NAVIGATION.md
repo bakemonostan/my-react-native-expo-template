@@ -29,6 +29,17 @@ This template ships a **generic, mock-only** auth flow so clones have a place to
 2. **Token hydration** — if you use JWT, rehydrate user from `/me` (or similar) on app start.
 3. **`Stack.Protected`** — when your Expo Router build includes it, you can mirror the [protected routes](https://docs.expo.dev/router/advanced/protected/) doc and simplify redirects.
 
+## Optional: Google native sign-in (`utils/googleAuth.ts`)
+
+**Not wired** to login UI or `authStore` — safe for wizard downloads.
+
+| Step | What to do |
+|------|------------|
+| IDs | Set `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` and `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` (e.g. `.env`). Never commit real secrets. |
+| Readiness | Call `parseGoogleAuthEnv()` or `getGoogleNativeClientIds()` to pass IDs into `GoogleSignin.configure`. |
+| Native module | Install [@react-native-google-signin/google-signin](https://react-native-google-signin.github.io/docs/install) when you need on-device Google; follow their iOS/Android setup. |
+| Session | After `signIn` / `getTokens`, call **your** backend, then update `useAuthStore` (or SecureStore) yourself — this util does not persist sessions. |
+
 ## Route URLs (groups do not appear in the path)
 
 - `/` — gate (`app/index.tsx`)

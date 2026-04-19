@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 /**
  * **Optional** Google Sign-In helper — **not** wired to auth UI or `authStore`.
  *
@@ -12,7 +14,6 @@
  *
  * This file only validates env and exposes IDs so the template stays dependency-free until you add the package.
  */
-import { z } from "zod";
 
 const googleEnvSchema = z.object({
   iosClientId: z.string().min(1),
@@ -35,7 +36,7 @@ export type GoogleAuthEnvResult =
   | {
       ok: false;
       message: string;
-      missingKeys: Array<"iosClientId" | "webClientId">;
+      missingKeys: ("iosClientId" | "webClientId")[];
     };
 
 /**
@@ -48,7 +49,7 @@ export function parseGoogleAuthEnv(): GoogleAuthEnvResult {
   if (parsed.success) {
     return { ok: true, clientIds: parsed.data };
   }
-  const missingKeys: Array<"iosClientId" | "webClientId"> = [];
+  const missingKeys: ("iosClientId" | "webClientId")[] = [];
   if (!raw.iosClientId) missingKeys.push("iosClientId");
   if (!raw.webClientId) missingKeys.push("webClientId");
   return {

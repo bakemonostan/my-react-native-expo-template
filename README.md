@@ -255,7 +255,7 @@ ANDROID_PACKAGE=com.company.app
 
 ## Known gaps / roadmap
 
-See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md). Auth shell (mock) and infinite-list hook are in; next wins are usually **real auth / SecureStore**, **Zod + form recipe**, and **push / i18n** when you need them.
+See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md). Auth shell (mock) and infinite-list hook are in; **Zod + `FormField`** demo lives under Components → **Form + Zod**; optional **Google client ID** helper is `utils/googleAuth.ts` (see [`docs/AUTH_AND_NAVIGATION.md`](docs/AUTH_AND_NAVIGATION.md)). Next wins are usually **API-backed auth / SecureStore**, **push / i18n**, and polish from the gaps doc.
 
 - **Auth details:** [`docs/AUTH_AND_NAVIGATION.md`](docs/AUTH_AND_NAVIGATION.md)
 

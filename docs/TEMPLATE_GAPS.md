@@ -1,19 +1,11 @@
 # Template gaps
 
-**Only what is still open.** Pick 1–2 per iteration. Mock auth + UI baseline are in the repo; see `docs/AUTH_AND_NAVIGATION.md` for the auth swap boundary.
+**Only what is still open.** Pick 1–2 per iteration. Auth swap boundary: `docs/AUTH_AND_NAVIGATION.md`. **Zod + `FormField` example:** Components drawer → **Form + Zod** (`components/Examples/ZodFormExample.tsx`). **Optional Google IDs:** `utils/googleAuth.ts` + same doc.
 
 ### Suggested order
 
-1. **Forms** — One golden-path screen: Zod + `FormField` / inputs + submit + field errors (`react-hook-form` optional). `zod` is installed but not wired to a shared pattern.
-2. **Backend auth (per clone)** — Replace `signIn` / `register` / `verifyOtp` in `store/authStore.ts` with your API; **SecureStore** for tokens; optional [protected routes](https://docs.expo.dev/router/advanced/authentication/) when your Router setup supports them.
-3. **Quality / hygiene** — Theme/text pass; keep `package-lock.json` aligned with `package.json` for `npm ci`.
-
-### High priority
-
-| Area | Gap |
-|------|-----|
-| OAuth stub | `utils/googleAuth.ts` — wire a flow or delete |
-| Forms | Document + ship one **Zod + submit + errors** example |
+1. **Backend auth (per clone)** — Replace `signIn` / `register` / `verifyOtp` in `store/authStore.ts` with your API; **SecureStore** for tokens; optional [protected routes](https://docs.expo.dev/router/advanced/authentication/) when your Router setup supports them.
+2. **Quality / hygiene** — Theme/text pass; keep `package-lock.json` aligned with `package.json` for `npm ci`.
 
 ### Medium priority
 
