@@ -1,3 +1,4 @@
+import { AuthPersistBridge } from "@/components/AuthPersistBridge";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import ToastComponent from "@/components/ui/ToastComponent";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
@@ -135,13 +136,18 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <ThemedNavigationShell>
         <BottomSheetModalProvider>
+          <AuthPersistBridge />
           <Stack>
             <Stack.Screen
               name="index"
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(tabs)"
+              name="(auth)"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(app)"
               options={{ headerShown: false }}
             />
             <Stack.Screen

@@ -40,9 +40,10 @@ export default GoBack;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255, 255, 255, 0.04)",
-    borderRadius: mScale(100),
+    width: mScale(32),
     height: mScale(32),
+    backgroundColor: "rgba(255, 255, 255, 0.04)",
+    borderRadius: mScale(16),
     alignItems: "center",
     justifyContent: "center",
   },

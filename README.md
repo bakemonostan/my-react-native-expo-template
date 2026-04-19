@@ -18,6 +18,33 @@ npm start
 
 ---
 
+## First-time iOS build — read this before `npm run ios`
+
+**This matters.** This template uses **custom native code** (not Expo Go). Your first local iOS build depends on **Xcode**, **CocoaPods**, and a **real simulator that exists on your Mac**. Skipping the steps below is the #1 cause of `xcodebuild` error 70, “destination not found,” or mystery UDIDs from another machine.
+
+### Do this on your first iOS run (and after any weird iOS build errors)
+
+1. **Prefer `git clone`** over downloading a random zip. If you use a zip, delete any bundled **`.expo`** folder after unpacking (it is gitignored for a reason — stale paths break the next person).
+
+2. **Install Xcode’s iOS simulator runtimes** (Xcode → **Settings** → **Platforms** / **Components**). If Xcode says an **iOS platform version** is missing, install it — otherwise builds can fail with no useful app output.
+
+3. **Pick a simulator that actually exists**, then pass it by **name** so Expo does not reuse a dead device ID from cache:
+
+   ```bash
+   xcrun simctl list devices available
+   npx expo run:ios --simulator "iPhone 16"
+   ```
+
+   Use a device **name from your own** `simctl` list (yours may say iPhone 15, 16, 17, etc.).
+
+4. If you still see **“Unable to find a destination”** with a random UUID: delete the project’s **`.expo`** folder, run again with `--simulator "…"` as above. Optionally clear **`~/.expo`** if something global is stuck.
+
+5. **Pods** (if `ios/` already exists): from the repo root, `cd ios && pod install && cd ..` before building.
+
+After the first successful run, `npm run ios` is usually enough — the explicit `--simulator` step is mainly to **force a valid destination** the first time (or after Xcode/simulator changes).
+
+---
+
 ## Scripts
 
 ```bash
@@ -26,7 +53,7 @@ npm start                         # Expo dev server
 npm run start:staging             # APP_ENV=staging
 npm run start:prod                # NODE_ENV=production
 
-# iOS
+# iOS (see "First-time iOS build" above — use --simulator on first run)
 npm run ios                       # iOS simulator
 npm run ios:staging               # iOS (staging env)
 
@@ -197,9 +224,10 @@ ANDROID_PACKAGE=com.company.app
 
 ```
 ├── app/                        # Expo Router screens
-│   ├── (tabs)/                 # Tab navigator screens
+│   ├── (app)/                  # Authenticated shell (guard) + `(tabs)/` main UI
+│   ├── (auth)/                 # Login, register, forgot password, OTP (mock)
 │   ├── _layout.tsx             # Root layout (providers, QueryClient, ErrorBoundary)
-│   ├── index.tsx               # Entry / redirect
+│   ├── index.tsx               # Entry gate → (app) or (auth)
 │   └── Modal.tsx               # Modal screen example
 ├── api/                        # Axios client + types + utilities
 ├── assets/                     # Fonts, images
@@ -215,7 +243,7 @@ ANDROID_PACKAGE=com.company.app
 │   └── mixins.ts               # Shared style helpers
 ├── context/
 │   └── ThemeContext.tsx         # ThemeProvider + useTheme (persisted)
-├── docs/                       # Internal docs and planning
+├── docs/                       # TEMPLATE_GAPS, AUTH_AND_NAVIGATION, etc.
 ├── hooks/                      # Custom hooks
 ├── scripts/                    # CLI scripts (bump-version, theme-mode, etc.)
 ├── store/                      # Zustand stores
@@ -227,22 +255,15 @@ ANDROID_PACKAGE=com.company.app
 
 ## Known gaps / roadmap
 
-See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md) for the full list. Top items:
+See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md). Auth shell (mock) and infinite-list hook are in; next wins are usually **real auth / SecureStore**, **Zod + form recipe**, and **push / i18n** when you need them.
 
-- Toast / snackbar system
-- Auth flow screens + auth Zustand slice + protected routes
-- Form handling pattern (Zod + React Hook Form)
-- Select, OTP input, EmptyState components
-- Push notifications
-- Feature flags
-- `useDebounce`, `usePermissions`, `useKeyboard` hooks
-- Toggle/Checkbox/Radio re-export from main `ui/index.ts`
+- **Auth details:** [`docs/AUTH_AND_NAVIGATION.md`](docs/AUTH_AND_NAVIGATION.md)
 
 ---
 
 ## What this is NOT (yet)
 
-- **Not a full auth boilerplate** — token storage and utilities are in place but screens, guards, and social sign-in are not wired
+- **Not production auth** — mock Zustand session and screens exist; wire APIs + **SecureStore** for tokens and replace `store/authStore.ts` logic
 - **Not a UI kit** — components cover common patterns but are not exhaustive
 - **Not tested** — zero test files currently; jest and jest-expo are installed ready to go
 

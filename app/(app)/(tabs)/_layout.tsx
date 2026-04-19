@@ -1,10 +1,25 @@
 import IconComponent from "@/components/ui/IconComponent";
+import { useTheme } from "@/hooks/useTheme";
 import { Tabs } from "expo-router";
 import React from "react";
+import { StyleSheet } from "react-native";
 
 export default function TabLayout() {
+  const { colors } = useTheme();
+
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopWidth: StyleSheet.hairlineWidth,
+          borderTopColor: colors.border,
+        },
+        tabBarLabelStyle: { fontSize: 11 },
+      }}>
       <Tabs.Screen
         name="index"
         options={{
@@ -13,21 +28,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => (
             <IconComponent
               name="home"
-              library="Ionicons"
-              color={color}
-              size={size}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          headerShown: false,
-          title: "Two",
-          tabBarIcon: ({ color, size }) => (
-            <IconComponent
-              name="list"
               library="Ionicons"
               color={color}
               size={size}
@@ -50,23 +50,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* store screen */}
-      <Tabs.Screen
-        name="store/StoreExampleScreen"
-        options={{
-          headerShown: false,
-          title: "Store",
-          tabBarIcon: ({ color, size }) => (
-            <IconComponent
-              name="store"
-              library="MaterialCommunityIcons"
-              color={color}
-              size={size}
-            />
-          ),
-        }}
-      />
-      {/* querying and data fetching and caching example screen*/}
       <Tabs.Screen
         name="querying/QueryingScreen"
         options={{

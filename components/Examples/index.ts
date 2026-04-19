@@ -1,5 +1,5 @@
 /**
- * Demo screens for the **Components** drawer (`app/(tabs)/components.tsx`).
+ * Demo screens for the **Components** drawer (`app/(app)/(tabs)/components.tsx`).
  * Each export is a default-exported screen component.
  */
 

@@ -1,7 +1,8 @@
 /**
  * Central export surface for custom hooks (`import { … } from "@/hooks"`).
  *
- * Includes debouncing, keyboard, app state, media permissions, React Query helpers, network,
+ * Includes debouncing, keyboard, app state, media permissions, React Query helpers (invalidate,
+ * offset infinite list), network,
  * navigation focus refresh, toasts, and theme. Native `useColorScheme` lives in `./useColorScheme`
  * (not re-exported here — use `useTheme` for product UI).
  *
@@ -35,6 +36,14 @@ export type {
 export { usePrevious } from "./usePrevious";
 
 export { useInvalidateQuery } from "./useInvalidateQuery";
+
+export {
+  useOffsetInfiniteQuery,
+} from "./useOffsetInfiniteQuery";
+export type {
+  OffsetPage,
+  UseOffsetInfiniteQueryOptions,
+} from "./useOffsetInfiniteQuery";
 
 export { useNetwork } from "./useNetwork";
 export type { NetworkState } from "./useNetwork";
