@@ -10,8 +10,8 @@ export default function FileUploadExample() {
   const [uri, setUri] = useState<string | undefined>();
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <View style={{ gap: 16, padding: 16 }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 16 }}>
         <TextComponent size="lg" weight="bold">
           File upload
         </TextComponent>

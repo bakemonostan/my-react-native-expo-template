@@ -3,17 +3,14 @@ import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 export default function EmptyStateExample() {
   const { colors } = useTheme();
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 32, paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 32 }}>
         <TextComponent size="lg" weight="bold">
           Empty state
         </TextComponent>
@@ -59,7 +56,7 @@ export default function EmptyStateExample() {
             />
           </View>
         </View>
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

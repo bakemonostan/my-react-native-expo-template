@@ -3,17 +3,14 @@ import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 export default function AccordionExample() {
   const { colors } = useTheme();
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 24, paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 24 }}>
         <TextComponent size="lg" weight="bold">
           Accordion
         </TextComponent>
@@ -50,7 +47,7 @@ export default function AccordionExample() {
             },
           ]}
         />
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

@@ -3,7 +3,7 @@ import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 export default function ChipExample() {
   const { colors } = useTheme();
@@ -11,11 +11,8 @@ export default function ChipExample() {
   const [tags, setTags] = useState(["React", "Expo", "TypeScript"]);
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 24, paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 24 }}>
         <TextComponent size="lg" weight="bold">
           Chips
         </TextComponent>
@@ -72,7 +69,7 @@ export default function ChipExample() {
             ))}
           </View>
         </View>
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

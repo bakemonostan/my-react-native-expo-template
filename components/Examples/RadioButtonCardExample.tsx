@@ -10,8 +10,8 @@ export default function RadioButtonCardExample() {
   const [plan, setPlan] = useState("pro");
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]} scrollable>
-      <View style={{ gap: 16, padding: 16 }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 16 }}>
         <TextComponent size="lg" weight="bold">
           Radio cards
         </TextComponent>

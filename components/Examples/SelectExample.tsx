@@ -3,7 +3,7 @@ import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 const COUNTRIES = [
   { label: "Nigeria", value: "NG" },
@@ -17,12 +17,8 @@ export default function SelectExample() {
   const [country, setCountry] = useState<string | undefined>();
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 24, paddingBottom: 40 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 24 }}>
         <TextComponent size="lg" weight="bold">
           Select
         </TextComponent>
@@ -51,7 +47,7 @@ export default function SelectExample() {
           error="This field is required for the demo."
           onChange={() => {}}
         />
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

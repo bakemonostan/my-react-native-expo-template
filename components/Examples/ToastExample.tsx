@@ -4,18 +4,15 @@ import TextComponent from "@/components/ui/TextComponent";
 import { useToast } from "@/hooks/useToast";
 import { useTheme } from "@/hooks/useTheme";
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 export default function ToastExample() {
   const { colors } = useTheme();
   const { success, error, info, warning } = useToast();
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 16 }}>
         <TextComponent size="lg" weight="bold">
           Toast
         </TextComponent>
@@ -73,14 +70,16 @@ export default function ToastExample() {
               backgroundColor: colors.warning,
               alignItems: "center",
             }}
-            onPress={() => warning("Careful", "Please review before continuing.")}
+            onPress={() =>
+              warning("Careful", "Please review before continuing.")
+            }
           >
             <TextComponent weight="medium" color="#000">
               Warning
             </TextComponent>
           </PressableComponent>
         </View>
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

@@ -6,8 +6,8 @@ import { View } from "react-native";
 
 export default function GradientExample() {
   return (
-    <Screen safeAreaEdges={["top", "bottom"]} scrollable>
-      <View style={{ gap: 24, padding: 16 }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 24 }}>
         <TextComponent size="lg" weight="bold">
           Gradient border
         </TextComponent>

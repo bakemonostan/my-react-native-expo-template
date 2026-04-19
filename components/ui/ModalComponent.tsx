@@ -1,5 +1,13 @@
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
-import { Modal, Pressable, StyleSheet, View, ViewStyle } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native";
 import TextComponent from "./TextComponent";
 
 export interface ModalComponentProps {
@@ -24,14 +32,14 @@ export interface ModalComponentProps {
   children: React.ReactNode;
 
   /**
-   * Custom styles for the modal container
+   * Custom styles for the backdrop (merged with theme overlay)
    */
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 
   /**
-   * Custom styles for the content container
+   * Custom styles for the sheet (merged with theme surface)
    */
-  contentStyle?: ViewStyle;
+  contentStyle?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -104,6 +112,8 @@ export default function ModalComponent({
   style,
   contentStyle,
 }: ModalComponentProps) {
+  const { colors } = useTheme();
+
   return (
     <Modal
       visible={visible}
@@ -111,14 +121,23 @@ export default function ModalComponent({
       animationType="fade"
       onRequestClose={onClose}>
       <Pressable
-        style={[styles.overlay, style]}
+        style={[styles.overlay, { backgroundColor: colors.overlay }, style]}
         onPress={onClose}>
         <Pressable onPress={(e) => e.stopPropagation()}>
-          <View style={[styles.content, contentStyle]}>
+          <View
+            style={[
+              styles.content,
+              {
+                backgroundColor: colors.surface,
+                borderColor: colors.border,
+              },
+              contentStyle,
+            ]}>
             {title && (
               <TextComponent
                 size="lg"
                 weight="bold"
+                color={colors.text}
                 style={styles.title}>
                 {title}
               </TextComponent>
@@ -134,13 +153,12 @@ export default function ModalComponent({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
   content: {
-    backgroundColor: "#FFFFFF",
     borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
     padding: 20,
     width: "90%",
     maxWidth: 400,

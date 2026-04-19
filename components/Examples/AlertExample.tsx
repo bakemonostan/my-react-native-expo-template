@@ -1,14 +1,13 @@
 import AlertComponent from "@/components/ui/AlertComponent";
-import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
+import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
-import { PresetStyles } from "@/theme/presets";
 import React from "react";
-import ScrollViewComponent from "../ui/ScrollViewComponent";
+import { View } from "react-native";
 
 export default function AlertExample() {
   return (
-    <SafeAreaViewComponent style={PresetStyles.screenContainer}>
-      <ScrollViewComponent style={{ gap: 16, padding: 16 }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 16 }}>
         <TextComponent size="lg" weight="bold">
           Alert Component
         </TextComponent>
@@ -44,7 +43,7 @@ export default function AlertExample() {
           textColor="#0D47A1"
           borderColor="#90CAF9"
         />
-      </ScrollViewComponent>
-    </SafeAreaViewComponent>
+      </View>
+    </Screen>
   );
 }

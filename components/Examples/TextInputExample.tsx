@@ -3,7 +3,7 @@ import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 export default function TextInputExample() {
   const { colors } = useTheme();
@@ -11,12 +11,8 @@ export default function TextInputExample() {
   const [b, setB] = useState("");
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 20, paddingBottom: 40 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 20 }}>
         <TextComponent size="lg" weight="bold">
           Text input (raw)
         </TextComponent>
@@ -65,7 +61,7 @@ export default function TextInputExample() {
             inputStyle={{ minHeight: 100, textAlignVertical: "top" }}
           />
         </View>
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

@@ -12,8 +12,8 @@ export default function ToggleExample() {
   const [plan, setPlan] = useState<"basic" | "pro">("basic");
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <View style={{ gap: 24, padding: 16 }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 24 }}>
         <TextComponent size="lg" weight="bold">
           Toggles
         </TextComponent>

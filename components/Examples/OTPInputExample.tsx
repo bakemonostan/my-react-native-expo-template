@@ -4,19 +4,15 @@ import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 export default function OTPInputExample() {
   const { colors } = useTheme();
   const [showError, setShowError] = useState(false);
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 28, paddingBottom: 40 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 28 }}>
         <TextComponent size="lg" weight="bold">
           OTP input
         </TextComponent>
@@ -45,7 +41,7 @@ export default function OTPInputExample() {
           </TextComponent>
           <OTPInput length={4} secure onComplete={() => {}} />
         </View>
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

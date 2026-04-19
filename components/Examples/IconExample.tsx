@@ -1,15 +1,14 @@
 import IconComponent from "@/components/ui/IconComponent";
-import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
+import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { colors } from "@/constants/Colors";
-import { PresetStyles } from "@/theme/presets";
 import React from "react";
 import { View } from "react-native";
 
 export default function IconExample() {
   return (
-    <SafeAreaViewComponent style={PresetStyles.screenContainer}>
-      <View style={{ gap: 16, padding: 16 }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 16 }}>
         <TextComponent
           size="lg"
           weight="bold">
@@ -70,6 +69,6 @@ export default function IconExample() {
           />
         </View>
       </View>
-    </SafeAreaViewComponent>
+    </Screen>
   );
 }

@@ -9,8 +9,8 @@ export default function TextAreaExample() {
   const [bio, setBio] = useState("");
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]} scrollable>
-      <View style={{ gap: 20, padding: 16 }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 20 }}>
         <TextComponent size="lg" weight="bold">
           Text area
         </TextComponent>

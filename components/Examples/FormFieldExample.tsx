@@ -3,7 +3,7 @@ import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
-import { ScrollView } from "react-native";
+import { View } from "react-native";
 
 export default function FormFieldExample() {
   const { colors } = useTheme();
@@ -12,12 +12,8 @@ export default function FormFieldExample() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 20, paddingBottom: 40 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 20 }}>
         <TextComponent size="lg" weight="bold">
           Form field
         </TextComponent>
@@ -57,7 +53,7 @@ export default function FormFieldExample() {
         <TextComponent size="sm" color={colors.textSecondary}>
           Toggle the eye icon to show or hide the password.
         </TextComponent>
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

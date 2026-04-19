@@ -2,7 +2,7 @@ import AvatarComponent from "@/components/ui/AvatarComponent";
 import BadgeComponent from "@/components/ui/BadgeComponent";
 import CardComponent from "@/components/ui/CardComponent";
 import IconComponent from "@/components/ui/IconComponent";
-import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
+import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import { scale, vScale } from "@/constants/mixins";
@@ -10,8 +10,6 @@ import { heightToDp, SPACING } from "@/constants/responsive";
 import { PresetStyles } from "@/theme/presets";
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
-import ScrollViewComponent from "../ui/ScrollViewComponent";
-
 export default function CardExample() {
   const { colors } = useTheme();
 
@@ -24,10 +22,8 @@ export default function CardExample() {
   ];
 
   return (
-    <SafeAreaViewComponent withEdges={false}>
-      <ScrollViewComponent
-        style={PresetStyles.screenContainer}
-        contentContainerStyle={{ paddingBottom: vScale(20) }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: vScale(16), paddingBottom: vScale(20) }}>
         <TextComponent
           size="lg"
           weight="bold"
@@ -257,8 +253,8 @@ export default function CardExample() {
             </View>
           </View>
         </CardComponent>
-      </ScrollViewComponent>
-    </SafeAreaViewComponent>
+      </View>
+    </Screen>
   );
 }
 

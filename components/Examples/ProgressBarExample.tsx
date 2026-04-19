@@ -3,7 +3,7 @@ import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import React, { useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 export default function ProgressBarExample() {
   const { colors } = useTheme();
@@ -17,11 +17,8 @@ export default function ProgressBarExample() {
   }, []);
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 24, paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 24 }}>
         <TextComponent size="lg" weight="bold">
           Progress bar
         </TextComponent>
@@ -53,7 +50,7 @@ export default function ProgressBarExample() {
           </TextComponent>
           <ProgressBar />
         </View>
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

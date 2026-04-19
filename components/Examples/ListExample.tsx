@@ -1,8 +1,7 @@
 import { List } from "@/components/ui/ListComponents";
-import SafeAreaViewComponent from "@/components/ui/SafeAreaViewComponent";
+import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { vScale } from "@/constants/mixins";
-import { PresetStyles } from "@/theme/presets";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
@@ -170,7 +169,7 @@ export default function ListExample() {
     badge: item.badge,
     time: item.time,
     pressable: true,
-    onPress: () => console.log("Pressed:", item),
+    onPress: () => {},
   });
 
   const renderSection = ({ item: section }: { item: ExampleSection }) => (
@@ -183,22 +182,21 @@ export default function ListExample() {
   );
 
   return (
-    <SafeAreaViewComponent
-      style={PresetStyles.screenContainer}
-      withEdges={false}
-    >
+    <Screen safeAreaEdges={["bottom"]} scrollable={false} bodyStyle={{ flex: 1 }}>
       <View style={styles.container}>
         <TextComponent size="lg" weight="bold" style={styles.header}>
           List Examples
         </TextComponent>
         <FlatList
+          style={{ flex: 1 }}
           data={sections}
           renderItem={renderSection}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: vScale(24) }}
         />
       </View>
-    </SafeAreaViewComponent>
+    </Screen>
   );
 }
 

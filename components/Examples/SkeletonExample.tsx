@@ -11,8 +11,8 @@ import { View } from "react-native";
 export default function SkeletonExample() {
   const { colors } = useTheme();
   return (
-    <Screen safeAreaEdges={["top", "bottom"]} scrollable>
-      <View style={{ gap: 24, padding: 16 }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 24 }}>
         <TextComponent size="lg" weight="bold">
           Skeleton
         </TextComponent>

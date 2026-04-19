@@ -4,7 +4,7 @@ import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
 import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 export default function ConfirmationDialogExample() {
   const { colors } = useTheme();
@@ -14,11 +14,8 @@ export default function ConfirmationDialogExample() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 16 }}>
         <TextComponent size="lg" weight="bold">
           Confirmation dialog
         </TextComponent>
@@ -43,7 +40,7 @@ export default function ConfirmationDialogExample() {
             onPress={() => setLoadingOpen(true)}
           />
         </View>
-      </ScrollView>
+      </View>
 
       <ConfirmationDialog
         visible={standardOpen}

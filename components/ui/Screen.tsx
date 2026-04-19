@@ -75,8 +75,8 @@ export interface ScreenProps {
   backgroundColor?: string;
 
   /**
-   * Safe area edges to apply insets to
-   * @default ["top"]
+   * Safe area edges to apply insets to (e.g. `["bottom"]` under a stack header).
+   * @default []
    */
   safeAreaEdges?: ExtendedEdge[];
 

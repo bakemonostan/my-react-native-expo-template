@@ -18,8 +18,8 @@ export default function StateHandlerExample() {
     phase === "data" ? ["Apple", "Banana", "Cherry"] : phase === "empty" ? [] : null;
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]}>
-      <View style={{ gap: 16, padding: 16 }}>
+    <Screen safeAreaEdges={["bottom"]}>
+      <View style={{ gap: 16 }}>
         <TextComponent size="lg" weight="bold">
           State handler
         </TextComponent>
