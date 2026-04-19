@@ -5,6 +5,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import {
   FlatList,
@@ -169,6 +170,7 @@ export function ListItem({
   style,
   contentStyle,
 }: ListItemProps) {
+  const { colors } = useTheme();
   const Container = pressable ? TouchableOpacity : View;
 
   const renderIcon = (
@@ -181,17 +183,17 @@ export function ListItem({
 
   return (
     <Container
-      style={[styles.itemContainer, style]}
+      style={[styles.itemContainer, { backgroundColor: colors.surface }, style]}
       onPress={pressable ? onPress : undefined}
       activeOpacity={0.7}
     >
       {leftIcon && renderIcon(leftIcon)}
       <View style={[styles.contentContainer, contentStyle]}>
-        <TextComponent weight="medium" size="base">
+        <TextComponent weight="medium" size="base" color={colors.text}>
           {title}
         </TextComponent>
         {subtitle && (
-          <TextComponent style={styles.subtitle} color="#666666" size="sm">
+          <TextComponent style={styles.subtitle} color={colors.textSecondary} size="sm">
             {subtitle}
           </TextComponent>
         )}
@@ -343,10 +345,13 @@ export function List<T>({
   data,
   renderItem,
   showDivider = true,
-  dividerColor = "#E1E1E1",
+  dividerColor,
   containerStyle,
   ...restProps
 }: ListProps<T>) {
+  const { colors } = useTheme();
+  const resolvedDividerColor = dividerColor ?? colors.separator;
+
   const renderListItem = ({ item }: { item: T }) => {
     const itemProps = renderItem(item);
     return <ListItem {...itemProps} />;
@@ -360,7 +365,7 @@ export function List<T>({
         showDivider
           ? () => (
               <View
-                style={[styles.divider, { backgroundColor: dividerColor }]}
+                style={[styles.divider, { backgroundColor: resolvedDividerColor }]}
               />
             )
           : undefined
@@ -379,7 +384,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#FFFFFF",
   },
   contentContainer: {
     flex: 1,

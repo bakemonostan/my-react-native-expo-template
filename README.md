@@ -1,363 +1,253 @@
-# React Native Template
+# My React Native Expo Template
 
-A comprehensive React Native template with a rich set of pre-built components, utilities, and best practices for building modern mobile applications.
+A production-minded Expo + React Native starter. The goal is to skip the boring setup and start building features — with a proper architecture already in place.
 
-## ⚡ Scripts
+> **Status:** Active development. See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md) for the honest backlog.
 
-```bash
-# Dev
-npm start                  # Start Expo dev server
-npm run start:staging      # Start with APP_ENV=staging
-npm run start:prod         # Start with NODE_ENV=production
+---
 
-# Run on device/simulator
-npm run ios                # Run on iOS simulator
-npm run ios:staging        # Run on iOS (staging env)
-npm run android            # Run on Android (default: debug variant)
-npm run android:debug      # Explicit debug build & install
-npm run android:release    # Release build (installs on emulator / default target)
-npm run android:release:device   # Release build on a connected physical device
-npm run android:build      # Build & install on a connected Android device (debug)
-npm run android:staging    # Android with APP_ENV=staging (debug)
-npm run android:staging:debug    # Staging + debug variant
-npm run android:staging:release  # Staging + release variant
-
-# Code quality
-npm run lint               # Run Expo lint
-
-# Versioning
-npm run bump-version       # Bump version across package.json, iOS & Android
-
-# Theming
-npm run theme-mode light   # Force light mode (opt out of dark mode)
-npm run theme-mode dark    # Force dark mode
-npm run theme-mode auto    # Follow system preference (default)
-```
-
-## 🚀 Features
-
-- **Component Library**: A rich set of pre-built, customizable components
-- **TypeScript Support**: Full TypeScript integration for better development experience
-- **Theme System**: Flexible theming with light/dark mode support
-- **Responsive Design**: Built-in responsive utilities and components
-- **Navigation**: Integrated with Expo Router for seamless navigation
-- **Bottom Sheets**: Custom bottom sheet components with smooth animations
-- **Form Handling**: Utilities for form data management
-- **Authentication**: Google authentication integration
-- **UI Components**: Extensive collection of UI components
-
-## 📦 Component Library
-
-### Core Components
-
-- **AlertComponent**: Customizable alert messages with different variants
-- **AvatarComponent**: User avatar display with fallback options
-- **BadgeComponent**: Status indicators and notification badges
-- **CardComponent**: Flexible card layouts with elevation and customization
-- **DividerComponent**: Visual separators with customizable styles
-- **IconComponent**: Multi-library icon support (Ionicons, FontAwesome, etc.)
-- **ImageComponent**: Enhanced image component with loading and error states
-- **ListComponents**: Flexible list implementations with various layouts
-- **ModalComponent**: Custom modal dialogs with animations
-- **PressableComponent**: Enhanced touchable components with variants
-- **TextComponent**: Typography components with responsive scaling
-- **TextInputComponent**: Enhanced input fields with validation
-
-### Layout Components
-
-- **SafeAreaViewComponent**: Safe area handling with customization
-- **ScrollViewComponent**: Enhanced scroll views with customization
-- **SimpleKeyboardAvoidingView**: Keyboard handling with customization
-- **DrawerComponent**: Custom drawer implementation
-
-## 🎨 Theme System
-
-The template includes a comprehensive theme system with:
-
-- **Colors**: Predefined color palettes
-- **Typography**: Font scales and weights
-- **Spacing**: Consistent spacing system
-- **Borders & Shadows**: Reusable border and shadow styles
-- **Component Dimensions**: Standardized component sizes
-- **Layout Dimensions**: Responsive layout utilities
-- **Touch Targets**: Accessibility-friendly touch areas
-
-## 🛠️ Utilities
-
-### Form Data Helpers
-
-```typescript
-// Append images to form data
-appendImagesToFormData(formData, images, fieldName);
-
-// Create form data from object
-createFormData(data);
-
-// Append array to form data
-appendArrayToFormData(formData, fieldName, data);
-
-// Append single image
-appendSingleImageToFormData(formData, imageUri, fieldName);
-```
-
-### Scaling Utilities
-
-```typescript
-// Scale dimensions
-scale(size);
-vScale(size);
-mScale(size, factor);
-toDp(px);
-
-// Apply opacity to colors
-applyOpacity(hexColor, opacity);
-```
-
-## 📱 Navigation
-
-The template uses Expo Router for navigation with:
-
-- Tab-based navigation
-- Drawer navigation
-- Modal presentations
-- Deep linking support
-
-## 🔐 Authentication
-
-Includes Google authentication integration with:
-
-- OAuth flow handling
-- Token management
-- User session handling
-
-## 🎯 Best Practices
-
-- TypeScript for type safety
-- Component composition
-- Responsive design
-- Accessibility considerations
-- Performance optimization
-- Code organization
-
-## 📦 Installation
+## Quick start
 
 ```bash
-# Clone the repository
-git clone [repository-url]
-
-# Install dependencies
+git clone <repo-url>
+cd my-react-native-expo-template
 npm install
-
-# Start the development server
+cp .env.example .env   # fill in your values
 npm start
 ```
 
-## 🏗️ Project Structure
+---
+
+## Scripts
+
+```bash
+# Dev
+npm start                         # Expo dev server
+npm run start:staging             # APP_ENV=staging
+npm run start:prod                # NODE_ENV=production
+
+# iOS
+npm run ios                       # iOS simulator
+npm run ios:staging               # iOS (staging env)
+
+# Android
+npm run android                   # Android (debug)
+npm run android:debug             # Explicit debug build
+npm run android:release           # Release build
+npm run android:release:device    # Release on physical device
+npm run android:staging           # Staging (debug)
+npm run android:staging:release   # Staging (release)
+
+# Code quality
+npm run lint                      # Expo ESLint
+
+# Versioning
+npm run bump-version              # Bump version in package.json, iOS, Android
+
+# Theming
+npm run theme-mode light          # Force light mode
+npm run theme-mode dark           # Force dark mode
+npm run theme-mode auto           # Follow system (default)
+```
+
+---
+
+## What's in the box
+
+### Architecture
+
+| Layer | What's here |
+|-------|-------------|
+| **Routing** | Expo Router — tabs + drawer + stack + typed routes |
+| **State** | Zustand (typed slices, store utils) |
+| **Data fetching** | TanStack React Query — offline-first, exponential retry, AppState sync |
+| **API client** | Axios — auto auth header injection, 401 token clear, typed errors |
+| **Theme** | Full design token system (colors, typography, spacing, shadows, touch targets, icon sizes) with light/dark/auto + persistence |
+| **Error handling** | Error Boundary wrapping the whole app |
+| **Storage** | SecureStore for tokens, AsyncStorage wrapper (`utils/storage.ts`) for preferences |
+| **Environment** | `.env` + `app.config.ts` — staging/prod split, gitignored secrets |
+| **CI** | GitHub Actions — lint on every push/PR |
+
+### UI Components (`components/ui/`)
+
+| Component | Description |
+|-----------|-------------|
+| `AlertComponent` | Info / success / warning / error variants |
+| `AvatarComponent` | Image avatar with fallback |
+| `BadgeComponent` | Status badges and notification counts |
+| `CardComponent` | Flexible card with elevation options |
+| `DividerComponent` | Visual separator |
+| `ErrorState` | Full-screen error display |
+| `FileUploadComponent` | File picker with validation |
+| `GoBack` | Back navigation button |
+| `GradientView` | Linear gradient wrapper |
+| `GradientView` | Linear gradient wrapper |
+| `Header` | Screen header with back/action slots |
+| `IconComponent` | Multi-library icon support (Ionicons, FontAwesome, etc.) |
+| `ImageComponent` | Expo Image with loading and error states |
+| `ListComponents` | FlatList and SectionList wrappers |
+| `LoadingComponent` | Spinner / loading indicator |
+| `ModalComponent` | Animated modal dialog |
+| `PressableComponent` | Touchable with haptics and variants |
+| `RadioButtonCard` | Selectable card with radio state |
+| `SafeAreaViewComponent` | Safe area wrapper |
+| `Screen` | Base screen wrapper (safe area + scroll) |
+| `ScrollViewComponent` | Enhanced scroll view |
+| `SimpleKeyboardAvoidingView` | Keyboard avoidance |
+| `SkeletonComponent` | Loading skeleton |
+| `StateHandler` | Unified loading/error/empty/success switcher |
+| `TextComponent` | Typography with responsive scaling |
+| `TextAreaComponent` | Multi-line text input |
+| `TextInputComponent` | Text input with label, error, icons |
+
+### Toggle / Selection Components (`components/Toggle/`)
+
+| Component | Description |
+|-----------|-------------|
+| `Checkbox` | Checked / unchecked with custom styling |
+| `Radio` | Single-select radio button |
+| `Switch` | On/off toggle |
+| `Toggle` | Generic toggle primitive |
+
+> These are **not** re-exported from `components/ui/index.ts` yet — tracked in [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md).
+
+### Bottom Sheet Components
+
+- `GorhomSheetWrapper` — standard bottom sheet
+- `GorhomSheetModalWrapper` — modal-style bottom sheet
+- `ScrollableBottomSheetWithFooter` — scrollable content + sticky footer
+
+### Hooks (`hooks/`)
+
+| Hook | Description |
+|------|-------------|
+| `useTheme` | Access active color tokens + isDark + setMode |
+| `useColorScheme` | System color scheme (web-compatible) |
+| `useNetwork` | Network connectivity state |
+| `useInvalidateQuery` | React Query cache invalidation helper |
+| `useFocusEffect` | Screen focus lifecycle |
+
+### Utilities (`utils/`)
+
+| Utility | Description |
+|---------|-------------|
+| `storage` | AsyncStorage wrapper — `get`, `set`, `getObject`, `setObject`, `remove` |
+| `scaling` | `scale`, `vScale`, `mScale`, `toDp` — responsive dimension helpers |
+| `formDataHelpers` | `createFormData`, `appendImagesToFormData`, `appendSingleImageToFormData` |
+| `useSafeAreaInsetsStyle` | Safe area insets as style object |
+
+### API layer (`api/`)
 
 ```
-├── app/                    # Main application code
-│   ├── (tabs)/            # Tab-based navigation
-│   └── _layout.tsx        # Root layout
-├── components/            # Reusable components
-│   ├── ui/               # UI components
-│   └── Examples/         # Component examples
-├── constants/            # Constants and configurations
-├── hooks/               # Custom React hooks
-├── theme/               # Theme configurations
-└── utils/              # Utility functions
+api/
+├── config.ts           # Axios instance (interceptors, timeout, base URL)
+├── api.constants.ts    # BASE_URL (env-driven), TOKEN_KEY
+├── api.types.ts        # ApiError and shared response types
+└── api.utils.ts        # tokenUtils (get/set/clear), isAuthenticated, getErrorMessage
 ```
 
-## 🧪 Component Examples
+### Theme system (`theme/`)
 
-The template includes example implementations for all components in the `components/Examples` directory, demonstrating:
+```
+theme/
+├── index.ts                    # Single Theme export — use this everywhere
+├── typography.ts               # Font families + responsive font sizes + line heights
+├── spacing.ts                  # Spacing scale
+├── borders-shadows-animations.ts # BorderRadius, Shadows, AnimationValues, ScaleUtils
+├── component-dimensions.ts     # Standard component sizes (buttons, inputs, etc.)
+├── layout-dimensions.ts        # Screen-level layout values
+├── icon-sizes.ts               # Icon size scale
+├── touch-targets.ts            # Accessibility min touch sizes
+└── presets.ts                  # Preset style combinations
+```
 
-- Basic usage
-- Props customization
-- Different variants
-- Layout patterns
-- Best practices
-
-## 📚 Documentation
-
-Each component and utility is documented with:
-
-- TypeScript interfaces
-- Prop descriptions
-- Usage examples
-- Best practices
-- Performance considerations
-
-## 📝 JSDoc Documentation
-
-All components are thoroughly documented with JSDoc comments, providing:
-
-- Detailed component descriptions
-- Complete props interface documentation
-- Default values and types
-- Multiple usage examples
-- TypeScript type definitions
-
-Example of component documentation:
+**Usage:**
 
 ```tsx
-/**
- * A customizable alert component with different variants and styling options
- *
- * @example
- * // Basic usage with variant
- * <AlertComponent
- *   variant="info"
- *   title="Information"
- *   message="This is an info alert"
- * />
- */
+import { Theme } from "@/theme";
+import { useTheme } from "@/hooks/useTheme";
+
+// Static token (non-theme-aware)
+const gap = Theme.Spacing.md;
+
+// Theme-aware (follows light/dark)
+const { colors, isDark } = useTheme();
+<View style={{ backgroundColor: colors.surface }} />
 ```
 
-Every prop is documented with:
+---
 
-```tsx
-interface AlertComponentProps {
-  /**
-   * Alert message
-   */
-  message: string;
+## Environment setup
 
-  /**
-   * Alert title
-   */
-  title?: string;
+Copy `.env.example` to `.env` and fill in your values:
 
-  /**
-   * Visual variant of the alert
-   * @default 'info'
-   */
-  variant?: AlertVariant;
-}
+```bash
+APP_ENV=development
+EXPO_PUBLIC_API_BASE_URL=https://api.example.com
+EXPO_PUBLIC_API_BASE_URL_STAGING=https://staging-api.example.com
+IOS_BUNDLE_ID=com.company.app
+ANDROID_PACKAGE=com.company.app
 ```
 
-## 🤝 Contributing
+> Only `EXPO_PUBLIC_*` variables are bundled into the client. Everything else is build-time only.
 
-Contributions are welcome! Please read our contributing guidelines before submitting pull requests.
+---
 
-## 📄 License
+## Project structure
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+```
+├── app/                        # Expo Router screens
+│   ├── (tabs)/                 # Tab navigator screens
+│   ├── _layout.tsx             # Root layout (providers, QueryClient, ErrorBoundary)
+│   ├── index.tsx               # Entry / redirect
+│   └── Modal.tsx               # Modal screen example
+├── api/                        # Axios client + types + utilities
+├── assets/                     # Fonts, images
+├── components/
+│   ├── ui/                     # Core UI components (exported via index.ts)
+│   ├── Toggle/                 # Checkbox, Radio, Switch, Toggle
+│   ├── BottomSheetComponents/  # Bottom sheet wrappers
+│   ├── BottomSheetScreens/     # Bottom sheet screen examples
+│   ├── ErrorBoundary/          # Error boundary + error details UI
+│   └── Examples/               # Usage examples for every component
+├── constants/
+│   ├── Colors.ts               # Palette + light/dark semantic tokens
+│   └── mixins.ts               # Shared style helpers
+├── context/
+│   └── ThemeContext.tsx         # ThemeProvider + useTheme (persisted)
+├── docs/                       # Internal docs and planning
+├── hooks/                      # Custom hooks
+├── scripts/                    # CLI scripts (bump-version, theme-mode, etc.)
+├── store/                      # Zustand stores
+├── theme/                      # Design token system
+└── utils/                      # Utility functions
+```
 
-## 📋 TODO
+---
 
-### Priority 1 - Core Infrastructure & Security
+## Known gaps / roadmap
 
-#### Security Features
+See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md) for the full list. Top items:
 
-- [x] Set up secure storage
-  - [x] Implement react-native-keychain for sensitive data
-  - [x] Add secure token storage
-  - [ ] Set up biometric authentication
-  - [ ] Add SSL pinning
-  - [ ] Implement app encryption
-  - [ ] Add secure storage utilities
+- Toast / snackbar system
+- Auth flow screens + auth Zustand slice + protected routes
+- Form handling pattern (Zod + React Hook Form)
+- Select, OTP input, EmptyState components
+- Push notifications
+- Feature flags
+- `useDebounce`, `usePermissions`, `useKeyboard` hooks
+- Toggle/Checkbox/Radio re-export from main `ui/index.ts`
 
-#### State Management
+---
 
-- [x] Add Zustand (lighter alternative to Redux)
-  - [x] Set up store with TypeScript
-  - [x] Create test store example and screen
-  - [x] Create app settings store slice
-  - [x] Add persistence with zustand/middleware
+## What this is NOT (yet)
 
-#### Data Fetching & Caching
+- **Not a full auth boilerplate** — token storage and utilities are in place but screens, guards, and social sign-in are not wired
+- **Not a UI kit** — components cover common patterns but are not exhaustive
+- **Not tested** — zero test files currently; jest and jest-expo are installed ready to go
 
-- [x] Set up React Query (TanStack Query)
-  - [x] Configure query client with TypeScript
-  - [x] Set up default options (retries, staleTime)
-  - [x] Create base query hooks
-  - [x] Add offline support with react-query-offline
+---
 
-#### API Integration
+## License
 
-- [x] Set up Axios instance
-  - [x] Create base API client
-  - [x] Add request/response interceptors
-  - [x] Set up error handling
-  - [x] Create API type definitions
-
-### Priority 2 - Core Components & Performance
-
-#### Performance Optimizations
-
-- [x] Implement code splitting (handled by Expo Router)
-- [x] Add lazy loading (handled by Expo Router)
-- [ ] Add performance monitoring
-  - [ ] Set up React Native Performance Monitor
-  - [ ] Add bundle analysis
-- [ ] Optimize bundle size
-  - [ ] Optimize assets
-  - [ ] Configure metro bundler
-
-#### Type Safety
-
-- [x] Set up Zod schemas
-  - [x] Set up API response types
-
-#### Form Management
-
-- [ ] Add React Hook Form
-  - [ ] Set up Zod/Yup for form validation
-  - [ ] Create reusable form components
-  - [ ] Add form error handling
-  - [ ] Create form submission utilities
-  - [ ] Add form persistence
-
-#### Error Handling
-
-- [x] Create error handling utilities
-- [x] Add retry mechanisms for failed requests
-
-### Priority 3 - Mobile Features & Media Handling
-
-#### Mobile Features
-
-- [ ] Set up deep linking
-  - [ ] Configure URL schemes
-  - [ ] Add deep link handlers
-- [x] Implement offline storage
-  - [x] Add AsyncStorage utilities
-- [ ] Add file system access
-
-#### Media Components
-
-- [ ] Create CameraComponent
-  - [ ] Add photo capture
-  - [ ] Add video recording
-  - [ ] Add flash control
-  - [ ] Add camera switching
-  - [ ] Add image preview
-
-- [ ] Create ImageUploadComponent
-  - [ ] Add image picker integration
-  - [ ] Add image compression
-  - [ ] Add image cropping
-  - [ ] Add multiple image selection
-  - [ ] Add image preview gallery
-  - [ ] Add upload progress tracking
-
-- [ ] Create FileUploadComponent
-  - [ ] Add file picker integration
-  - [ ] Add file type validation
-  - [ ] Add file size validation
-  - [ ] Add upload progress tracking
-  - [ ] Add retry mechanism
-  - [ ] Add file preview
-
-- [ ] Create MediaGalleryComponent
-  - [ ] Add image grid view
-  - [ ] Add image carousel
-  - [ ] Add video playback
-  - [ ] Add media selection
-  - [ ] Add media sharing
-
-- [ ] Create ProgressIndicatorComponent
-  - [ ] Add upload progress
-  - [ ] Add download progress
-  - [ ] Add indeterminate progress
-  - [ ] Add progress cancellation
+MIT

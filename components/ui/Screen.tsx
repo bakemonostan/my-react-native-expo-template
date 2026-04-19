@@ -152,7 +152,7 @@ export function Screen({
   footer,
   scrollable = true,
   backgroundColor,
-  safeAreaEdges,
+  safeAreaEdges = [],
   statusBarStyle = 'auto',
   StatusBarProps,
   ScrollViewProps,
@@ -160,7 +160,7 @@ export function Screen({
   headerStyle,
   bodyStyle,
   footerStyle,
-  withDefaultPadding,
+  withDefaultPadding = true,
 }: ScreenProps) {
   const { colors } = useTheme();
   const bgColor = backgroundColor ?? colors.background;
@@ -169,13 +169,28 @@ export function Screen({
 
   useScrollToTop(scrollRef);
 
+  const {
+    contentContainerStyle: scrollContentContainerStyle,
+    ...restScrollViewProps
+  } = ScrollViewProps ?? {};
+
+  const mergedContentContainerStyle = [
+    { flexGrow: 1 as const },
+    ...(Array.isArray(scrollContentContainerStyle)
+      ? scrollContentContainerStyle
+      : scrollContentContainerStyle != null
+        ? [scrollContentContainerStyle]
+        : []),
+  ];
+
   const bodyContent = scrollable ? (
     <ScrollView
       ref={scrollRef}
       style={[$bodyContainer, bodyStyle]}
-      contentContainerStyle={{ flexGrow: 1 }}
+      contentContainerStyle={mergedContentContainerStyle}
+      showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps='handled'
-      {...ScrollViewProps}>
+      {...restScrollViewProps}>
       {children}
     </ScrollView>
   ) : (
@@ -218,6 +233,7 @@ const $screenContainer: ViewStyle = {
 const $headerContainer: ViewStyle = {};
 
 const $bodyContainer: ViewStyle = {
+  paddingTop: Layout.screen.paddingVertical,
   flex: 1,
 };
 

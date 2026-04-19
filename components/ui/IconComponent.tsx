@@ -51,6 +51,15 @@ export type IconComponentProps =
   | CustomIconProps;
 
 /**
+ * Vector-only icon props for slots (chips, form fields, empty states, etc.).
+ * Excludes `library: "custom"` so `name` is always required and matches `IconComponent`.
+ */
+export type VectorIconSlotProps = Pick<
+  Extract<IconComponentProps, { library: keyof typeof IconComponents }>,
+  "name" | "library" | "size"
+>;
+
+/**
  * A flexible Icon component that supports multiple vector icon libraries and custom image icons.
  *
  * ## Features

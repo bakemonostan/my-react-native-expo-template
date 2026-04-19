@@ -1,4 +1,5 @@
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import ToastComponent from "@/components/ui/ToastComponent";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { customFontsToLoad } from "@/theme/typography";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -166,6 +167,7 @@ export default function RootLayout() {
           </Stack>
         </BottomSheetModalProvider>
       </ThemedNavigationShell>
+      <ToastComponent />
     </QueryClientProvider>
     </ThemeProvider>
     </ErrorBoundary>

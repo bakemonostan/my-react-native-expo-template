@@ -1,19 +1,30 @@
 import {
+  AccordionExample,
   AlertExample,
   AvatarExample,
   BadgeExample,
   CardExample,
+  ChipExample,
+  ConfirmationDialogExample,
   DividerExample,
+  EmptyStateExample,
   FileUploadExample,
+  FormFieldExample,
   GradientExample,
   IconExample,
   ImageExample,
   ListExample,
   ModalExample,
+  OTPInputExample,
+  ProgressBarExample,
   RadioButtonCardExample,
+  SelectExample,
   SkeletonExample,
+  SliderExample,
   StateHandlerExample,
   TextAreaExample,
+  TextInputExample,
+  ToastExample,
   ToggleExample,
 } from "@/components/Examples";
 import { useTheme } from "@/context/ThemeContext";
@@ -172,6 +183,146 @@ export default function ComponentsScreen() {
         }}
       />
       <Drawer.Screen
+        name="Empty state"
+        component={EmptyStateExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="albums-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Form field"
+        component={FormFieldExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="create-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Select"
+        component={SelectExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="chevron-down-circle-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Toast"
+        component={ToastExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="chatbox-ellipses-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Confirmation"
+        component={ConfirmationDialogExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="help-circle-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Chips"
+        component={ChipExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="pricetag-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Accordion"
+        component={AccordionExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="newspaper-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="OTP"
+        component={OTPInputExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="keypad-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Progress"
+        component={ProgressBarExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="stats-chart-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Text input"
+        component={TextInputExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="text-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
         name="Toggles"
         component={ToggleExample}
         options={{
@@ -234,6 +385,20 @@ export default function ComponentsScreen() {
           drawerIcon: ({ color, size }) => (
             <IconComponent
               name="layers-outline"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Sliders"
+        component={SliderExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="reorder-three-outline"
               library="Ionicons"
               color={color}
               size={size}

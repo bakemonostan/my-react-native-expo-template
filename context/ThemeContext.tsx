@@ -1,11 +1,15 @@
 import { darkColors, lightColors, type AppColors } from "@/constants/Colors";
+import { storage } from "@/utils/storage";
 import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { useColorScheme } from "react-native";
+
+const THEME_MODE_KEY = "theme_mode";
 
 export type ThemeMode = "light" | "dark" | "auto";
 
@@ -50,6 +54,15 @@ export function ThemeProvider({
   const systemScheme = useColorScheme() ?? "light";
   const [mode, setModeState] = useState<ThemeMode>(defaultMode);
 
+  // Restore persisted theme preference on mount
+  useEffect(() => {
+    storage.get(THEME_MODE_KEY).then((saved) => {
+      if (saved === "light" || saved === "dark" || saved === "auto") {
+        setModeState(saved);
+      }
+    });
+  }, []);
+
   const colorScheme: "light" | "dark" =
     mode === "auto" ? systemScheme : mode;
   const isDark = colorScheme === "dark";
@@ -57,6 +70,7 @@ export function ThemeProvider({
 
   const setMode = useCallback((newMode: ThemeMode) => {
     setModeState(newMode);
+    storage.set(THEME_MODE_KEY, newMode);
   }, []);
 
   return (
