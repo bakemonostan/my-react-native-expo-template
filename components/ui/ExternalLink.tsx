@@ -1,18 +1,18 @@
-import { Link } from "expo-router";
-import * as WebBrowser from "expo-web-browser";
-import React from "react";
-import { Platform } from "react-native";
+import { ExternalPathString, Link, RelativePathString } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
+import React from 'react';
+import { Platform } from 'react-native';
 
 /**
  * A component for handling external links with platform-specific behavior.
- * 
+ *
  * ## Features
  * - **Platform Optimization**: Different behavior for web vs native platforms
  * - **In-App Browser**: Opens external links in app browser on native platforms
  * - **Web Compatibility**: Uses standard link behavior on web platform
  * - **Type Safety**: TypeScript validates all Link props
  * - **Seamless UX**: Prevents default browser opening on mobile
- * 
+ *
  * ## Platform Behavior
  * - **Web**: Opens link in new tab/window (standard browser behavior)
  * - **Native**: Opens link in in-app browser using expo-web-browser
@@ -28,7 +28,7 @@ import { Platform } from "react-native";
  * @example
  * ```tsx
  * // External link with custom styling
- * <ExternalLink 
+ * <ExternalLink
  *   href="https://docs.expo.dev"
  *   style={{ color: '#007AFF', textDecorationLine: 'underline' }}
  * >
@@ -67,7 +67,7 @@ import { Platform } from "react-native";
  * @example
  * ```tsx
  * // External link with custom press handling
- * <ExternalLink 
+ * <ExternalLink
  *   href="https://example.com"
  *   onPress={(e) => {
  *     console.log('External link pressed');
@@ -79,16 +79,15 @@ import { Platform } from "react-native";
  * ```
  */
 export function ExternalLink(
-  props: Omit<React.ComponentProps<typeof Link>, "href"> & { href: string }
+  props: Omit<React.ComponentProps<typeof Link>, 'href'> & { href: string },
 ) {
   return (
     <Link
-      target="_blank"
+      target='_blank'
       {...props}
-      // @ts-expect-error: External URLs are not typed.
-      href={props.href}
+      href={props.href as RelativePathString | ExternalPathString}
       onPress={(e) => {
-        if (Platform.OS !== "web") {
+        if (Platform.OS !== 'web') {
           // Prevent the default behavior of linking to the default browser on native.
           e.preventDefault();
           // Open the link in an in-app browser.

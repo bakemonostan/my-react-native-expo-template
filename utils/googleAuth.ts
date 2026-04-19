@@ -1,96 +1,71 @@
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
-// import { Platform } from "react-native";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { API_BASE_URL } from "@/app/constants";
+/**
+ * **Optional** Google Sign-In helper — **not** wired to auth UI or `authStore`.
+ *
+ * **What you do**
+ * 1. Create OAuth client IDs in [Google Cloud Console](https://console.cloud.google.com/apis/credentials).
+ * 2. Set env vars (never commit real values): `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`, `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`
+ *    (e.g. `.env` — see [Expo env vars](https://docs.expo.dev/guides/environment-variables/)).
+ * 3. Install and configure the native module when you need Google on device:
+ *    [@react-native-google-signin/google-signin](https://react-native-google-signin.github.io/docs/install).
+ * 4. Call `GoogleSignin.configure({ ...getGoogleNativeClientIds(), scopes: [...] })`, then `signIn` / `getTokens`,
+ *    exchange tokens with **your** API, then update session (e.g. `useAuthStore` or SecureStore).
+ *
+ * This file only validates env and exposes IDs so the template stays dependency-free until you add the package.
+ */
+import { z } from "zod";
 
-// const iosClientId = "";
-// const webClientId = "";
+const googleEnvSchema = z.object({
+  iosClientId: z.string().min(1),
+  webClientId: z.string().min(1),
+});
 
-// interface GoogleSignInOptions {
-//   onSuccess?: (userData: any) => void;
-//   onError?: (error: string) => void;
-//   setLoading?: (isLoading: boolean) => void;
-// }
+export type GoogleNativeClientIds = z.infer<typeof googleEnvSchema>;
 
-// export const configureGoogleSignIn = () => {
-//   try {
-//     GoogleSignin.configure({
-//       iosClientId,
-//       webClientId,
-//       scopes: ["profile", "email"],
-//       offlineAccess: true,
-//     });
+function readGoogleEnvFromProcess(): Record<string, string> {
+  return {
+    iosClientId:
+      process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID?.trim() ?? "",
+    webClientId:
+      process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim() ?? "",
+  };
+}
 
-//     return true;
-//   } catch (error) {
-//     console.error("[GoogleAuth] Failed to configure Google Sign-In:", error);
-//     return false;
-//   }
-// };
+export type GoogleAuthEnvResult =
+  | { ok: true; clientIds: GoogleNativeClientIds }
+  | {
+      ok: false;
+      message: string;
+      missingKeys: Array<"iosClientId" | "webClientId">;
+    };
 
-// export const handleGoogleSignIn = async ({
-//   onSuccess,
-//   onError,
-//   setLoading,
-// }: GoogleSignInOptions): Promise<boolean> => {
-//   if (setLoading) setLoading(true);
+/**
+ * Reads `EXPO_PUBLIC_GOOGLE_*` IDs from the Metro bundle env.
+ * Returns `{ ok: true, clientIds }` when both are non-empty, otherwise a safe `{ ok: false, ... }` for UI gating.
+ */
+export function parseGoogleAuthEnv(): GoogleAuthEnvResult {
+  const raw = readGoogleEnvFromProcess();
+  const parsed = googleEnvSchema.safeParse(raw);
+  if (parsed.success) {
+    return { ok: true, clientIds: parsed.data };
+  }
+  const missingKeys: Array<"iosClientId" | "webClientId"> = [];
+  if (!raw.iosClientId) missingKeys.push("iosClientId");
+  if (!raw.webClientId) missingKeys.push("webClientId");
+  return {
+    ok: false,
+    missingKeys,
+    message:
+      "Set EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID and EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID (e.g. in .env). Do not commit client secrets.",
+  };
+}
 
-//   try {
-//     const configSuccess = configureGoogleSignIn();
-//     if (!configSuccess) {
-//       onError?.("Failed to configure Google Sign-In");
-//       return false;
-//     }
-
-//     const hasPlayServices = await GoogleSignin.hasPlayServices({
-//       showPlayServicesUpdateDialog: true,
-//     });
-
-//     try {
-//       await GoogleSignin.signOut();
-//     } catch (signOutError) {
-//       console.error("Failed to sign out:", signOutError);
-//     }
-
-//     const user = await GoogleSignin.signIn();
-//     const tokens = await GoogleSignin.getTokens();
-
-//     if (user) {
-//       try {
-//         const response = await fetch(`${API_BASE_URL}/auth/social-login`, {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           body: JSON.stringify({
-//             provider_name: "google",
-//             access_token: tokens.accessToken,
-//             device_type: Platform.OS,
-//           }),
-//         });
-
-//         const data = await response.json();
-//         if (!response.ok) {
-//           throw new Error(data.message || "Authentication failed");
-//         }
-
-//         const { token, user: userData } = data.data;
-//         await AsyncStorage.setItem("token", token);
-
-//         onSuccess?.(userData);
-//         return true;
-//       } catch (apiError: any) {
-//         onError?.(apiError.message || "Authentication failed");
-//         return false;
-//       }
-//     } else {
-//       onError?.("Failed to get valid credentials from Google");
-//       return false;
-//     }
-//   } catch (error: any) {
-//     onError?.(error.message);
-//     return false;
-//   } finally {
-//     if (setLoading) setLoading(false);
-//   }
-// };
+/**
+ * Same as {@link parseGoogleAuthEnv} but throws if IDs are missing — use before `GoogleSignin.configure`.
+ */
+export function getGoogleNativeClientIds(): GoogleNativeClientIds {
+  const r = parseGoogleAuthEnv();
+  if (!r.ok) {
+    throw new Error(r.message);
+  }
+  return r.clientIds;
+}
