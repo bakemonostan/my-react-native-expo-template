@@ -6,6 +6,7 @@ import {
   CardExample,
   ChipExample,
   ConfirmationDialogExample,
+  DateTimePickerExample,
   DividerExample,
   EmptyStateExample,
   FileUploadExample,
@@ -133,6 +134,20 @@ export default function ComponentsScreen() {
           drawerIcon: ({ color, size }) => (
             <IconComponent
               name="remove"
+              library="Ionicons"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Date & time"
+        component={DateTimePickerExample}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <IconComponent
+              name="calendar-outline"
               library="Ionicons"
               color={color}
               size={size}

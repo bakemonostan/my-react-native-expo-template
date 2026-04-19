@@ -51,7 +51,8 @@ export function ThemeProvider({
   children,
   defaultMode = "auto",
 }: ThemeProviderProps) {
-  const systemScheme = useColorScheme() ?? "light";
+  const systemScheme: "light" | "dark" =
+    useColorScheme() === "dark" ? "dark" : "light";
   const [mode, setModeState] = useState<ThemeMode>(defaultMode);
 
   // Restore persisted theme preference on mount

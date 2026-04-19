@@ -1,12 +1,6 @@
+import { useTheme } from "@/hooks/useTheme";
 import React, { useEffect, useState } from "react";
-import {
-  Dimensions,
-  StyleProp,
-  Text,
-  TextProps,
-  TextStyle,
-  useColorScheme,
-} from "react-native";
+import { Dimensions, StyleProp, Text, TextProps, TextStyle } from "react-native";
 import { FontWeight, getFontFamily } from "./fontConfig";
 
 const guidelineBaseWidth = 375;
@@ -98,7 +92,7 @@ export const TEXT_VARIANTS = {
 
 /**
  * App typography primitive: preset **sizes**, **variants** (h1–caption), optional **responsive** scaling,
- * and a default text color that follows light/dark unless **`color`** is set.
+ * and a default text color from **`ThemeContext`** (`colors.text`) unless **`color`** is set.
  *
  * @example Basic body text
  * ```tsx
@@ -141,9 +135,8 @@ export default function TextComponent({
   style,
   ...restProps
 }: TextComponentProps) {
-  const colorScheme = useColorScheme();
-  const resolvedColor =
-    color ?? (colorScheme === "dark" ? "#FFFFFF" : "#000000");
+  const { colors } = useTheme();
+  const resolvedColor = color ?? colors.text;
   const screenWidth = useScreenWidth();
 
   const getFontSize = (sizeValue: FontSize): number => {

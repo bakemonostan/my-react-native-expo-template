@@ -18,6 +18,10 @@
  * </View>
  * ```
  *
+ * Prefer **`TextComponent`** for app typography (sizes, weights); it now defaults
+ * **`color`** from the same theme. Use **`Text`** / **`View`** here for raw RN
+ * primitives when you only need semantic fg/bg.
+ *
  * See `context/ThemeContext.tsx` — https://docs.expo.dev/develop/user-interface/color-themes/
  */
 
@@ -41,5 +45,13 @@ export function View({ style, ...props }: ViewProps) {
       style={[{ backgroundColor: colors.background }, style]}
       {...props}
     />
+  );
+}
+
+/** Raw **`Text`** with **`colors.textSecondary`** (captions, hints). */
+export function TextSecondary({ style, ...props }: TextProps) {
+  const { colors } = useTheme();
+  return (
+    <DefaultText style={[{ color: colors.textSecondary }, style]} {...props} />
   );
 }

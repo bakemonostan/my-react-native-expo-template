@@ -10,6 +10,7 @@ export { default as BadgeExample } from "./BadgeExample";
 export { default as CardExample } from "./CardExample";
 export { default as ChipExample } from "./ChipExample";
 export { default as ConfirmationDialogExample } from "./ConfirmationDialogExample";
+export { default as DateTimePickerExample } from "./DateTimePickerExample";
 export { default as DividerExample } from "./DividerExample";
 export { default as EmptyStateExample } from "./EmptyStateExample";
 export { default as FileUploadExample } from "./FileUploadExample";

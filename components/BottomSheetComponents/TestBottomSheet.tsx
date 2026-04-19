@@ -7,9 +7,11 @@ interface SheetProps {
   onSubmit?: (selectedOption: string) => void;
 }
 
+type HorizontalListItem = { id: string; title: string; color: string };
+
 export const TestBottomSheet = forwardRef<BottomSheet, SheetProps>(
   function TestBottomSheet({ onSubmit: _onSubmit }, ref) {
-    const data = useMemo(
+    const data = useMemo<HorizontalListItem[]>(
       () => [
         { id: "1", title: "Component 1", color: "#FF6B6B" },
         { id: "2", title: "Component 2", color: "#4ECDC4" },
@@ -19,7 +21,7 @@ export const TestBottomSheet = forwardRef<BottomSheet, SheetProps>(
       []
     );
     const renderItem = useCallback(
-      ({ item }: any) => (
+      ({ item }: { item: HorizontalListItem }) => (
         <View style={[styles.horizontalItem, { backgroundColor: item.color }]}>
           <Text style={styles.itemText}>{item.title}</Text>
         </View>
@@ -37,7 +39,7 @@ export const TestBottomSheet = forwardRef<BottomSheet, SheetProps>(
         <View style={styles.container}>
           <BottomSheetFlatList
             data={data}
-            keyExtractor={(i) => i.id}
+            keyExtractor={(i: HorizontalListItem) => i.id}
             renderItem={renderItem}
             horizontal
             contentContainerStyle={styles.contentContainer}
