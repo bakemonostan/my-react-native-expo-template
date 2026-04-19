@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Animated,
   Pressable,
+  type PressableStateCallbackType,
   PressableProps,
   StyleProp,
   View,
@@ -414,7 +415,9 @@ export default function PressableComponent({
           { opacity: isInteractionDisabled ? 0.5 : opacityAnim },
           pressableStyle,
           typeof style === "function"
-            ? style({ pressed: false, hovered: false })
+            ? style(
+                { pressed: false, hovered: false } as unknown as PressableStateCallbackType,
+              )
             : style,
           { transform: [{ scale: scaleAnim }] },
         ]}>
