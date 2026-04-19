@@ -1,13 +1,21 @@
-import { mScale } from "@/constants/mixins";
-import { useTheme } from "@/hooks/useTheme";
-import { Spacing } from "@/theme/spacing";
-import React from "react";
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
-import IconComponent from "./IconComponent";
+import { mScale } from '@/constants/mixins';
+import { useTheme } from '@/hooks/useTheme';
+import { Spacing } from '@/theme/spacing';
+import React from 'react';
+import {
+  StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
+import IconComponent from './IconComponent';
 
 /**
- * Selectable dark card with a top-right check affordance. **`onSelect(value)`** fires when the user taps;
- * compare **`selectedValue`** to **`value`** to style selection (border uses theme **`primary`**).
+ * Selectable plan-style card with a right-hand check affordance. Tile uses
+ * **`backgroundSecondary`** in light mode and **`surface`** in dark mode so it
+ * isn’t harsh black on a light screen. **`onSelect(value)`** fires on tap; selection
+ * border uses theme **`primary`**.
  *
  * @example List of plans
  * ```tsx
@@ -35,7 +43,7 @@ export interface RadioButtonCardProps {
   selectedValue: string;
   onSelect: (value: string) => void;
   disabled?: boolean;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
   children: React.ReactNode;
 }
@@ -61,8 +69,8 @@ function CheckMark({
       ]}>
       {selected ? (
         <IconComponent
-          library="Feather"
-          name="check"
+          library='Feather'
+          name='check'
           size={mScale(12)}
           color={checkColor}
         />
@@ -80,13 +88,14 @@ export default function RadioButtonCard({
   testID,
   children,
 }: RadioButtonCardProps) {
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const isSelected = selectedValue === value;
 
-  const cardBg = colors.palette.neutral900;
+  /** Light: soft tile on the page (not black). Dark: surface above background. */
+  const cardBg = isDark ? colors.surface : colors.backgroundSecondary;
   const selectedBorder = colors.primary;
   const checkIconColor = colors.palette.neutral900;
-  const unselectedRing = "rgba(255, 255, 255, 0.4)";
+  const unselectedRing = isDark ? 'rgba(255, 255, 255, 0.45)' : colors.border;
 
   return (
     <View style={[styles.cardWrapper, style]}>
@@ -102,6 +111,8 @@ export default function RadioButtonCard({
         }}
         disabled={disabled}
         activeOpacity={0.8}
+        accessibilityRole='radio'
+        accessibilityState={{ selected: isSelected, disabled }}
         testID={testID}>
         <View style={styles.content}>{children}</View>
         <View style={styles.checkMarkContainer}>
@@ -119,37 +130,30 @@ export default function RadioButtonCard({
 
 const styles = StyleSheet.create({
   cardWrapper: {
-    position: "relative",
+    position: 'relative',
   },
   container: {
     borderRadius: mScale(24),
     borderWidth: mScale(2),
-    borderColor: "transparent",
-    paddingTop: Spacing.sm,
-    paddingBottom: Spacing.lg,
+    borderColor: 'transparent',
+    paddingVertical: Spacing.base,
     paddingHorizontal: Spacing.base,
-    position: "relative",
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   checkMarkContainer: {},
   checkContainer: {
-    width: mScale(20),
-    height: mScale(20),
-    borderRadius: mScale(12),
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: mScale(1) },
-    shadowOpacity: 0.2,
-    shadowRadius: mScale(2),
-    elevation: 2,
+    width: mScale(22),
+    height: mScale(22),
+    borderRadius: mScale(11),
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   checkContainerUnselected: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: mScale(2),
   },
   checkDisabled: {
@@ -157,7 +161,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: Spacing.xs,
+    paddingRight: Spacing.sm,
+    justifyContent: 'center',
   },
   disabled: {
     opacity: 0.6,

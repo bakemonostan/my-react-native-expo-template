@@ -16,12 +16,12 @@ export default function RadioButtonCardExample() {
           Radio cards
         </TextComponent>
         <TextComponent size="sm" color={colors.textSecondary}>
-          Dark cards with a check indicator. Selected: {plan}
+          Plan tiles follow the theme. Selected: {plan}
         </TextComponent>
 
         <RadioButtonCard value="basic" selectedValue={plan} onSelect={setPlan}>
           <View style={{ gap: 4 }}>
-            <TextComponent weight="bold" color={colors.palette.white}>
+            <TextComponent weight="bold" color={colors.text}>
               Basic
             </TextComponent>
             <TextComponent size="sm" color={colors.textSecondary}>
@@ -32,7 +32,7 @@ export default function RadioButtonCardExample() {
 
         <RadioButtonCard value="pro" selectedValue={plan} onSelect={setPlan}>
           <View style={{ gap: 4 }}>
-            <TextComponent weight="bold" color={colors.palette.white}>
+            <TextComponent weight="bold" color={colors.text}>
               Pro
             </TextComponent>
             <TextComponent size="sm" color={colors.textSecondary}>
