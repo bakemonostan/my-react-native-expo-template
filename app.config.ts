@@ -177,6 +177,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   extra: {
     router: {},
+    themeMode:
+      themeMode === "light"
+        ? "light"
+        : themeMode === "dark"
+          ? "dark"
+          : "auto",
     appEnv:
       process.env.APP_ENV ?? process.env.EXPO_PUBLIC_APP_ENV ?? 'development',
     apiBaseUrl: resolveApiBaseUrl(),

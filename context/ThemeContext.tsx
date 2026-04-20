@@ -1,17 +1,36 @@
 import { darkColors, lightColors, type AppColors } from "@/constants/Colors";
 import { storage } from "@/utils/storage";
+import Constants from "expo-constants";
 import React, {
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { useColorScheme } from "react-native";
 
-const THEME_MODE_KEY = "theme_mode";
-
 export type ThemeMode = "light" | "dark" | "auto";
+
+/** From `.env` at bundle time — overrides semantic `primary` / `tint` only (see `constants/Colors.ts` palette). */
+const BRAND_PRIMARY_HEX =
+  process.env.EXPO_PUBLIC_BRAND_PRIMARY?.trim().toUpperCase() ?? "";
+
+function readThemeModeFromExtra(): ThemeMode {
+  const raw = (Constants.expoConfig?.extra as { themeMode?: string } | undefined)
+    ?.themeMode;
+  if (raw === "light" || raw === "dark" || raw === "auto") return raw;
+  return "auto";
+}
+
+function applyBrandPrimary(base: AppColors, hex: string): AppColors {
+  if (!hex) return base;
+  if (!/^#(?:[0-9A-F]{3}|[0-9A-F]{6}|[0-9A-F]{8})$/i.test(hex)) return base;
+  return { ...base, primary: hex, tint: hex } as AppColors;
+}
+
+const THEME_MODE_KEY = "theme_mode";
 
 interface ThemeContextValue {
   /** Current mode setting: "light", "dark", or "auto" (follows system). */
@@ -49,11 +68,12 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({
   children,
-  defaultMode = "auto",
+  defaultMode,
 }: ThemeProviderProps) {
   const systemScheme: "light" | "dark" =
     useColorScheme() === "dark" ? "dark" : "light";
-  const [mode, setModeState] = useState<ThemeMode>(defaultMode);
+  const initialMode = defaultMode ?? readThemeModeFromExtra();
+  const [mode, setModeState] = useState<ThemeMode>(initialMode);
 
   // Restore persisted theme preference on mount
   useEffect(() => {
@@ -67,7 +87,10 @@ export function ThemeProvider({
   const colorScheme: "light" | "dark" =
     mode === "auto" ? systemScheme : mode;
   const isDark = colorScheme === "dark";
-  const colors = isDark ? darkColors : lightColors;
+  const colors = useMemo(() => {
+    const base = isDark ? darkColors : lightColors;
+    return applyBrandPrimary(base, BRAND_PRIMARY_HEX);
+  }, [isDark]);
 
   const setMode = useCallback((newMode: ThemeMode) => {
     setModeState(newMode);

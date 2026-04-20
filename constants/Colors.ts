@@ -13,7 +13,8 @@
  *
  * - **In screens & components:** use **`useTheme().colors`** (`context/ThemeContext`) so light/dark updates automatically.
  * - **Avoid** `import { colors }` for surfaces/text that should follow the active scheme; use theme hooks instead.
- * - **Brand:** replace the **`primary*`** entries in **`palette`** with your product palette before shipping.
+ * - **Brand (quick):** set **`EXPO_PUBLIC_BRAND_PRIMARY`** in `.env` — `ThemeProvider` overrides semantic **`primary`** / **`tint`** only (RN Init wizard writes this).
+ * - **Brand (full ramp):** replace **`palette.primary*`** here so **`colors.palette.primary500`** etc. match your product before shipping.
  *
  * @example Theme-aware (preferred)
  * ```tsx
