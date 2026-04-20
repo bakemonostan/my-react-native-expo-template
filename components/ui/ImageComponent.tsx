@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useTheme } from "@/hooks/useTheme";
+import React, { useMemo, useState } from "react";
 import {
   Image,
   ImageProps,
@@ -41,7 +42,7 @@ export interface ImageComponentProps extends Omit<ImageProps, "style"> {
 
   /**
    * Color of the error icon
-   * @default '#FF3B30'
+   * @default **`colors.error`**
    */
   errorIconColor?: string;
 }
@@ -129,9 +130,32 @@ export default function ImageComponent({
   showLoading = true,
   showError = true,
   errorIconSize = 24,
-  errorIconColor = "#FF3B30",
+  errorIconColor,
   ...restProps
 }: ImageComponentProps) {
+  const { colors } = useTheme();
+  const resolvedErrorIconColor = errorIconColor ?? colors.error;
+
+  const overlayStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        loadingContainer: {
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: colors.surface,
+          opacity: 0.75,
+          alignItems: "center",
+          justifyContent: "center",
+        },
+        errorContainer: {
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: colors.backgroundSecondary,
+          alignItems: "center",
+          justifyContent: "center",
+        },
+      }),
+    [colors.backgroundSecondary, colors.surface],
+  );
+
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
@@ -159,17 +183,17 @@ export default function ImageComponent({
         {...restProps}
       />
       {isLoading && showLoading && (
-        <View style={styles.loadingContainer}>
+        <View style={overlayStyles.loadingContainer}>
           <LoadingComponent size="small" />
         </View>
       )}
       {hasError && showError && (
-        <View style={styles.errorContainer}>
+        <View style={overlayStyles.errorContainer}>
           <IconComponent
             library="Ionicons"
             name="image-outline"
             size={errorIconSize}
-            color={errorIconColor}
+            color={resolvedErrorIconColor}
           />
         </View>
       )}
@@ -184,17 +208,5 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-  },
-  loadingContainer: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  errorContainer: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#F5F5F5",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });

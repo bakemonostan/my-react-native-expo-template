@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import { useTheme } from "@/hooks/useTheme";
+import React, { useMemo, useRef } from "react";
 import {
   ActivityIndicator,
   Animated,
@@ -126,45 +127,6 @@ const SIZE_MAP: Record<
 };
 
 /**
- * Text styles for each variant
- */
-const VARIANT_TEXT_STYLES: Record<PressableVariant, { color: string }> = {
-  primary: {
-    color: "#FFFFFF",
-  },
-  secondary: {
-    color: "#007AFF",
-  },
-  outline: {
-    color: "#007AFF",
-  },
-  ghost: {
-    color: "#007AFF",
-  },
-};
-
-const VARIANT_STYLES: Record<PressableVariant, ViewStyle> = {
-  primary: {
-    backgroundColor: "#007AFF",
-    borderWidth: 0,
-  },
-  secondary: {
-    backgroundColor: "#E3F2FD",
-    borderWidth: 1,
-    borderColor: "#90CAF9",
-  },
-  ghost: {
-    backgroundColor: "transparent",
-    borderWidth: 0,
-  },
-  outline: {
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#007AFF",
-  },
-};
-
-/**
  * A customizable Pressable component with consistent sizing and variants
  *
  * @example
@@ -265,6 +227,43 @@ export default function PressableComponent({
   children,
   ...restProps
 }: PressableComponentProps) {
+  const { colors } = useTheme();
+
+  const variantText = useMemo(
+    (): Record<PressableVariant, { color: string }> => ({
+      primary: { color: colors.primaryText },
+      secondary: { color: colors.primary },
+      outline: { color: colors.primary },
+      ghost: { color: colors.primary },
+    }),
+    [colors],
+  );
+
+  const variantSurface = useMemo((): Record<PressableVariant, ViewStyle> => {
+    const secondaryBg = colors.secondary ?? colors.backgroundSecondary;
+    const secondaryBorder = colors.border;
+    return {
+      primary: {
+        backgroundColor: colors.primary,
+        borderWidth: 0,
+      },
+      secondary: {
+        backgroundColor: secondaryBg,
+        borderWidth: 1,
+        borderColor: secondaryBorder,
+      },
+      ghost: {
+        backgroundColor: "transparent",
+        borderWidth: 0,
+      },
+      outline: {
+        backgroundColor: colors.surface,
+        borderWidth: 1,
+        borderColor: colors.primary,
+      },
+    };
+  }, [colors]);
+
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
 
@@ -319,12 +318,13 @@ export default function PressableComponent({
     justifyContent: "center",
     borderRadius: rounded ? 100 : borderRadius,
     ...dimensions,
-    ...VARIANT_STYLES[variant],
+    ...variantSurface[variant],
   };
 
   const disabledStyles: ViewStyle = {
     opacity: 0.5,
-    backgroundColor: variant === "ghost" ? undefined : "#CCCCCC",
+    backgroundColor:
+      variant === "ghost" ? undefined : colors.backgroundSecondary,
   };
 
   // Override background color if provided
@@ -351,7 +351,7 @@ export default function PressableComponent({
                   size={leftAccessory.size || 20}
                   {...(leftAccessory.library !== "custom" && {
                     color: isInteractionDisabled
-                      ? "#999999"
+                      ? colors.textDim
                       : leftAccessory.color,
                   })}
                 />
@@ -364,8 +364,8 @@ export default function PressableComponent({
             variant={labelVariant}
             color={
               isInteractionDisabled
-                ? "#999999"
-                : buttonTextColor || VARIANT_TEXT_STYLES[variant].color
+                ? colors.textDim
+                : buttonTextColor || variantText[variant].color
             }
             text={buttonText}
           />
@@ -373,7 +373,7 @@ export default function PressableComponent({
             <View style={{ marginLeft: accessorySpacing }}>
               <ActivityIndicator
                 size="small"
-                color="#999999"
+                color={colors.textDim}
               />
             </View>
           ) : (
@@ -386,7 +386,7 @@ export default function PressableComponent({
                     size={rightAccessory.size || 20}
                     {...(rightAccessory.library !== "custom" && {
                       color: isInteractionDisabled
-                        ? "#999999"
+                        ? colors.textDim
                         : rightAccessory.color,
                     })}
                   />

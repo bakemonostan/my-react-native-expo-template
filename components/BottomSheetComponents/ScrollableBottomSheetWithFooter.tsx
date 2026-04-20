@@ -1,5 +1,5 @@
-import { colors } from "@/constants/Colors";
 import { mScale } from "@/constants/mixins";
+import { useTheme } from "@/hooks/useTheme";
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetFooter,
@@ -33,6 +33,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
   },
   ref
 ) {
+  const { colors } = useTheme();
   const scrollViewRef = useRef<any>(null);
   const scrollPositionRef = useRef(0);
 
@@ -51,6 +52,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
         key={item}
         style={[
           styles.tipItem,
+          { borderColor: colors.border },
           horizontal && {
             borderWidth: 0,
           },
@@ -58,7 +60,7 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
         <TextComponent variant="body1Regular">{item}</TextComponent>
       </View>
     ),
-    [horizontal]
+    [horizontal, colors.border]
   );
 
   const renderFooter = useCallback(
@@ -114,16 +116,19 @@ const ScrollableBottomSheetWithFooter = React.forwardRef<
       backdropComponent={renderBackdrop}
       handleStyle={styles.handleStyle}
       handleIndicatorStyle={styles.indicator}>
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.surface }]}>
         <TextComponent variant="h4">{title}</TextComponent>
         <PressableComponent
           buttonText="Close"
-          style={styles.closeButton}
+          style={[
+            styles.closeButton,
+            { backgroundColor: colors.backgroundSecondary },
+          ]}
           onPress={onClose}
         />
       </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.listWrapper}>
+      <View style={[styles.contentContainer, { backgroundColor: colors.background }]}>
+        <View style={[styles.listWrapper, { backgroundColor: colors.background }]}>
           <BottomSheetScrollView
             ref={scrollViewRef}
             horizontal={horizontal}
@@ -156,7 +161,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   header: {
-    backgroundColor: "white",
     padding: 16,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -173,18 +177,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: mScale(16),
     backgroundColor: "transparent",
     borderRadius: mScale(8),
-    borderColor: colors.border,
     borderWidth: 1,
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: colors.background,
     padding: mScale(12),
   },
   listWrapper: {
     flex: 1,
     borderRadius: mScale(16),
-    backgroundColor: colors.background,
     marginBottom: Platform.OS === "ios" ? mScale(55) : mScale(60),
   },
   footerContainer: {
@@ -195,9 +196,7 @@ const styles = StyleSheet.create({
     height: 0,
     padding: 0,
   },
-  closeButton: {
-    backgroundColor: "rgba(0, 0, 0, 0.05)",
-  },
+  closeButton: {},
   listContent: {
     paddingHorizontal: mScale(24),
   },

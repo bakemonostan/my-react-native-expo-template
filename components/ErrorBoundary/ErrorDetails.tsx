@@ -1,10 +1,11 @@
-import { ErrorInfo } from "react";
+import { ErrorInfo, useMemo } from "react";
 import { ScrollView, TextStyle, View, ViewStyle } from "react-native";
 
 import IconComponent from "@/components/ui/IconComponent";
 import PressableComponent from "@/components/ui/PressableComponent";
 import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
+import { useTheme } from "@/hooks/useTheme";
 
 export interface ErrorDetailsProps {
   error: Error;
@@ -18,30 +19,51 @@ export interface ErrorDetailsProps {
  * @returns {JSX.Element} The rendered `ErrorDetails` component.
  */
 export function ErrorDetails(props: ErrorDetailsProps) {
+  const { colors } = useTheme();
+
+  const { $contentContainer, $errorSection } = useMemo(() => {
+    const content: ViewStyle = {
+      alignItems: "center",
+      paddingHorizontal: 20,
+      paddingTop: 24,
+      flex: 1,
+    };
+
+    const errorSection: ViewStyle = {
+      flex: 2,
+      backgroundColor: colors.backgroundSecondary,
+      marginVertical: 16,
+      borderRadius: 8,
+      width: "100%",
+    };
+
+    return { $contentContainer: content, $errorSection: errorSection };
+  }, [colors.backgroundSecondary]);
+
   return (
     <Screen
       scrollable={false}
       safeAreaEdges={["top", "bottom"]}
-      backgroundColor="#ffffff"
+      backgroundColor={colors.background}
       bodyStyle={$contentContainer}>
       <View style={$topSection}>
         <IconComponent
           library="MaterialCommunityIcons"
           name="bug"
           size={64}
-          color="#DC2626"
+          color={colors.error}
         />
         <TextComponent
           weight="semi_bold"
           size="xxl"
-          color="#DC2626"
+          color={colors.error}
           styles={$heading}>
           Oops! Something went wrong
         </TextComponent>
         <TextComponent
           weight="regular"
           size="base"
-          color="#666666">
+          color={colors.textSecondary}>
           We&apos;re sorry for the inconvenience. The error has been logged.
         </TextComponent>
       </View>
@@ -52,14 +74,14 @@ export function ErrorDetails(props: ErrorDetailsProps) {
         <TextComponent
           weight="bold"
           size="sm"
-          color="#DC2626"
+          color={colors.error}
           styles={$errorContent}>
           {`${props.error}`.trim()}
         </TextComponent>
         <TextComponent
           weight="regular"
           size="xs"
-          color="#999999"
+          color={colors.textDim}
           styles={$errorBacktrace}
           {...{ selectable: true }}>
           {`${props.errorInfo?.componentStack ?? ""}`.trim()}
@@ -71,20 +93,12 @@ export function ErrorDetails(props: ErrorDetailsProps) {
         size="lg"
         buttonText="Try Again"
         labelVariant="body1Bold"
-        backgroundColor="#DC2626"
         pressableStyle={$resetButton}
         onPress={props.onReset}
       />
     </Screen>
   );
 }
-
-const $contentContainer: ViewStyle = {
-  alignItems: "center",
-  paddingHorizontal: 20,
-  paddingTop: 24,
-  flex: 1,
-};
 
 const $topSection: ViewStyle = {
   flex: 1,
@@ -96,14 +110,6 @@ const $topSection: ViewStyle = {
 const $heading: TextStyle = {
   marginBottom: 8,
   textAlign: "center",
-};
-
-const $errorSection: ViewStyle = {
-  flex: 2,
-  backgroundColor: "#F3F4F6",
-  marginVertical: 16,
-  borderRadius: 8,
-  width: "100%",
 };
 
 const $errorSectionContentContainer: ViewStyle = {

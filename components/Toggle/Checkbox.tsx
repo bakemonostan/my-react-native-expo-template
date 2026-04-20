@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useTheme";
 import { useCallback, useEffect, useRef } from "react";
 import {
   Animated,
@@ -84,6 +85,8 @@ function CheckboxInput(props: CheckboxInputProps) {
     detailStyle: $detailStyleOverride,
   } = props;
 
+  const { colors } = useTheme();
+
   const opacity = useRef(new Animated.Value(0));
 
   useEffect(() => {
@@ -95,30 +98,30 @@ function CheckboxInput(props: CheckboxInputProps) {
   }, [on]);
 
   const offBackgroundColor = disabled
-    ? "#9CA3AF"
+    ? colors.textDim
     : status === "error"
-      ? "#FEE2E2"
-      : "#E5E7EB";
+      ? colors.errorBackground
+      : colors.border;
 
   const outerBorderColor = disabled
-    ? "#9CA3AF"
+    ? colors.textDim
     : status === "error"
-      ? "#DC2626"
+      ? colors.error
       : !on
-        ? "#1F2937"
-        : "#3B82F6";
+        ? colors.text
+        : colors.primary;
 
   const onBackgroundColor = disabled
     ? "transparent"
     : status === "error"
-      ? "#FEE2E2"
-      : "#3B82F6";
+      ? colors.errorBackground
+      : colors.primary;
 
   const iconTintColor = disabled
-    ? "#6B7280"
+    ? colors.textSecondary
     : status === "error"
-      ? "#DC2626"
-      : "#FFFFFF";
+      ? colors.error
+      : colors.primaryText;
 
   return (
     <View

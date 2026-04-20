@@ -1,4 +1,10 @@
-import { darkColors, lightColors, type AppColors } from "@/constants/Colors";
+import { readWizardThemeFromEnv } from "@/config/themeFromEnv";
+import {
+  darkColors,
+  lightColors,
+  mergeSemanticTokens,
+  type AppColors,
+} from "@/constants/Colors";
 import { storage } from "@/utils/storage";
 import Constants from "expo-constants";
 import React, {
@@ -89,6 +95,11 @@ export function ThemeProvider({
   const isDark = colorScheme === "dark";
   const colors = useMemo(() => {
     const base = isDark ? darkColors : lightColors;
+    const wizard = readWizardThemeFromEnv();
+    if (wizard) {
+      const tokens = isDark ? wizard.dark : wizard.light;
+      return mergeSemanticTokens(base, tokens);
+    }
     return applyBrandPrimary(base, BRAND_PRIMARY_HEX);
   }, [isDark]);
 

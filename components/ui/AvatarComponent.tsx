@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
 import {
   Image,
@@ -28,7 +29,7 @@ export interface AvatarComponentProps {
 
   /**
    * Background color for the avatar
-   * @default '#E1E1E1'
+   * @default **`colors.backgroundSecondary`**
    */
   backgroundColor?: string;
 
@@ -50,7 +51,7 @@ export interface AvatarComponentProps {
 
   /**
    * Border color when bordered is true
-   * @default '#FFFFFF'
+   * @default **`colors.surface`**
    */
   borderColor?: string;
 }
@@ -128,23 +129,27 @@ export default function AvatarComponent({
   source,
   size = 40,
   initials,
-  backgroundColor = "#E1E1E1",
+  backgroundColor,
   style,
   imageStyle,
   bordered = false,
-  borderColor = "#FFFFFF",
+  borderColor,
 }: AvatarComponentProps) {
+  const { colors } = useTheme();
+  const bg = backgroundColor ?? colors.backgroundSecondary;
+  const border = borderColor ?? colors.surface;
+
   const containerStyle = [
     styles.container,
     {
       width: size,
       height: size,
       borderRadius: size / 2,
-      backgroundColor,
+      backgroundColor: bg,
     },
     bordered && {
       borderWidth: 2,
-      borderColor,
+      borderColor: border,
     },
     style,
   ];
@@ -176,7 +181,7 @@ export default function AvatarComponent({
       <View style={containerStyle}>
         <TextComponent
           style={styles.initials}
-          color="#FFFFFF"
+          color={colors.text}
           weight="semi_bold"
           size={fontSize}>
           {initials}

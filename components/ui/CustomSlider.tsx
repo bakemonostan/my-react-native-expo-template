@@ -224,6 +224,7 @@ export function CustomSlider({
                 borderRadius: thumbSize / 2,
                 borderWidth: StyleSheet.hairlineWidth * 2,
                 borderColor: progressColor,
+                shadowColor: colors.palette.black,
               },
               animatedThumbStyle,
             ]}
@@ -264,7 +265,6 @@ const styles = StyleSheet.create({
   },
   thumb: {
     position: "absolute",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,

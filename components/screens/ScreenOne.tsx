@@ -1,17 +1,21 @@
+import { useTheme } from "@/hooks/useTheme";
 import { useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import DrawerComponent from "../ui/DrawerComponent";
 
 export default function ScreenOne() {
+  const { colors } = useTheme();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <DrawerComponent
       isOpen={drawerOpen}
       onToggle={setDrawerOpen}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Screen One</Text>
-        <Text>This is the main content of Screen One</Text>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <Text style={[styles.title, { color: colors.text }]}>Screen One</Text>
+        <Text style={{ color: colors.textSecondary }}>
+          This is the main content of Screen One
+        </Text>
 
         <Button
           title="Toggle Drawer"
@@ -27,26 +31,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff",
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 20,
-  },
-  link: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: "#007AFF",
-    borderRadius: 5,
-  },
-  linkText: {
-    color: "#fff",
-    textAlign: "center",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
   },
 });

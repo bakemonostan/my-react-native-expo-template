@@ -1,4 +1,5 @@
-import React from "react";
+import { useTheme } from "@/hooks/useTheme";
+import React, { useMemo } from "react";
 import { ActivityIndicator, StyleSheet, View, ViewStyle } from "react-native";
 import TextComponent from "./TextComponent";
 
@@ -22,7 +23,7 @@ export interface LoadingComponentProps {
 
   /**
    * Color of the loading indicator
-   * @default '#007AFF'
+   * @default theme `colors.primary`
    */
   color?: string;
 
@@ -112,25 +113,52 @@ export default function LoadingComponent({
   visible = true,
   message,
   size = "large",
-  color = "#007AFF",
+  color,
   style,
   fullScreen = false,
 }: LoadingComponentProps) {
+  const { colors } = useTheme();
+  const spinnerColor = color ?? colors.primary;
+
+  const fullScreenScrimStyle = useMemo((): ViewStyle => {
+    const hex = colors.surface;
+    const scrim =
+      hex.startsWith("#") && hex.length === 7 ? `${hex}EB` : hex;
+    return {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: scrim,
+      zIndex: 0,
+    };
+  }, [colors.surface]);
+
   if (!visible) return null;
 
   const containerStyle = [
     styles.container,
-    fullScreen && styles.fullScreen,
+    fullScreen && styles.fullScreenFill,
     style,
   ];
 
-  return (
-    <View style={containerStyle}>
-      <ActivityIndicator size={size} color={color} />
-      {message && (
-        <TextComponent style={styles.message} color="#666666" size="sm">
+  const body = (
+    <>
+      <ActivityIndicator size={size} color={spinnerColor} />
+      {message ? (
+        <TextComponent style={styles.message} color={colors.textSecondary} size="sm">
           {message}
         </TextComponent>
+      ) : null}
+    </>
+  );
+
+  return (
+    <View style={containerStyle}>
+      {fullScreen ? (
+        <>
+          <View pointerEvents="none" style={fullScreenScrimStyle} />
+          <View style={styles.fullScreenContent}>{body}</View>
+        </>
+      ) : (
+        body
       )}
     </View>
   );
@@ -142,10 +170,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  fullScreen: {
+  fullScreenFill: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
     zIndex: 999,
+  },
+  fullScreenContent: {
+    zIndex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
   },
   message: {
     marginTop: 12,

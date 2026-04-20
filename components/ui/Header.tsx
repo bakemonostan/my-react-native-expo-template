@@ -1,5 +1,5 @@
-import { colors } from '@/constants/Colors';
 import { mScale } from '@/constants/mixins';
+import { useTheme } from '@/hooks/useTheme';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -8,7 +8,7 @@ import TextComponent from './TextComponent';
 
 /**
  * Top bar with back (**`GoBack`**), centered **`title`** / optional **`description`**, and optional **`rightItem`**.
- * Uses static palette colors from `@/constants/Colors` for defaults — override with **`backgroundColor`** / **`titleColor`** as needed.
+ * Defaults use **`useTheme().colors`** — override with **`backgroundColor`** / **`titleColor`** when needed.
  *
  * @example Stack screen header
  * ```tsx
@@ -37,13 +37,17 @@ export interface HeaderProps {
 const Header = ({
   title,
   description,
-  backgroundColor = colors.palette.white,
+  backgroundColor,
   withChild,
   children,
   onPress,
   rightItem,
-  titleColor = colors.text,
+  titleColor,
 }: HeaderProps) => {
+  const { colors } = useTheme();
+  const headerBg = backgroundColor ?? colors.surface;
+  const headerTitleColor = titleColor ?? colors.text;
+
   const handleBack = () => {
     if (onPress) {
       onPress();
@@ -53,14 +57,14 @@ const Header = ({
   };
 
   return (
-    <View style={[styles.container, { backgroundColor }]}>
+    <View style={[styles.container, { backgroundColor: headerBg }]}>
       <GoBack onPress={handleBack} />
       <View style={styles.titleContainer}>
         <TextComponent
           text={title}
           variant='h4'
           weight='bold'
-          color={titleColor}
+          color={headerTitleColor}
         />
         {description && (
           <TextComponent

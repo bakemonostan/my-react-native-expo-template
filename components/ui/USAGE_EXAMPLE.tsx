@@ -4,6 +4,7 @@
  * Copy these patterns to get started quickly.
  */
 
+import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
 import { View } from "react-native";
 import {
@@ -39,6 +40,7 @@ FONT_FAMILY_MAP.bold = "Inter-Bold";
 // ============================================
 
 export function ExampleScreen() {
+  const { colors } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -56,13 +58,13 @@ export function ExampleScreen() {
       <TextComponent
         weight="bold"
         size="lg"
-        color="#007AFF">
+        color={colors.primary}>
         Basic Text Component
       </TextComponent>
 
       <TextComponent
         variant="h1"
-        color="#000000">
+        color={colors.text}>
         Responsive Heading
       </TextComponent>
 
@@ -80,7 +82,7 @@ export function ExampleScreen() {
         leftAccessory={{
           library: "Ionicons",
           name: "heart",
-          color: "#007AFF",
+          color: colors.primary,
         }}
         onPress={() => console.log("Pressed")}
       />
@@ -103,7 +105,7 @@ export function ExampleScreen() {
         <AvatarComponent
           initials="JD"
           size={40}
-          backgroundColor="#007AFF"
+          backgroundColor={colors.primary}
         />
 
         <AvatarComponent
@@ -118,7 +120,7 @@ export function ExampleScreen() {
         <BadgeComponent content="5" />
         <BadgeComponent
           content="New"
-          backgroundColor="#4CD964"
+          backgroundColor={colors.success}
         />
         <BadgeComponent
           dot
@@ -132,13 +134,13 @@ export function ExampleScreen() {
           library="Ionicons"
           name="home"
           size={24}
-          color="#007AFF"
+          color={colors.primary}
         />
         <IconComponent
           library="Feather"
           name="search"
           size={24}
-          color="#666"
+          color={colors.textSecondary}
         />
         <IconComponent
           library="MaterialIcons"
@@ -154,7 +156,7 @@ export function ExampleScreen() {
         size="base"
         inputStyle={{
           borderWidth: 1,
-          borderColor: "#DDD",
+          borderColor: colors.border,
           borderRadius: 8,
           padding: 12,
         }}
@@ -212,6 +214,7 @@ export function ExampleScreen() {
 
 // Form with validation
 export function FormExample() {
+  const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -231,7 +234,7 @@ export function FormExample() {
         onChangeText={setEmail}
         inputStyle={{
           borderWidth: 1,
-          borderColor: "#DDD",
+          borderColor: colors.border,
           borderRadius: 8,
           padding: 12,
           marginBottom: 16,
@@ -246,7 +249,7 @@ export function FormExample() {
         error={error}
         inputStyle={{
           borderWidth: 1,
-          borderColor: "#DDD",
+          borderColor: colors.border,
           borderRadius: 8,
           padding: 12,
           marginBottom: 16,
@@ -269,6 +272,7 @@ export function FormExample() {
 
 // List with avatars and badges
 export function ListExample() {
+  const { colors } = useTheme();
   const users = [
     { id: 1, name: "John Doe", initials: "JD", unread: 3 },
     { id: 2, name: "Jane Smith", initials: "JS", unread: 0 },
@@ -289,7 +293,7 @@ export function ListExample() {
           <AvatarComponent
             initials={user.initials}
             size={48}
-            backgroundColor="#007AFF"
+            backgroundColor={colors.primary}
           />
 
           <TextComponent

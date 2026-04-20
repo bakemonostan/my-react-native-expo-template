@@ -30,7 +30,9 @@ export default function ToastExample() {
             }}
             onPress={() => success("Saved", "Your changes are synced.")}
           >
-            <TextComponent weight="medium" color="#fff">
+            <TextComponent
+              weight="medium"
+              color={colors.palette.white}>
               Success
             </TextComponent>
           </PressableComponent>
@@ -44,7 +46,9 @@ export default function ToastExample() {
             }}
             onPress={() => error("Something failed", "Check connection.")}
           >
-            <TextComponent weight="medium" color="#fff">
+            <TextComponent
+              weight="medium"
+              color={colors.palette.white}>
               Error
             </TextComponent>
           </PressableComponent>
@@ -58,7 +62,9 @@ export default function ToastExample() {
             }}
             onPress={() => info("Heads up", "This is an info toast.")}
           >
-            <TextComponent weight="medium" color="#fff">
+            <TextComponent
+              weight="medium"
+              color={colors.palette.white}>
               Info
             </TextComponent>
           </PressableComponent>
@@ -74,7 +80,7 @@ export default function ToastExample() {
               warning("Careful", "Please review before continuing.")
             }
           >
-            <TextComponent weight="medium" color="#000">
+            <TextComponent weight="medium" color={colors.text}>
               Warning
             </TextComponent>
           </PressableComponent>

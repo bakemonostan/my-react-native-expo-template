@@ -1,8 +1,8 @@
-import { colors } from '@/constants/Colors';
 import { mScale } from '@/constants/mixins';
+import { useTheme } from '@/hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Alert,
   Image,
@@ -14,12 +14,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import Animated, {
-  Extrapolate,
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 /**
  * Dashed “drop zone” that opens the image library (see **`expo-image-picker`**), enforces **`maxFileSize`**,
@@ -70,6 +65,67 @@ export default function FileUploadComponent({
   message = 'Tap to upload your document',
   subtitle,
 }: FileUploadProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          borderWidth: 2,
+          borderColor: colors.palette.primary200,
+          borderRadius: mScale(16),
+          paddingVertical: mScale(40),
+          paddingHorizontal: mScale(24),
+          backgroundColor: colors.palette.primary100,
+          borderStyle: 'dashed',
+        },
+        content: {
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        previewImage: {
+          width: mScale(120),
+          height: mScale(120),
+          borderRadius: mScale(12),
+          marginBottom: mScale(16),
+          resizeMode: 'cover',
+        },
+        iconContainer: {
+          marginBottom: mScale(20),
+        },
+        iconBg: {
+          width: mScale(64),
+          height: mScale(64),
+          borderRadius: mScale(32),
+          backgroundColor: colors.palette.primary200,
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        successBg: {
+          backgroundColor: colors.palette.success100,
+        },
+        title: {
+          fontSize: mScale(16),
+          fontWeight: '600',
+          color: colors.text,
+          marginBottom: mScale(8),
+          textAlign: 'center',
+        },
+        subtitle: {
+          fontSize: mScale(13),
+          color: colors.textSecondary,
+          textAlign: 'center',
+          marginBottom: mScale(4),
+        },
+        tapToChange: {
+          fontSize: mScale(12),
+          color: colors.primary,
+          textAlign: 'center',
+          marginTop: mScale(4),
+        },
+      }),
+    [colors],
+  );
+
   const [fileName, setFileName] = useState<string | undefined>(undefined);
   const [fileUri, setFileUri] = useState<string | undefined>(value);
   const scale = useSharedValue(1);
@@ -109,44 +165,33 @@ export default function FileUploadComponent({
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: false,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
         quality: 0.8,
       });
 
-      if (result.canceled) return;
-
-      const asset = result.assets[0];
-
-      if (asset.fileSize && asset.fileSize > maxFileSize) {
-        const maxSizeMB = Math.round(maxFileSize / 1024 / 1024);
-        const errorMsg = `File size exceeds ${maxSizeMB}MB limit`;
-        Alert.alert('File Too Large', errorMsg);
-        onError?.(errorMsg);
-        return;
+      if (!result.canceled && result.assets[0]) {
+        const asset = result.assets[0];
+        if (asset.fileSize != null && asset.fileSize > maxFileSize) {
+          onError?.(
+            `File is too large. Maximum size is ${Math.round(maxFileSize / 1024 / 1024)}MB.`,
+          );
+          return;
+        }
+        const uri = asset.uri;
+        const name = asset.fileName ?? 'image.jpg';
+        setFileUri(uri);
+        setFileName(name);
+        onFileSelect?.(uri, name);
       }
-
-      const name = asset.fileName || `document_${Date.now()}.jpg`;
-      setFileName(name);
-      setFileUri(asset.uri);
-      onFileSelect?.(asset.uri, name);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to pick image';
-      Alert.alert('Error', errorMessage);
-      onError?.(errorMessage);
+    } catch {
+      onError?.('Something went wrong while picking the file.');
     }
   };
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          scale: interpolate(scale.value, [0, 1], [0.95, 1], Extrapolate.CLAMP),
-        },
-      ],
-    };
-  });
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   const maxSizeMB = Math.round(maxFileSize / 1024 / 1024);
   const displayFileName = fileName || (value ? 'Document selected' : undefined);
@@ -198,59 +243,3 @@ export default function FileUploadComponent({
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    borderWidth: 2,
-    borderColor: colors.palette.primary200,
-    borderRadius: mScale(16),
-    paddingVertical: mScale(40),
-    paddingHorizontal: mScale(24),
-    backgroundColor: colors.palette.primary100,
-    borderStyle: 'dashed',
-  },
-  content: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  previewImage: {
-    width: mScale(120),
-    height: mScale(120),
-    borderRadius: mScale(12),
-    marginBottom: mScale(16),
-    resizeMode: 'cover',
-  },
-  iconContainer: {
-    marginBottom: mScale(20),
-  },
-  iconBg: {
-    width: mScale(64),
-    height: mScale(64),
-    borderRadius: mScale(32),
-    backgroundColor: colors.palette.primary200,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  successBg: {
-    backgroundColor: colors.palette.success100,
-  },
-  title: {
-    fontSize: mScale(16),
-    fontWeight: '600',
-    color: colors.text,
-    marginBottom: mScale(8),
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: mScale(13),
-    color: colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: mScale(4),
-  },
-  tapToChange: {
-    fontSize: mScale(12),
-    color: colors.primary,
-    textAlign: 'center',
-    marginTop: mScale(4),
-  },
-});

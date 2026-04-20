@@ -1,5 +1,7 @@
+import { useTheme } from "@/hooks/useTheme";
 import * as React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useMemo } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Drawer } from "react-native-drawer-layout";
 
 interface DrawerComponentProps {
@@ -129,6 +131,56 @@ export default function DrawerComponent({
   isOpen,
   onToggle,
 }: DrawerComponentProps) {
+  const { colors } = useTheme();
+
+  const styles = useMemo(
+    () => ({
+      drawer: {
+        flex: 1,
+        backgroundColor: colors.surface,
+      },
+      drawerContent: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: colors.backgroundSecondary,
+        paddingTop: 50,
+      },
+      drawerTitle: {
+        fontSize: 24,
+        fontWeight: "bold" as const,
+        marginBottom: 20,
+        color: colors.text,
+      },
+      drawerItem: {
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        marginBottom: 10,
+        backgroundColor: colors.surface,
+        borderRadius: 5,
+      },
+      drawerItemText: {
+        fontSize: 16,
+        color: colors.text,
+      },
+      closeButton: {
+        backgroundColor: colors.primary,
+        marginTop: 20,
+      },
+      closeButtonText: {
+        fontSize: 16,
+        color: colors.primaryText,
+        fontWeight: "600" as const,
+      },
+      mainContainer: {
+        flex: 1,
+      },
+      content: {
+        flex: 1,
+      },
+    }),
+    [colors],
+  );
+
   const renderDrawerContent = () => {
     return (
       <View style={styles.drawerContent}>
@@ -146,7 +198,7 @@ export default function DrawerComponent({
           style={[styles.drawerItem, styles.closeButton]}
           onPress={() => onToggle(false)}
         >
-          <Text style={styles.drawerItemText}>Close</Text>
+          <Text style={styles.closeButtonText}>Close</Text>
         </TouchableOpacity>
       </View>
     );
@@ -161,49 +213,8 @@ export default function DrawerComponent({
       drawerStyle={styles.drawer}
     >
       <View style={styles.mainContainer}>
-        {/* Main content - no header */}
         <View style={styles.content}>{children}</View>
       </View>
     </Drawer>
   );
 }
-
-const styles = StyleSheet.create({
-  drawer: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  drawerContent: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f5f5f5",
-    paddingTop: 50, // Account for status bar
-  },
-  drawerTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#333",
-  },
-  drawerItem: {
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    backgroundColor: "#fff",
-    borderRadius: 5,
-  },
-  drawerItemText: {
-    fontSize: 16,
-    color: "#333",
-  },
-  closeButton: {
-    backgroundColor: "#007AFF",
-    marginTop: 20,
-  },
-  mainContainer: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-  },
-});

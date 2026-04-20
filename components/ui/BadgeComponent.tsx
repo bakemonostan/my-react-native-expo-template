@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import TextComponent from "./TextComponent";
@@ -10,13 +11,13 @@ export interface BadgeComponentProps {
 
   /**
    * Background color of the badge
-   * @default '#FF3B30'
+   * @default **`colors.error`**
    */
   backgroundColor?: string;
 
   /**
    * Text color of the badge
-   * @default '#FFFFFF'
+   * @default **`colors.primaryText`**
    */
   textColor?: string;
 
@@ -106,12 +107,16 @@ export interface BadgeComponentProps {
  */
 export default function BadgeComponent({
   content,
-  backgroundColor = "#FF3B30",
-  textColor = "#FFFFFF",
+  backgroundColor,
+  textColor,
   size = "medium",
   style,
   dot = false,
 }: BadgeComponentProps) {
+  const { colors } = useTheme();
+  const bg = backgroundColor ?? colors.error;
+  const fg = textColor ?? colors.primaryText;
+
   const getSize = () => {
     switch (size) {
       case "small":
@@ -140,7 +145,7 @@ export default function BadgeComponent({
   const containerStyle = [
     styles.container,
     {
-      backgroundColor,
+      backgroundColor: bg,
       width: dot ? badgeSize : undefined,
       height: badgeSize,
       minWidth: dot ? badgeSize : badgeSize * 1.5,
@@ -157,7 +162,7 @@ export default function BadgeComponent({
     <View style={containerStyle}>
       <TextComponent
         style={styles.text}
-        color={textColor}
+        color={fg}
         size={fontSize}
         weight="semi_bold"
       >

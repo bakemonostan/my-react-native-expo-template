@@ -1,3 +1,5 @@
+import type { AppColors } from "@/constants/Colors";
+import { useTheme } from "@/hooks/useTheme";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
   Animated,
@@ -16,6 +18,16 @@ import {
 } from "./Toggle";
 
 const isRTL = false;
+
+type SwitchPaint = Pick<
+  AppColors,
+  | "primary"
+  | "border"
+  | "error"
+  | "errorBackground"
+  | "backgroundSecondary"
+  | "textSecondary"
+>;
 
 /**
  * iOS-style switch on `Toggle`: track, knob, optional **`accessibilityMode`** (`"text"` | `"icon"`).
@@ -83,19 +95,20 @@ function resolveKnobColor(
   status: SwitchInputProps["status"],
   $detailStyleOverride: ViewStyle | undefined,
   $innerStyleOverride: ViewStyle | undefined,
+  paint: SwitchPaint,
 ): string {
   if (on) {
     const custom = $detailStyleOverride?.backgroundColor;
     if (typeof custom === "string") return custom;
-    if (disabled) return "#6B7280";
-    if (status === "error") return "#DC2626";
-    return "#F3F4F6";
+    if (disabled) return paint.textSecondary;
+    if (status === "error") return paint.error;
+    return paint.backgroundSecondary;
   }
   const custom = $innerStyleOverride?.backgroundColor;
   if (typeof custom === "string") return custom;
-  if (disabled) return "#6B7280";
-  if (status === "error") return "#DC2626";
-  return "#E5E7EB";
+  if (disabled) return paint.textSecondary;
+  if (status === "error") return paint.error;
+  return paint.border;
 }
 
 function SwitchInput(props: SwitchInputProps) {
@@ -107,6 +120,16 @@ function SwitchInput(props: SwitchInputProps) {
     innerStyle: $innerStyleOverride,
     detailStyle: $detailStyleOverride,
   } = props;
+
+  const { colors } = useTheme();
+  const paint: SwitchPaint = {
+    primary: colors.primary,
+    border: colors.border,
+    error: colors.error,
+    errorBackground: colors.errorBackground,
+    backgroundSecondary: colors.backgroundSecondary,
+    textSecondary: colors.textSecondary,
+  };
 
   const animate = useRef(new Animated.Value(on ? 1 : 0));
   const opacity = useRef(new Animated.Value(0));
@@ -142,16 +165,16 @@ function SwitchInput(props: SwitchInputProps) {
   ].find((v) => typeof v === "number");
 
   const offBackgroundColor = disabled
-    ? "#9CA3AF"
+    ? colors.textDim
     : status === "error"
-      ? "#FEE2E2"
-      : "#D1D5DB";
+      ? colors.errorBackground
+      : colors.border;
 
   const onBackgroundColor = disabled
     ? "transparent"
     : status === "error"
-      ? "#FEE2E2"
-      : "#3B82F6";
+      ? colors.errorBackground
+      : colors.primary;
 
   const knobBackgroundColor = resolveKnobColor(
     on,
@@ -159,6 +182,7 @@ function SwitchInput(props: SwitchInputProps) {
     status,
     $detailStyleOverride as ViewStyle | undefined,
     $innerStyleOverride as ViewStyle | undefined,
+    paint,
   );
 
   const rtlAdjustment = isRTL ? -1 : 1;
@@ -242,6 +266,8 @@ function SwitchAccessibilityLabel(
     detailStyle,
   } = props;
 
+  const { colors } = useTheme();
+
   if (!accessibilityMode) return null;
 
   const shouldLabelBeVisible = (on && role === "on") || (!on && role === "off");
@@ -252,15 +278,15 @@ function SwitchAccessibilityLabel(
     role === "on" && { left: "5%" },
   ];
 
-  let color = "#F3F4F6";
-  if (disabled) color = "#6B7280";
-  else if (status === "error") color = "#DC2626";
+  let color: ColorValue = colors.backgroundSecondary;
+  if (disabled) color = colors.textSecondary;
+  else if (status === "error") color = colors.error;
   else if (!on) {
     const c = (innerStyle as ViewStyle)?.backgroundColor;
-    color = c != null ? String(c) : "#3B82F6";
+    color = (c != null ? String(c) : colors.primary) as ColorValue;
   } else {
     const c = (detailStyle as ViewStyle)?.backgroundColor;
-    color = c != null ? String(c) : "#F3F4F6";
+    color = (c != null ? String(c) : colors.backgroundSecondary) as ColorValue;
   }
 
   return (

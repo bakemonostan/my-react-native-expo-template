@@ -178,7 +178,10 @@ export default function DateTimePickerField({
             onRequestClose={() => setIosOpen(false)}
           >
             <Pressable
-              style={styles.modalBackdrop}
+              style={[
+                styles.modalBackdrop,
+                { backgroundColor: colors.palette.black, opacity: 0.45 },
+              ]}
               onPress={() => setIosOpen(false)}
             >
               <Pressable
@@ -283,7 +286,6 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.45)",
     justifyContent: "center",
     alignItems: "center",
     padding: 20,

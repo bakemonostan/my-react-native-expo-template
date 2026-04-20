@@ -1,4 +1,4 @@
-import { colors } from "@/constants/Colors";
+import { useTheme } from "@/hooks/useTheme";
 import { mScale } from "@/utils/scaling";
 import {
   BottomSheetBackdrop,
@@ -37,13 +37,13 @@ export interface RevisedBottomSheetWrapperProps
 
   /**
    * Background color for the main container
-   * @default "rgba(242, 242, 242, 1)"
+   * @default theme **`colors.backgroundSecondary`**
    */
   containerBgColor?: string;
 
   /**
    * Background color for the scroll view container
-   * @default "white"
+   * @default theme **`colors.surface`**
    */
   scrollViewBgColor?: string;
 
@@ -164,8 +164,8 @@ const RevisedBottomSheetWrapper = React.forwardRef<
     title = "Title",
     closeText = "Close",
     onClose,
-    containerBgColor = "rgba(242, 242, 242, 1)",
-    scrollViewBgColor = "white",
+    containerBgColor,
+    scrollViewBgColor,
     showHeader = true,
     scrollable = true,
     paddingBottom = mScale(70),
@@ -178,6 +178,10 @@ const RevisedBottomSheetWrapper = React.forwardRef<
   },
   ref
 ) {
+  const { colors } = useTheme();
+  const resolvedContainerBg = containerBgColor ?? colors.backgroundSecondary;
+  const resolvedScrollBg = scrollViewBgColor ?? colors.surface;
+
   const renderBackdrop = useCallback(
     (props: any) => (
       <BottomSheetBackdrop
@@ -205,7 +209,9 @@ const RevisedBottomSheetWrapper = React.forwardRef<
       handleStyle={{ height: 0, padding: 0 }}
       {...bottomSheetProps}>
       {showHeader && (
-        <View style={styles.headerContainer}>
+        <View
+          style={[styles.headerContainer, { backgroundColor: colors.surface }]}
+        >
           {customHeader ? (
             customHeader
           ) : (
@@ -220,7 +226,10 @@ const RevisedBottomSheetWrapper = React.forwardRef<
                   buttonTextColor={colors.primary}
                   labelVariant="body2Regular"
                   size={"xs"}
-                  style={styles.closeButton}
+                  style={[
+                    styles.closeButton,
+                    { backgroundColor: colors.backgroundSecondary },
+                  ]}
                   onPress={handleClose}
                 />
               </View>
@@ -232,13 +241,16 @@ const RevisedBottomSheetWrapper = React.forwardRef<
       <View
         style={[
           styles.container,
-          { backgroundColor: containerBgColor, paddingBottom: paddingBottom },
+          {
+            backgroundColor: resolvedContainerBg,
+            paddingBottom: paddingBottom,
+          },
         ]}>
         <View
           style={[
             styles.scrollViewContainer,
             {
-              backgroundColor: scrollViewBgColor,
+              backgroundColor: resolvedScrollBg,
             },
           ]}>
           {scrollable ? (
@@ -252,7 +264,11 @@ const RevisedBottomSheetWrapper = React.forwardRef<
       </View>
 
       {footerContent && (
-        <View style={styles.footerContainer}>{footerContent}</View>
+        <View
+          style={[styles.footerContainer, { backgroundColor: colors.surface }]}
+        >
+          {footerContent}
+        </View>
       )}
     </BottomSheetModal>
   );
@@ -277,7 +293,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: mScale(12),
-    backgroundColor: "white",
     paddingHorizontal: mScale(12),
     borderTopEndRadius: mScale(12),
     borderTopStartRadius: mScale(12),
@@ -286,12 +301,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: mScale(8),
   },
-  closeButton: {
-    backgroundColor: colors.backgroundSecondary,
-  },
+  closeButton: {},
   footerContainer: {
     padding: mScale(12),
     paddingBottom: mScale(58),
-    backgroundColor: "white",
   },
 });

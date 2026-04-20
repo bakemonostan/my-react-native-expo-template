@@ -5,6 +5,7 @@
  * (Switch, Checkbox, Radio) in your React Native application.
  */
 
+import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
 import { View } from "react-native";
 import { Checkbox, Radio, Switch } from "./index";
@@ -158,6 +159,7 @@ export function LeftLabelExample() {
 
 // Example 8: Custom styling
 export function CustomStyledExample() {
+  const { colors } = useTheme();
   const [enabled, setEnabled] = useState(false);
 
   return (
@@ -168,7 +170,7 @@ export function CustomStyledExample() {
       labelStyle={{ fontSize: 18, fontWeight: "bold" }}
       containerStyle={{
         padding: 16,
-        backgroundColor: "#f0f0f0",
+        backgroundColor: colors.backgroundSecondary,
         borderRadius: 8,
       }}
     />

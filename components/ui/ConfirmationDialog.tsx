@@ -117,7 +117,10 @@ export default function ConfirmationDialog({
       animationType='fade'
       onRequestClose={onCancel}>
       <Pressable
-        style={styles.backdrop}
+        style={[
+          styles.backdrop,
+          { backgroundColor: colors.palette.black, opacity: 0.5 },
+        ]}
         onPress={onCancel}>
         <Pressable onPress={(e) => e.stopPropagation()}>
           <View
@@ -171,7 +174,6 @@ export default function ConfirmationDialog({
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 24,

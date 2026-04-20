@@ -166,7 +166,10 @@ export default function SelectComponent<T = string>({
         animationType='slide'
         onRequestClose={() => setOpen(false)}>
         <Pressable
-          style={styles.backdrop}
+          style={[
+            styles.backdrop,
+            { backgroundColor: colors.palette.black, opacity: 0.45 },
+          ]}
           onPress={() => setOpen(false)}
         />
         <View style={[styles.sheet, { backgroundColor: colors.surface }]}>
@@ -264,7 +267,6 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   sheet: {
     borderTopLeftRadius: 20,

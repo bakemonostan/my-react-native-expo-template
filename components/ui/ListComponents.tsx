@@ -222,7 +222,7 @@ export interface ListProps<T> extends Omit<FlatListProps<T>, "renderItem"> {
 
   /**
    * Color of the divider
-   * @default '#E1E1E1'
+   * @default theme **`colors.separator`**
    */
   dividerColor?: string;
 

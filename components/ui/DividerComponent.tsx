@@ -1,10 +1,11 @@
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 
 export interface DividerComponentProps {
   /**
    * Color of the divider
-   * @default '#E1E1E1'
+   * @default theme `colors.separator`
    */
   color?: string;
 
@@ -98,16 +99,19 @@ export interface DividerComponentProps {
  * ```
  */
 export default function DividerComponent({
-  color = "#E1E1E1",
+  color,
   thickness = 1,
   spacing = 16,
   vertical = false,
   style,
 }: DividerComponentProps) {
+  const { colors } = useTheme();
+  const lineColor = color ?? colors.separator;
+
   const dividerStyle = [
     styles.divider,
     {
-      backgroundColor: color,
+      backgroundColor: lineColor,
       [vertical ? "width" : "height"]: thickness,
       margin: spacing,
     },

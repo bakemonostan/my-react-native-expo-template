@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useTheme";
 import { useEffect, useRef } from "react";
 import { Animated, ColorValue, StyleProp, View, ViewStyle } from "react-native";
 
@@ -71,6 +72,8 @@ function RadioInput(props: RadioInputProps) {
     detailStyle: $detailStyleOverride,
   } = props;
 
+  const { colors } = useTheme();
+
   const opacity = useRef(new Animated.Value(0));
 
   useEffect(() => {
@@ -82,30 +85,30 @@ function RadioInput(props: RadioInputProps) {
   }, [on]);
 
   const offBackgroundColor = disabled
-    ? "#9CA3AF"
+    ? colors.textDim
     : status === "error"
-      ? "#FEE2E2"
-      : "#E5E7EB";
+      ? colors.errorBackground
+      : colors.border;
 
   const outerBorderColor = disabled
-    ? "#9CA3AF"
+    ? colors.textDim
     : status === "error"
-      ? "#DC2626"
+      ? colors.error
       : !on
-        ? "#1F2937"
-        : "#3B82F6";
+        ? colors.text
+        : colors.primary;
 
   const onBackgroundColor = disabled
     ? "transparent"
     : status === "error"
-      ? "#FEE2E2"
-      : "#F3F4F6";
+      ? colors.errorBackground
+      : colors.backgroundSecondary;
 
   const dotBackgroundColor = disabled
-    ? "#6B7280"
+    ? colors.textSecondary
     : status === "error"
-      ? "#DC2626"
-      : "#3B82F6";
+      ? colors.error
+      : colors.primary;
 
   return (
     <View

@@ -1,3 +1,5 @@
+import type { ThemeTokenSet } from "@/config/themeFromEnv";
+
 /**
  * @fileoverview Central color system: shared **palette**, **light** / **dark** semantic tokens, and **`AppColors`** typing for `ThemeProvider`.
  *
@@ -13,8 +15,9 @@
  *
  * - **In screens & components:** use **`useTheme().colors`** (`context/ThemeContext`) so light/dark updates automatically.
  * - **Avoid** `import { colors }` for surfaces/text that should follow the active scheme; use theme hooks instead.
- * - **Brand (quick):** set **`EXPO_PUBLIC_BRAND_PRIMARY`** in `.env` — `ThemeProvider` overrides semantic **`primary`** / **`tint`** only (RN Init wizard writes this).
- * - **Brand (full ramp):** replace **`palette.primary*`** here so **`colors.palette.primary500`** etc. match your product before shipping.
+ * - **Brand (quick):** set **`EXPO_PUBLIC_BRAND_PRIMARY`** when you are not using the full wizard token map.
+ * - **Full semantic map:** `EXPO_PUBLIC_THEME_LIGHT_*` / `EXPO_PUBLIC_THEME_DARK_*` from RN Init — merged in `ThemeProvider` via {@link mergeSemanticTokens}.
+ * - **Brand (full ramp):** edit **`palette.primary*`** here for code that still reads the shared ramp.
  *
  * @example Theme-aware (preferred)
  * ```tsx
@@ -155,5 +158,47 @@ export const colors = lightColors;
 
 /**
  * Union of {@link lightColors} and {@link darkColors} — the shape of **`useTheme().colors`** at runtime.
+ * Wizard tokens add the same keys as {@link ThemeTokenSet} (ring, surfaces, etc.) for tweakcn-style access.
  */
-export type AppColors = typeof lightColors | typeof darkColors;
+export type AppColors = (typeof lightColors | typeof darkColors) &
+  Partial<ThemeTokenSet>;
+
+/**
+ * Applies wizard / tweakcn-style semantic tokens on top of the static light or dark base.
+ */
+export function mergeSemanticTokens(
+  base: typeof lightColors | typeof darkColors,
+  tokens: ThemeTokenSet,
+): AppColors {
+  return {
+    ...base,
+    background: tokens.background,
+    backgroundSecondary: tokens.muted,
+    surface: tokens.card,
+    text: tokens.foreground,
+    textSecondary: tokens.mutedForeground,
+    textDim: tokens.mutedForeground,
+    border: tokens.border,
+    separator: tokens.border,
+    primary: tokens.primary,
+    primaryText: tokens.primaryForeground,
+    tint: tokens.ring,
+    error: tokens.destructive,
+    errorBackground: tokens.muted,
+    foreground: tokens.foreground,
+    card: tokens.card,
+    cardForeground: tokens.cardForeground,
+    popover: tokens.popover,
+    popoverForeground: tokens.popoverForeground,
+    secondary: tokens.secondary,
+    secondaryForeground: tokens.secondaryForeground,
+    muted: tokens.muted,
+    mutedForeground: tokens.mutedForeground,
+    accent: tokens.accent,
+    accentForeground: tokens.accentForeground,
+    destructive: tokens.destructive,
+    destructiveForeground: tokens.destructiveForeground,
+    input: tokens.input,
+    ring: tokens.ring,
+  } as AppColors;
+}

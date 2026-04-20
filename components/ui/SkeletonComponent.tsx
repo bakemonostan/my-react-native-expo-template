@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useTheme";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useState } from "react";
 import { DimensionValue, StyleSheet, ViewStyle } from "react-native";
@@ -62,7 +63,7 @@ export interface SkeletonComponentProps {
 
   /**
    * Background color of the skeleton
-   * @default "#E1E1E1"
+   * @default theme **`colors.palette.primary100`** (subtle brand-tinted track)
    * @example
    * ```tsx
    * <SkeletonComponent backgroundColor="#F0F0F0" height={20} />
@@ -191,13 +192,17 @@ export interface SkeletonComponentProps {
 export default function SkeletonComponent({
   width = "100%",
   height = 20,
-  backgroundColor = "rgba(202, 223, 253, 0.20)",
+  backgroundColor: backgroundColorProp,
   rounded = false,
   borderRadius = 4,
   style,
   direction = ANIMATION_DIRECTION.leftToRight,
   animationType = ANIMATION_TYPE.shiver,
 }: SkeletonComponentProps) {
+  const { colors } = useTheme();
+  const backgroundColor =
+    backgroundColorProp ?? colors.palette.primary100;
+
   const isXDirectionAnimation =
     direction === ANIMATION_DIRECTION.leftToRight ||
     direction === ANIMATION_DIRECTION.rightToLeft;

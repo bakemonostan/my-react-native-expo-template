@@ -1,10 +1,12 @@
 import GradientView from "@/components/ui/GradientView";
 import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
 import { View } from "react-native";
 
 export default function GradientExample() {
+  const { colors } = useTheme();
   return (
     <Screen safeAreaEdges={["bottom"]}>
       <View style={{ gap: 24 }}>
@@ -23,7 +25,11 @@ export default function GradientExample() {
         <GradientView
           showBorder
           borderRadius={16}
-          colors={["#F97316", "#EC4899", "#8B5CF6"]}
+          colors={[
+            colors.palette.warning500,
+            colors.palette.error500,
+            colors.palette.primary600,
+          ]}
         >
           <View style={{ padding: 20 }}>
             <TextComponent variant="body1Regular">

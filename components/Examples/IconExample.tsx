@@ -1,11 +1,13 @@
 import IconComponent from "@/components/ui/IconComponent";
 import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
-import { colors } from "@/constants/Colors";
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
 import { View } from "react-native";
 
 export default function IconExample() {
+  const { colors } = useTheme();
+
   return (
     <Screen safeAreaEdges={["bottom"]}>
       <View style={{ gap: 16 }}>
@@ -31,25 +33,25 @@ export default function IconExample() {
             name="heart"
             library="AntDesign"
             size={32}
-            color="#255992"
+            color={colors.primary}
           />
           <IconComponent
             name="heart"
             library="MaterialCommunityIcons"
             size={42}
-            color="#aa26aa"
+            color={colors.warning}
           />
           <IconComponent
             name="heart-broken"
             library="MaterialIcons"
             size={52}
-            color="#3B30FF"
+            color={colors.tint}
           />
           <IconComponent
             name="heart"
             library="Feather"
             size={62}
-            color="#222222"
+            color={colors.text}
           />
           <IconComponent
             name="heart"

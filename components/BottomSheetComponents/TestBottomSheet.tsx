@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useTheme";
 import React, { forwardRef, useCallback, useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
@@ -11,22 +12,39 @@ type HorizontalListItem = { id: string; title: string; color: string };
 
 export const TestBottomSheet = forwardRef<BottomSheet, SheetProps>(
   function TestBottomSheet({ onSubmit: _onSubmit }, ref) {
+    const { colors } = useTheme();
+
     const data = useMemo<HorizontalListItem[]>(
       () => [
-        { id: "1", title: "Component 1", color: "#FF6B6B" },
-        { id: "2", title: "Component 2", color: "#4ECDC4" },
-        { id: "3", title: "Component 3", color: "#45B7D1" },
-        { id: "4", title: "Component 4", color: "#96CEB4" },
+        { id: "1", title: "Component 1", color: colors.palette.error500 },
+        { id: "2", title: "Component 2", color: colors.palette.success500 },
+        { id: "3", title: "Component 3", color: colors.palette.primary500 },
+        { id: "4", title: "Component 4", color: colors.palette.warning500 },
       ],
-      []
+      [
+        colors.palette.error500,
+        colors.palette.primary500,
+        colors.palette.success500,
+        colors.palette.warning500,
+      ],
     );
+
     const renderItem = useCallback(
       ({ item }: { item: HorizontalListItem }) => (
-        <View style={[styles.horizontalItem, { backgroundColor: item.color }]}>
-          <Text style={styles.itemText}>{item.title}</Text>
+        <View
+          style={[
+            styles.horizontalItem,
+            {
+              backgroundColor: item.color,
+              shadowColor: colors.palette.black,
+            },
+          ]}>
+          <Text style={[styles.itemText, { color: colors.palette.white }]}>
+            {item.title}
+          </Text>
         </View>
       ),
-      []
+      [colors.palette.black, colors.palette.white],
     );
 
     return (
@@ -34,46 +52,31 @@ export const TestBottomSheet = forwardRef<BottomSheet, SheetProps>(
         enableDynamicSizing={false}
         snapPoints={["50%"]}
         enablePanDownToClose={true}
-        ref={ref}
-      >
+        ref={ref}>
         <View style={styles.container}>
           <BottomSheetFlatList
             data={data}
             keyExtractor={(i: HorizontalListItem) => i.id}
             renderItem={renderItem}
             horizontal
-            contentContainerStyle={styles.contentContainer}
+            contentContainerStyle={[
+              styles.contentContainer,
+              { backgroundColor: colors.surface },
+            ]}
           />
-          {/* <Pressable
-              style={styles.closeButton}
-              onPress={() => {
-                if (ref && "current" in ref && ref.current) {
-                  ref.current.close();
-                }
-              }}
-            >
-              <Text style={styles.closeButtonText}>Close</Text>
-            </Pressable> */}
         </View>
       </GorhomSheet>
     );
-  }
+  },
 );
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  modalContent: {
-    flex: 1,
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   itemText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#fff",
     textAlign: "center",
   },
   horizontalItem: {
@@ -83,45 +86,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
-    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5, // Android shadow
+    elevation: 5,
   },
-  modalText: {
-    fontSize: 18,
-    color: "black",
-    marginBottom: 20,
-  },
-  contentContainer: {
-    backgroundColor: "white",
-  },
-  closeButton: {
-    padding: 10,
-    backgroundColor: "#2196F3",
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
+  contentContainer: {},
 });
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingTop: 200,
-//   },
-//   contentContainer: {
-//     backgroundColor: "white",
-//   },
-//   itemContainer: {
-//     padding: 6,
-//     margin: 6,
-//     backgroundColor: "#eee",
-//   },
-// });

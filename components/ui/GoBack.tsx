@@ -1,4 +1,5 @@
 import { mScale } from "@/constants/mixins";
+import { useTheme } from "@/hooks/useTheme";
 import { router } from "expo-router";
 import React from "react";
 import { Pressable, StyleSheet } from "react-native";
@@ -29,9 +30,20 @@ const GoBack = ({
     router.back();
   },
 }: GoBackProps) => {
+  const { colors } = useTheme();
   return (
-    <Pressable onPress={onPress} style={styles.container}>
-      <IconComponent library="Feather" name="chevron-left" size={20} />
+    <Pressable
+      onPress={onPress}
+      style={[
+        styles.container,
+        { backgroundColor: colors.backgroundSecondary },
+      ]}>
+      <IconComponent
+        library="Feather"
+        name="chevron-left"
+        size={20}
+        color={colors.text}
+      />
     </Pressable>
   );
 };
@@ -42,7 +54,6 @@ const styles = StyleSheet.create({
   container: {
     width: mScale(32),
     height: mScale(32),
-    backgroundColor: "rgba(255, 255, 255, 0.04)",
     borderRadius: mScale(16),
     alignItems: "center",
     justifyContent: "center",

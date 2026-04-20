@@ -1,10 +1,12 @@
 import AlertComponent from "@/components/ui/AlertComponent";
 import { Screen } from "@/components/ui/Screen";
 import TextComponent from "@/components/ui/TextComponent";
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
 import { View } from "react-native";
 
 export default function AlertExample() {
+  const { colors } = useTheme();
   return (
     <Screen safeAreaEdges={["bottom"]}>
       <View style={{ gap: 16 }}>
@@ -39,9 +41,9 @@ export default function AlertExample() {
         <AlertComponent
           variant="info"
           message="This is a simple alert without a title."
-          backgroundColor="#E3F2FD"
-          textColor="#0D47A1"
-          borderColor="#90CAF9"
+          backgroundColor={colors.palette.primary100}
+          textColor={colors.palette.primary900}
+          borderColor={colors.palette.primary300}
         />
       </View>
     </Screen>

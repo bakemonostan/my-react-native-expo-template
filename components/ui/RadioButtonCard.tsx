@@ -53,16 +53,19 @@ function CheckMark({
   disabled,
   checkColor,
   ringColor,
+  selectedInnerBg,
 }: {
   selected: boolean;
   disabled?: boolean;
   checkColor: string;
   ringColor: string;
+  selectedInnerBg: string;
 }) {
   return (
     <View
       style={[
         styles.checkContainer,
+        selected && { backgroundColor: selectedInnerBg },
         !selected && styles.checkContainerUnselected,
         !selected && { borderColor: ringColor },
         disabled && styles.checkDisabled,
@@ -94,8 +97,8 @@ export default function RadioButtonCard({
   /** Light: soft tile on the page (not black). Dark: surface above background. */
   const cardBg = isDark ? colors.surface : colors.backgroundSecondary;
   const selectedBorder = colors.primary;
-  const checkIconColor = colors.palette.neutral900;
-  const unselectedRing = isDark ? 'rgba(255, 255, 255, 0.45)' : colors.border;
+  const checkIconColor = colors.primary;
+  const unselectedRing = isDark ? colors.textDim : colors.border;
 
   return (
     <View style={[styles.cardWrapper, style]}>
@@ -121,6 +124,7 @@ export default function RadioButtonCard({
             disabled={disabled}
             checkColor={checkIconColor}
             ringColor={unselectedRing}
+            selectedInnerBg={colors.surface}
           />
         </View>
       </TouchableOpacity>
@@ -148,9 +152,8 @@ const styles = StyleSheet.create({
     width: mScale(22),
     height: mScale(22),
     borderRadius: mScale(11),
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   checkContainerUnselected: {
     backgroundColor: 'transparent',

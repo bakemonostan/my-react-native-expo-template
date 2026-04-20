@@ -21,7 +21,13 @@ function useToastConfig(): ToastConfig {
     success: (props: BaseToastProps) => (
       <BaseToast
         {...props}
-        style={[styles.base, { borderLeftColor: colors.success }]}
+        style={[
+          styles.base,
+          {
+            borderLeftColor: colors.success,
+            shadowColor: colors.palette.black,
+          },
+        ]}
         contentContainerStyle={{ backgroundColor: colors.surface }}
         text1Style={{ color: colors.text, fontWeight: '600', fontSize: 14 }}
         text2Style={{ color: colors.textSecondary, fontSize: 12 }}
@@ -30,7 +36,13 @@ function useToastConfig(): ToastConfig {
     error: (props: BaseToastProps) => (
       <ErrorToast
         {...props}
-        style={[styles.base, { borderLeftColor: colors.error }]}
+        style={[
+          styles.base,
+          {
+            borderLeftColor: colors.error,
+            shadowColor: colors.palette.black,
+          },
+        ]}
         contentContainerStyle={{ backgroundColor: colors.surface }}
         text1Style={{ color: colors.text, fontWeight: '600', fontSize: 14 }}
         text2Style={{ color: colors.textSecondary, fontSize: 12 }}
@@ -39,7 +51,13 @@ function useToastConfig(): ToastConfig {
     info: (props: BaseToastProps) => (
       <BaseToast
         {...props}
-        style={[styles.base, { borderLeftColor: colors.primary }]}
+        style={[
+          styles.base,
+          {
+            borderLeftColor: colors.primary,
+            shadowColor: colors.palette.black,
+          },
+        ]}
         contentContainerStyle={{ backgroundColor: colors.surface }}
         text1Style={{ color: colors.text, fontWeight: '600', fontSize: 14 }}
         text2Style={{ color: colors.textSecondary, fontSize: 12 }}
@@ -53,6 +71,7 @@ function useToastConfig(): ToastConfig {
           {
             backgroundColor: colors.warningBackground,
             borderLeftColor: colors.warning,
+            shadowColor: colors.palette.black,
           },
         ]}>
         <View style={styles.warningContent}>
@@ -117,7 +136,6 @@ const styles = StyleSheet.create({
   base: {
     borderRadius: 8,
     borderLeftWidth: 4,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,

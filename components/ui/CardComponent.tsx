@@ -1,4 +1,5 @@
-import React from "react";
+import { useTheme } from "@/hooks/useTheme";
+import React, { useMemo } from "react";
 import { StyleProp, View, ViewStyle } from "react-native";
 
 export interface CardComponentProps {
@@ -26,7 +27,7 @@ export interface CardComponentProps {
 
   /**
    * Background color of the card
-   * @default '#FFFFFF'
+   * @default active **`colors.surface`**
    */
   backgroundColor?: string;
 
@@ -127,24 +128,29 @@ export default function CardComponent({
   style,
   elevated = true,
   borderRadius = 12,
-  backgroundColor = "#FFFFFF",
+  backgroundColor,
   padding = 16,
 }: CardComponentProps) {
-  const baseStyles: ViewStyle = {
-    backgroundColor,
-    borderRadius,
-    padding,
-    ...(elevated && {
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.1,
-      shadowRadius: 3.84,
-      elevation: 5,
-    }),
-  };
+  const { colors } = useTheme();
+  const bg = backgroundColor ?? colors.surface;
+
+  const baseStyles = useMemo((): ViewStyle => {
+    return {
+      backgroundColor: bg,
+      borderRadius,
+      padding,
+      ...(elevated && {
+        shadowColor: colors.palette.black,
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
+        elevation: 5,
+      }),
+    };
+  }, [bg, borderRadius, colors.palette.black, elevated, padding]);
 
   return <View style={[baseStyles, style]}>{children}</View>;
 }

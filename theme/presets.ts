@@ -1,3 +1,7 @@
+/**
+ * Static layout presets keyed off default **`lightColors`** (`constants/Colors.ts`).
+ * For screens that follow the user/wizard theme, prefer **`useTheme().colors`** instead.
+ */
 import { colors } from "@/constants/Colors";
 import { StyleSheet, ViewStyle } from "react-native";
 import { BorderRadius, Shadows } from "./borders-shadows-animations";
@@ -7,15 +11,16 @@ import { TouchTargets } from "./touch-targets";
 
 // Define base styles using satisfies for proper type checking
 const $cardStyle = {
-  backgroundColor: "#ffffff",
+  backgroundColor: colors.surface,
   borderRadius: BorderRadius.md,
   padding: ComponentSizes.card.padding.base,
   borderWidth: 1,
+  borderColor: colors.border,
   ...Shadows.ios.base,
 } satisfies ViewStyle;
 
 const $buttonPrimaryStyle = {
-  backgroundColor: "#007AFF",
+  backgroundColor: colors.primary,
   borderRadius: BorderRadius.base,
   ...TouchTargets.button.base,
   alignItems: "center" as const,
@@ -25,7 +30,7 @@ const $buttonPrimaryStyle = {
 const $buttonSecondaryStyle = {
   backgroundColor: "transparent",
   borderWidth: 1,
-  borderColor: "#007AFF",
+  borderColor: colors.primary,
   borderRadius: BorderRadius.base,
   ...TouchTargets.button.base,
   alignItems: "center" as const,
@@ -37,17 +42,17 @@ const $inputStyle = {
   height: ComponentSizes.input.height.base,
   paddingHorizontal: ComponentSizes.input.padding.base,
   borderBottomWidth: 1,
-  borderColor: "#e9ecef",
+  borderColor: colors.border,
 } satisfies ViewStyle;
 
 const $listItemStyle = {
-  backgroundColor: "#ffffff",
+  backgroundColor: colors.surface,
   height: ComponentSizes.listItem.height.comfortable,
   paddingHorizontal: ComponentSizes.listItem.padding.base,
   flexDirection: "row" as const,
   alignItems: "center" as const,
   borderBottomWidth: 1,
-  borderBottomColor: "#f0f0f0",
+  borderBottomColor: colors.separator,
 } satisfies ViewStyle;
 
 const $centerContainerStyle = {

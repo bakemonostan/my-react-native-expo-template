@@ -1,6 +1,6 @@
 import { useTheme } from "@/context/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useMemo } from "react";
 import { View, ViewStyle } from "react-native";
 
 /**
@@ -72,8 +72,6 @@ export interface GradientViewProps {
  * </GradientView>
  * ```
  */
-const DEFAULT_GRADIENT = ["#8B5CF6", "#3B82F6", "#2563EB"] as const;
-
 export default function GradientView({
   children,
   borderWidth = 1.5,
@@ -87,8 +85,22 @@ export default function GradientView({
   const { colors } = useTheme();
   const innerBg = backgroundColor ?? colors.background;
 
+  const defaultBrandGradient = useMemo(
+    () =>
+      [
+        colors.palette.primary400,
+        colors.palette.primary600,
+        colors.palette.primary800,
+      ] as [string, string, ...string[]],
+    [
+      colors.palette.primary400,
+      colors.palette.primary600,
+      colors.palette.primary800,
+    ],
+  );
+
   const lineColors = (
-    gradientColors?.length ? gradientColors : [...DEFAULT_GRADIENT]
+    gradientColors?.length ? gradientColors : defaultBrandGradient
   ) as [string, string, ...string[]];
 
   if (!showBorder) {
