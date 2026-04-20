@@ -1,45 +1,50 @@
 /**
- * MOCK AUTH — swappable boundary: replace `signIn` / `register` / `verifyOtp` (and any token
- * logic) with your API; screens and gates only read `user` + `hydrated`. See `docs/AUTH_AND_NAVIGATION.md`.
+ * Auth session: Zustand + AsyncStorage for profile + SecureStore for access token (see `api/api.utils`).
+ * HTTP lives in `services/authBackend.ts`. See `docs/AUTH_AND_NAVIGATION.md`.
  */
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { tokenUtils } from "@/api/api.utils";
+import {
+  backendRegister,
+  backendSignIn,
+  backendSignOut,
+  backendVerifyOtp,
+} from "@/services/authBackend";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 const AUTH_PERSIST_KEY = "template_auth_v1";
 
-/** Minimal user shape for the template (swap for your API user). */
 export type AuthUser = {
   email: string;
   name: string;
 };
 
+export type AuthActionResult =
+  | { ok: true }
+  | { ok: false; message: string };
+
 export type AuthState = {
-  /**
-   * `true` after Zustand persist has finished (set from root `_layout` via
-   * `persist.onFinishHydration` — not persisted).
-   */
   hydrated: boolean;
   user: AuthUser | null;
-  /** Email waiting for OTP verification (forgot-password / verify flow). */
   pendingOtpEmail: string | null;
   setHydrated: (value: boolean) => void;
-  /** Mock sign-in: any non-empty password succeeds. */
-  signIn: (email: string, _password: string, name?: string) => void;
-  signOut: () => void;
-  /** Mock register then session. */
-  register: (email: string, _password: string, name: string) => void;
+  signIn: (
+    email: string,
+    password: string,
+    name?: string,
+  ) => Promise<AuthActionResult>;
+  signOut: () => Promise<void>;
+  register: (
+    email: string,
+    password: string,
+    name: string,
+  ) => Promise<AuthActionResult>;
   setPendingOtpEmail: (email: string | null) => void;
-  /** Mock: accepts any code with ≥ 6 digits when `pendingOtpEmail` is set. */
-  verifyOtp: (code: string) => boolean;
-  /** Update the signed-in user's display name (local mock; replace with API patch). */
+  verifyOtp: (code: string) => Promise<AuthActionResult>;
   updateDisplayName: (name: string) => void;
 };
 
-/**
- * Generic auth session for the template (Zustand + persist).
- * Replace `signIn` / `register` / `verifyOtp` with real API calls and store tokens in SecureStore.
- */
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -47,26 +52,50 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       pendingOtpEmail: null,
       setHydrated: (value) => set({ hydrated: value }),
-      signIn: (email, _password, name) => {
-        const display = name?.trim() || email.split("@")[0] || "User";
-        set({ user: { email: email.trim(), name: display }, pendingOtpEmail: null });
+
+      signIn: async (email, password, name) => {
+        const trimmed = email.trim();
+        if (!trimmed || !password) {
+          return { ok: false, message: "Email and password are required." };
+        }
+        const res = await backendSignIn(trimmed, password, name);
+        if (!res.ok) return res;
+        await tokenUtils.setToken(res.accessToken);
+        set({ user: res.user, pendingOtpEmail: null });
+        return { ok: true };
       },
-      signOut: () => set({ user: null, pendingOtpEmail: null }),
-      register: (email, _password, name) => {
-        const display = name.trim() || email.split("@")[0] || "User";
-        set({ user: { email: email.trim(), name: display }, pendingOtpEmail: null });
+
+      signOut: async () => {
+        await backendSignOut();
+        set({ user: null, pendingOtpEmail: null });
       },
+
+      register: async (email, password, name) => {
+        const trimmed = email.trim();
+        if (!trimmed || !password) {
+          return { ok: false, message: "Email and password are required." };
+        }
+        const res = await backendRegister(trimmed, password, name.trim());
+        if (!res.ok) return res;
+        await tokenUtils.setToken(res.accessToken);
+        set({ user: res.user, pendingOtpEmail: null });
+        return { ok: true };
+      },
+
       setPendingOtpEmail: (email) => set({ pendingOtpEmail: email }),
-      verifyOtp: (code) => {
-        const digits = code.replace(/\D/g, "");
+
+      verifyOtp: async (code) => {
         const email = get().pendingOtpEmail;
-        if (!email || digits.length < 6) return false;
-        set({
-          user: { email, name: "Verified user" },
-          pendingOtpEmail: null,
-        });
-        return true;
+        if (!email) {
+          return { ok: false, message: "No email pending verification." };
+        }
+        const res = await backendVerifyOtp(email, code);
+        if (!res.ok) return res;
+        await tokenUtils.setToken(res.accessToken);
+        set({ user: res.user, pendingOtpEmail: null });
+        return { ok: true };
       },
+
       updateDisplayName: (name) => {
         const u = get().user;
         if (!u) return;
@@ -82,8 +111,8 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         pendingOtpEmail: state.pendingOtpEmail,
       }),
-    }
-  )
+    },
+  ),
 );
 
 export function useIsLoggedIn(): boolean {

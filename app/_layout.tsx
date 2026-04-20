@@ -1,7 +1,9 @@
 import { AuthPersistBridge } from "@/components/AuthPersistBridge";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import ToastComponent from "@/components/ui/ToastComponent";
+import { I18nProvider } from "@/context/I18nContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
+import { usePushNotificationsSetup } from "@/hooks/usePushNotificationsSetup";
 import { customFontsToLoad } from "@/theme/typography";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import {
@@ -65,6 +67,11 @@ function onAppStateChange(status: AppStateStatus) {
  * Syncs React Navigation (tabs, stack, headers) with app light/dark colors.
  * Without this, navigators keep the default light gray/white chrome.
  */
+function PushSetup() {
+  usePushNotificationsSetup();
+  return null;
+}
+
 function ThemedNavigationShell({ children }: { children: ReactNode }) {
   const { colors, isDark } = useTheme();
   const navigationTheme = useMemo(
@@ -133,9 +140,11 @@ export default function RootLayout() {
   return (
     <ErrorBoundary catchErrors="always">
     <ThemeProvider>
+    <I18nProvider>
     <QueryClientProvider client={queryClient}>
       <ThemedNavigationShell>
         <BottomSheetModalProvider>
+          <PushSetup />
           <AuthPersistBridge />
           <Stack>
             <Stack.Screen
@@ -175,6 +184,7 @@ export default function RootLayout() {
       </ThemedNavigationShell>
       <ToastComponent />
     </QueryClientProvider>
+    </I18nProvider>
     </ThemeProvider>
     </ErrorBoundary>
   );

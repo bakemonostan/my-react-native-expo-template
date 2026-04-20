@@ -33,6 +33,8 @@ const api = axios.create({
     async (error: AxiosError<ErrorResponse>) => {
       if (error.response?.status === 401) {
         await tokenUtils.clearToken();
+        const { useAuthStore } = await import("@/store/authStore");
+        useAuthStore.setState({ user: null, pendingOtpEmail: null });
       }
   
       const apiError: ApiError = {

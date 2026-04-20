@@ -52,5 +52,7 @@ export { useRefreshOnFocus } from "./useFocusEffect";
 
 export { useToast } from "./useToast";
 
+export { usePushNotificationsSetup } from "./usePushNotificationsSetup";
+
 export { useTheme } from "./useTheme";
 export type { ThemeMode } from "./useTheme";

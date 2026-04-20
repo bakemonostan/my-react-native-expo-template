@@ -44,6 +44,24 @@ const androidPackage =
     ? process.env.ANDROID_PACKAGE_STAGING
     : (process.env.ANDROID_PACKAGE ?? ANDROID_PACKAGE_DEFAULT);
 
+const associatedDomainsRaw =
+  process.env.EXPO_PUBLIC_IOS_ASSOCIATED_DOMAINS?.trim() ?? "";
+const iosAssociatedDomains = associatedDomainsRaw
+  ? associatedDomainsRaw
+      .split(",")
+      .map((h) => h.trim())
+      .filter(Boolean)
+      .map((host) => `applinks:${host}`)
+  : [];
+
+const authModeEnv =
+  process.env.EXPO_PUBLIC_AUTH_MODE === "api" ? "api" : "mock";
+const pushSetupEnv =
+  process.env.EXPO_PUBLIC_PUSH_SETUP === "1" ||
+  process.env.EXPO_PUBLIC_PUSH_SETUP === "true"
+    ? "true"
+    : "false";
+
 function resolveApiBaseUrl(): string {
   if (isStaging && process.env.EXPO_PUBLIC_API_BASE_URL_STAGING) {
     return process.env.EXPO_PUBLIC_API_BASE_URL_STAGING;
@@ -73,6 +91,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: iosBundleId,
+    ...(iosAssociatedDomains.length > 0
+      ? { associatedDomains: iosAssociatedDomains }
+      : {}),
   },
 
   android: {
@@ -81,6 +102,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#ffffff',
     },
     package: androidPackage,
+    intentFilters: [
+      {
+        action: 'VIEW',
+        autoVerify: true,
+        data: [
+          {
+            scheme: SCHEME,
+          },
+        ],
+        category: ['BROWSABLE', 'DEFAULT'],
+      },
+    ],
   },
 
   web: {
@@ -102,6 +135,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     'expo-secure-store',
+    'expo-localization',
+    [
+      'expo-notifications',
+      {
+        icon: './assets/images/icon.png',
+        color: '#ffffff',
+        sounds: [],
+      },
+    ],
   ],
 
   experiments: {
@@ -113,6 +155,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     appEnv:
       process.env.APP_ENV ?? process.env.EXPO_PUBLIC_APP_ENV ?? 'development',
     apiBaseUrl: resolveApiBaseUrl(),
+    authMode: authModeEnv,
+    pushSetup: pushSetupEnv,
     ...(process.env.EXPO_PUBLIC_APP_VERSION && {
       EXPO_PUBLIC_APP_VERSION: process.env.EXPO_PUBLIC_APP_VERSION,
     }),

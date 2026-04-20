@@ -2,6 +2,9 @@
   "name": "my-rn-template",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.11.0"
+  },
   "scripts": {
     "start": "expo start",
     "start:staging": "APP_ENV=staging expo start --clear",
@@ -45,7 +48,9 @@
     "expo-image-picker": "~55.0.18",
     "expo-linear-gradient": "~55.0.13",
     "expo-linking": "~55.0.13",
+    "expo-localization": "~55.0.13",
     "expo-network": "~55.0.13",
+    "expo-notifications": "~55.0.19",
     "expo-router": "~55.0.12",
     "expo-secure-store": "~55.0.13",
     "expo-splash-screen": "~55.0.18",

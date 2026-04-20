@@ -2,7 +2,7 @@
 
 A production-minded Expo + React Native starter. The goal is to skip the boring setup and start building features — with a proper architecture already in place.
 
-> **Status:** Active development. See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md) for the honest backlog.
+> **Status:** Active development. See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md) for intentionally deferred items only.
 
 ---
 
@@ -107,7 +107,6 @@ npm run theme-mode auto           # Follow system (default)
 | `ErrorState` | Full-screen error display |
 | `FileUploadComponent` | File picker with validation |
 | `GoBack` | Back navigation button |
-| `GradientView` | Linear gradient wrapper |
 | `GradientView` | Linear gradient wrapper |
 | `Header` | Screen header with back/action slots |
 | `IconComponent` | Multi-library icon support (Ionicons, FontAwesome, etc.) |
@@ -214,6 +213,15 @@ EXPO_PUBLIC_API_BASE_URL=https://api.example.com
 EXPO_PUBLIC_API_BASE_URL_STAGING=https://staging-api.example.com
 IOS_BUNDLE_ID=com.company.app
 ANDROID_PACKAGE=com.company.app
+
+# Auth: mock (default) or api — see docs/AUTH_AND_NAVIGATION.md
+EXPO_PUBLIC_AUTH_MODE=mock
+
+# Push: 1 = request permission + log native device token in dev (no EAS)
+EXPO_PUBLIC_PUSH_SETUP=0
+
+# Optional Universal Links hosts (comma-separated), e.g. app.example.com
+# EXPO_PUBLIC_IOS_ASSOCIATED_DOMAINS=
 ```
 
 > Only `EXPO_PUBLIC_*` variables are bundled into the client. Everything else is build-time only.
@@ -225,7 +233,7 @@ ANDROID_PACKAGE=com.company.app
 ```
 ├── app/                        # Expo Router screens
 │   ├── (app)/                  # Authenticated shell (guard) + `(tabs)/` main UI
-│   ├── (auth)/                 # Login, register, forgot password, OTP (mock)
+│   ├── (auth)/                 # Login, register, forgot password, OTP
 │   ├── _layout.tsx             # Root layout (providers, QueryClient, ErrorBoundary)
 │   ├── index.tsx               # Entry gate → (app) or (auth)
 │   └── Modal.tsx               # Modal screen example
@@ -241,11 +249,16 @@ ANDROID_PACKAGE=com.company.app
 ├── constants/
 │   ├── Colors.ts               # Palette + light/dark semantic tokens
 │   └── mixins.ts               # Shared style helpers
+├── config/
+│   └── featureFlags.ts         # Client flags from app.config `extra`
 ├── context/
-│   └── ThemeContext.tsx         # ThemeProvider + useTheme (persisted)
+│   ├── I18nContext.tsx         # useI18n() + locale from expo-localization
+│   └── ThemeContext.tsx        # ThemeProvider + useTheme (persisted)
 ├── docs/                       # TEMPLATE_GAPS, AUTH_AND_NAVIGATION, etc.
+├── i18n/                       # Locale catalogs (en, es) + translate helpers
 ├── hooks/                      # Custom hooks
 ├── scripts/                    # CLI scripts (bump-version, theme-mode, etc.)
+├── services/                   # authBackend, sessionSync, pushNotifications
 ├── store/                      # Zustand stores
 ├── theme/                      # Design token system
 └── utils/                      # Utility functions
@@ -255,15 +268,15 @@ ANDROID_PACKAGE=com.company.app
 
 ## Known gaps / roadmap
 
-See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md). Auth shell (mock) and infinite-list hook are in; **Zod + `FormField`** demo lives under Components → **Form + Zod**; optional **Google client ID** helper is `utils/googleAuth.ts` (see [`docs/AUTH_AND_NAVIGATION.md`](docs/AUTH_AND_NAVIGATION.md)). Next wins are usually **API-backed auth / SecureStore**, **push / i18n**, and polish from the gaps doc.
+See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md) for the small **deferred** list (sheets recipes, analytics, biometrics, update prompts). **Zod + `FormField`** demo: Components tab → **Form + Zod**. Optional **Google** helper: `utils/googleAuth.ts`.
 
-- **Auth details:** [`docs/AUTH_AND_NAVIGATION.md`](docs/AUTH_AND_NAVIGATION.md)
+- **Auth + tokens + API shapes:** [`docs/AUTH_AND_NAVIGATION.md`](docs/AUTH_AND_NAVIGATION.md)
 
 ---
 
 ## What this is NOT (yet)
 
-- **Not production auth** — mock Zustand session and screens exist; wire APIs + **SecureStore** for tokens and replace `store/authStore.ts` logic
+- **Not your production backend** — set `EXPO_PUBLIC_AUTH_MODE=api` and adapt `services/authBackend.ts` to your routes; mock mode stays for UI-only work
 - **Not a UI kit** — components cover common patterns but are not exhaustive
 - **Not tested** — zero test files currently; jest and jest-expo are installed ready to go
 

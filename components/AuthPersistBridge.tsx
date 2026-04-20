@@ -1,18 +1,30 @@
+import { syncSecureSessionWithStore } from "@/services/sessionSync";
 import { useAuthStore } from "@/store/authStore";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 /**
- * Marks `useAuthStore` as hydrated after Zustand `persist` finishes rehydrating from AsyncStorage.
+ * After Zustand persist rehydrates, syncs SecureStore ↔ session, then sets `hydrated`.
  * Mount once under `QueryClientProvider` (see `app/_layout.tsx`).
  */
 export function AuthPersistBridge() {
+  const bootStarted = useRef(false);
+
   useEffect(() => {
-    const unsub = useAuthStore.persist.onFinishHydration(() => {
-      useAuthStore.setState({ hydrated: true });
-    });
-    if (useAuthStore.persist.hasHydrated()) {
+    async function boot() {
+      if (bootStarted.current) return;
+      bootStarted.current = true;
+      await syncSecureSessionWithStore();
       useAuthStore.setState({ hydrated: true });
     }
+
+    const unsub = useAuthStore.persist.onFinishHydration(() => {
+      void boot();
+    });
+
+    if (useAuthStore.persist.hasHydrated()) {
+      void boot();
+    }
+
     return unsub;
   }, []);
   return null;
