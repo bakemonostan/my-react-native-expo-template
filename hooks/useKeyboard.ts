@@ -4,6 +4,7 @@
  * @packageDocumentation
  */
 
+import { featureFlags } from "@/config/featureFlags";
 import { useEffect, useState } from "react";
 import { Keyboard, type KeyboardEvent, Platform } from "react-native";
 
@@ -40,10 +41,12 @@ export interface KeyboardInfo {
  * ```
  */
 export function useKeyboard(): KeyboardInfo {
+  const enabled = featureFlags.enableKeyboard;
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
     const showEvent =
       Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
     const hideEvent =
@@ -65,7 +68,11 @@ export function useKeyboard(): KeyboardInfo {
       showSub.remove();
       hideSub.remove();
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) {
+    return { keyboardHeight: 0, isVisible: false };
+  }
 
   return { keyboardHeight, isVisible };
 }

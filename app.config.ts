@@ -8,7 +8,6 @@
  */
 import type { ConfigContext, ExpoConfig } from 'expo/config';
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const pkg = require('./package.json') as { version: string };
 
 // --- Clone & customize (or override via env in CI) -------------------------
@@ -44,15 +43,28 @@ const androidPackage =
     ? process.env.ANDROID_PACKAGE_STAGING
     : (process.env.ANDROID_PACKAGE ?? ANDROID_PACKAGE_DEFAULT);
 
+/** 1/true = on, 0/false = off, unset = defaultOn (template stays permissive when env is missing). */
+function truthyEnv(raw: string | undefined, defaultOn: boolean): boolean {
+  const t = raw?.trim() ?? "";
+  if (t === "") return defaultOn;
+  return t === "1" || t.toLowerCase() === "true";
+}
+
+const enableDeepLinking = truthyEnv(
+  process.env.EXPO_PUBLIC_ENABLE_DEEP_LINKING,
+  true,
+);
+
 const associatedDomainsRaw =
   process.env.EXPO_PUBLIC_IOS_ASSOCIATED_DOMAINS?.trim() ?? "";
-const iosAssociatedDomains: string[] = associatedDomainsRaw
-  ? associatedDomainsRaw
-      .split(",")
-      .map((part: string) => part.trim())
-      .filter((host: string) => host.length > 0)
-      .map((host: string) => `applinks:${host}`)
-  : [];
+const iosAssociatedDomains: string[] =
+  enableDeepLinking && associatedDomainsRaw
+    ? associatedDomainsRaw
+        .split(",")
+        .map((part: string) => part.trim())
+        .filter((host: string) => host.length > 0)
+        .map((host: string) => `applinks:${host}`)
+    : [];
 
 const authModeEnv =
   process.env.EXPO_PUBLIC_AUTH_MODE === "api" ? "api" : "mock";
@@ -61,6 +73,17 @@ const pushSetupEnv =
   process.env.EXPO_PUBLIC_PUSH_SETUP === "true"
     ? "true"
     : "false";
+
+const stateModeEnv =
+  process.env.EXPO_PUBLIC_STATE_MODE === "none" ? "none" : "zustand";
+
+function normalizeHttpClient(): "axios" | "axios+rq" | "fetch" | "none" {
+  const raw = (process.env.EXPO_PUBLIC_HTTP_CLIENT ?? "axios+rq").toLowerCase();
+  if (raw === "axios") return "axios";
+  if (raw === "fetch") return "fetch";
+  if (raw === "none") return "none";
+  return "axios+rq";
+}
 
 function resolveApiBaseUrl(): string {
   if (isStaging && process.env.EXPO_PUBLIC_API_BASE_URL_STAGING) {
@@ -102,18 +125,20 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#ffffff',
     },
     package: androidPackage,
-    intentFilters: [
-      {
-        action: 'VIEW',
-        autoVerify: true,
-        data: [
+    intentFilters: enableDeepLinking
+      ? [
           {
-            scheme: SCHEME,
+            action: 'VIEW',
+            autoVerify: true,
+            data: [
+              {
+                scheme: SCHEME,
+              },
+            ],
+            category: ['BROWSABLE', 'DEFAULT'],
           },
-        ],
-        category: ['BROWSABLE', 'DEFAULT'],
-      },
-    ],
+        ]
+      : [],
   },
 
   web: {
@@ -157,6 +182,38 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     apiBaseUrl: resolveApiBaseUrl(),
     authMode: authModeEnv,
     pushSetup: pushSetupEnv,
+    stateMode: stateModeEnv,
+    httpClient: normalizeHttpClient(),
+    enableToast: truthyEnv(process.env.EXPO_PUBLIC_ENABLE_TOAST, true)
+      ? "true"
+      : "false",
+    enableI18n: truthyEnv(process.env.EXPO_PUBLIC_ENABLE_I18N, true)
+      ? "true"
+      : "false",
+    enableFeatureFlags: truthyEnv(
+      process.env.EXPO_PUBLIC_ENABLE_FEATURE_FLAGS,
+      true,
+    )
+      ? "true"
+      : "false",
+    enableDebounce: truthyEnv(process.env.EXPO_PUBLIC_ENABLE_DEBOUNCE, true)
+      ? "true"
+      : "false",
+    enableMediaPermissions: truthyEnv(
+      process.env.EXPO_PUBLIC_ENABLE_MEDIA_PERMISSIONS,
+      true,
+    )
+      ? "true"
+      : "false",
+    enableKeyboard: truthyEnv(process.env.EXPO_PUBLIC_ENABLE_KEYBOARD, true)
+      ? "true"
+      : "false",
+    enableDeepLinking: truthyEnv(
+      process.env.EXPO_PUBLIC_ENABLE_DEEP_LINKING,
+      true,
+    )
+      ? "true"
+      : "false",
     ...(process.env.EXPO_PUBLIC_APP_VERSION && {
       EXPO_PUBLIC_APP_VERSION: process.env.EXPO_PUBLIC_APP_VERSION,
     }),

@@ -1,47 +1,65 @@
 # Auth & navigation (Expo Router)
 
-This template ships a **generic, mock-only** auth flow so clones have a place to plug real APIs.
+This template ships a **working auth flow** with two modes, controlled at build time:
 
-## Swappable boundary (for wizard downloads)
+| Mode | Env | Behavior |
+|------|-----|----------|
+| **mock** (default) | `EXPO_PUBLIC_AUTH_MODE` unset or not `api` | `services/authBackend.ts` succeeds locally; **SecureStore** still receives a placeholder access token so axios + session sync behave like production. |
+| **api** | `EXPO_PUBLIC_AUTH_MODE=api` | Same module calls your REST routes with the shared axios client (`api/config.ts`). |
 
-**UI and routing only depend on** `useAuthStore` state (`user`, `hydrated`, `pendingOtpEmail` for the OTP stub). **All backend behavior lives in** `store/authStore.ts` — replace **`signIn`**, **`register`**, **`verifyOtp`** (and add token / refresh handling as needed) with your API; keep **`app/index.tsx`** and **`app/(app)/_layout.tsx`** aligned with whatever you treat as “signed in.” Tokens should use [**SecureStore**](https://docs.expo.dev/versions/latest/sdk/securestore/), not only AsyncStorage.
+## Swappable boundary
+
+**UI and routing** depend on `useAuthStore` (`user`, `hydrated`, `pendingOtpEmail`). **HTTP + tokens** live in:
+
+- `services/authBackend.ts` — `backendSignIn`, `backendRegister`, `backendVerifyOtp`, `backendRequestPasswordReset`, `fetchSessionUser`, `backendSignOut`
+- `api/api.utils.ts` — `tokenUtils` (**SecureStore** `auth_token`)
+- `services/sessionSync.ts` — after persist, aligns persisted `user` with token (and restores from `GET /auth/me` in api mode)
+
+Replace endpoint paths and JSON shapes inside `authBackend.ts` to match your server.
+
+### Expected API shapes (api mode)
+
+Adjust in `authBackend.ts` if your API differs.
+
+| Action | Method | Path | Body | Response (minimal) |
+|--------|--------|------|------|---------------------|
+| Login | POST | `/auth/login` | `{ email, password }` | `{ access_token, user: { email, name? } }` |
+| Register | POST | `/auth/register` | `{ email, password, name }` | same as login |
+| Verify OTP | POST | `/auth/verify-otp` | `{ email, code }` | same as login |
+| Forgot | POST | `/auth/forgot-password` | `{ email }` | any 2xx |
+| Session | GET | `/auth/me` | — | `{ user: { email, name? } }` or user object at root |
+| Logout | POST | `/auth/logout` | `{}` | any (errors ignored) |
 
 ## Official references
 
-- [Authentication in Expo Router](https://docs.expo.dev/router/advanced/authentication/) — session, splash, and stack structure.
-- [Protected routes](https://docs.expo.dev/router/advanced/protected/) — `Stack.Protected` / guards (when your SDK exposes them). This repo uses a **compatible** pattern: **`Redirect` in `app/(app)/_layout.tsx`** when there is no session (client-side only; not a substitute for server auth).
+- [Authentication in Expo Router](https://docs.expo.dev/router/advanced/authentication/)
+- [Protected routes](https://docs.expo.dev/router/advanced/protected/) — this repo uses **`Redirect` in `app/(app)/_layout.tsx`** when there is no session.
 
 ## What is implemented
 
 | Piece | Location |
-|-------|-----------|
-| Session (Zustand + persist) | `store/authStore.ts` — `user`, `signIn` / `signOut` / `register`, OTP stub fields |
-| Persist hydration flag | `components/AuthPersistBridge.tsx` + root `app/_layout.tsx` |
-| Entry redirect | `app/index.tsx` — `/` → `(app)/(tabs)` or `(auth)/login` |
-| Auth UI | `app/(auth)/login.tsx`, `register.tsx`, `forgot-password.tsx`, `verify-otp.tsx` — stack `headerShown: false`; custom `components/auth/AuthHeader.tsx` in `Screen`’s `header` slot |
-| Guarded app shell | `app/(app)/_layout.tsx` — requires `user`; otherwise `Redirect` to login |
-| Main app | `app/(app)/(tabs)/…` (tabs moved under `(app)`) |
-| Sign out | Home tab (`app/(app)/(tabs)/index.tsx`) |
-
-## What you should replace
-
-1. **`signIn` / `register` / `verifyOtp`** — call your backend; store **access tokens** with [`expo-secure-store`](https://docs.expo.dev/versions/latest/sdk/securestore/), not only AsyncStorage.
-2. **Token hydration** — if you use JWT, rehydrate user from `/me` (or similar) on app start.
-3. **`Stack.Protected`** — when your Expo Router build includes it, you can mirror the [protected routes](https://docs.expo.dev/router/advanced/protected/) doc and simplify redirects.
+|-------|----------|
+| Session (Zustand + persist profile) | `store/authStore.ts` — async `signIn` / `signOut` / `register` / `verifyOtp` |
+| Token storage | `api/api.utils.ts` — SecureStore |
+| Persist + SecureStore sync | `components/AuthPersistBridge.tsx` + `services/sessionSync.ts` |
+| 401 handling | `api/config.ts` — clears token + clears Zustand user |
+| Entry redirect | `app/index.tsx` |
+| Auth UI | `app/(auth)/…` — uses `useI18n()` for strings |
+| Guarded app shell | `app/(app)/_layout.tsx` |
+| Sign out | Home tab — awaits `signOut()` |
 
 ## Optional: Google native sign-in (`utils/googleAuth.ts`)
 
-**Not wired** to login UI or `authStore` — safe for wizard downloads.
+**Not wired** to login UI or `authStore` — safe for template clones.
 
 | Step | What to do |
 |------|------------|
-| IDs | Set `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` and `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` (e.g. `.env`). Never commit real secrets. |
-| Readiness | Call `parseGoogleAuthEnv()` or `getGoogleNativeClientIds()` to pass IDs into `GoogleSignin.configure`. |
-| Native module | Install [@react-native-google-signin/google-signin](https://react-native-google-signin.github.io/docs/install) when you need on-device Google; follow their iOS/Android setup. |
-| Session | After `signIn` / `getTokens`, call **your** backend, then update `useAuthStore` (or SecureStore) yourself — this util does not persist sessions. |
+| IDs | Set `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` and `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` in `.env`. |
+| Native module | Install [@react-native-google-signin/google-signin](https://react-native-google-signin.github.io/docs/install) when you need on-device Google. |
+| Session | After Google `signIn`, call **your** backend, then `useAuthStore.getState().signIn` or set token + user yourself. |
 
 ## Route URLs (groups do not appear in the path)
 
 - `/` — gate (`app/index.tsx`)
 - `/login`, `/register`, … — `app/(auth)/…`
-- Tab routes — e.g. `/` after redirect goes to the tab navigator’s default tab (see Expo Router tab docs).
+- Tab routes — see Expo Router tab docs for default tab path.

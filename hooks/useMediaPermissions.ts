@@ -4,6 +4,7 @@
  * @packageDocumentation
  */
 
+import { featureFlags } from "@/config/featureFlags";
 import * as ImagePicker from "expo-image-picker";
 import { useCallback } from "react";
 
@@ -56,7 +57,7 @@ export interface UseMediaPermissionsResult {
  * };
  * ```
  */
-export function useMediaPermissions(): UseMediaPermissionsResult {
+function useMediaPermissionsCore(): UseMediaPermissionsResult {
   const [cameraResp, requestCameraExpo, getCameraPermission] =
     ImagePicker.useCameraPermissions();
   const [libraryResp, requestLibraryExpo, getLibraryPermission] =
@@ -90,4 +91,21 @@ export function useMediaPermissions(): UseMediaPermissionsResult {
     cameraGranted: cameraResp?.granted ?? false,
     libraryGranted: libraryResp?.granted ?? false,
   };
+}
+
+const OFF_MEDIA: UseMediaPermissionsResult = {
+  camera: null,
+  library: null,
+  isBusy: false,
+  refresh: async () => {},
+  requestCamera: async () => false,
+  requestLibrary: async () => false,
+  cameraGranted: false,
+  libraryGranted: false,
+};
+
+export function useMediaPermissions(): UseMediaPermissionsResult {
+  const core = useMediaPermissionsCore();
+  if (!featureFlags.enableMediaPermissions) return OFF_MEDIA;
+  return core;
 }

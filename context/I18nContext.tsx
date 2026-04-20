@@ -1,3 +1,4 @@
+import { featureFlags } from "@/config/featureFlags";
 import { resolveLocale, translate, type I18nKey, type LocaleCode } from "@/i18n";
 import * as Localization from "expo-localization";
 import React, { createContext, useContext, useMemo } from "react";
@@ -10,10 +11,11 @@ type I18nContextValue = {
 const I18nContext = createContext<I18nContextValue | null>(null);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const locale = useMemo(
-    () => resolveLocale(Localization.getLocales()[0]?.languageTag),
-    [],
-  );
+  const i18nOn = featureFlags.enableI18n;
+  const locale = useMemo((): LocaleCode => {
+    if (!i18nOn) return "en";
+    return resolveLocale(Localization.getLocales()[0]?.languageTag);
+  }, [i18nOn]);
 
   const value = useMemo<I18nContextValue>(
     () => ({

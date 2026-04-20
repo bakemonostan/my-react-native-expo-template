@@ -4,6 +4,7 @@
  * @packageDocumentation
  */
 
+import { featureFlags } from "@/config/featureFlags";
 import Toast from "react-native-toast-message";
 
 /**
@@ -33,6 +34,7 @@ export function useToast() {
     text2?: string,
     visibilityTime = 3000
   ) => {
+    if (!featureFlags.enableToast) return;
     Toast.show({ type, text1, text2, visibilityTime, position: "top" });
   };
 
@@ -45,6 +47,9 @@ export function useToast() {
       show("info", text1, text2, visibilityTime),
     warning: (text1: string, text2?: string, visibilityTime?: number) =>
       show("warning", text1, text2, visibilityTime),
-    hide: () => Toast.hide(),
+    hide: () => {
+      if (!featureFlags.enableToast) return;
+      Toast.hide();
+    },
   };
 }

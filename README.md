@@ -2,7 +2,7 @@
 
 A production-minded Expo + React Native starter. The goal is to skip the boring setup and start building features — with a proper architecture already in place.
 
-> **Status:** Active development. See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md) for intentionally deferred items only.
+> **Status:** Active development. See [`docs/TEMPLATE_GAPS.md`](docs/TEMPLATE_GAPS.md) for intentionally deferred items only. Web setup wizard (separate Next.js repo) ↔ this app: [`docs/WIZARD_AND_TEMPLATE.md`](docs/WIZARD_AND_TEMPLATE.md).
 
 ---
 
@@ -167,6 +167,7 @@ npm run theme-mode auto           # Follow system (default)
 ```
 api/
 ├── config.ts           # Axios instance (interceptors, timeout, base URL)
+├── fetchClient.ts      # fetch + bearer + 401 clear (when EXPO_PUBLIC_HTTP_CLIENT=fetch)
 ├── api.constants.ts    # BASE_URL (env-driven), TOKEN_KEY
 ├── api.types.ts        # ApiError and shared response types
 └── api.utils.ts        # tokenUtils (get/set/clear), isAuthenticated, getErrorMessage
@@ -217,6 +218,10 @@ ANDROID_PACKAGE=com.company.app
 # Auth: mock (default) or api — see docs/AUTH_AND_NAVIGATION.md
 EXPO_PUBLIC_AUTH_MODE=mock
 
+# State + HTTP mode (RN Init wizard syncs these; see config/featureFlags.ts → runtimeModes)
+EXPO_PUBLIC_STATE_MODE=zustand
+EXPO_PUBLIC_HTTP_CLIENT=axios+rq
+
 # Push: 1 = request permission + log native device token in dev (no EAS)
 EXPO_PUBLIC_PUSH_SETUP=0
 
@@ -237,7 +242,7 @@ EXPO_PUBLIC_PUSH_SETUP=0
 │   ├── _layout.tsx             # Root layout (providers, QueryClient, ErrorBoundary)
 │   ├── index.tsx               # Entry gate → (app) or (auth)
 │   └── Modal.tsx               # Modal screen example
-├── api/                        # Axios client + types + utilities
+├── api/                        # Axios + optional fetch client + types + utilities
 ├── assets/                     # Fonts, images
 ├── components/
 │   ├── ui/                     # Core UI components (exported via index.ts)
@@ -250,7 +255,7 @@ EXPO_PUBLIC_PUSH_SETUP=0
 │   ├── Colors.ts               # Palette + light/dark semantic tokens
 │   └── mixins.ts               # Shared style helpers
 ├── config/
-│   └── featureFlags.ts         # Client flags from app.config `extra`
+│   └── featureFlags.ts         # featureFlags + runtimeModes (state / HTTP client from env)
 ├── context/
 │   ├── I18nContext.tsx         # useI18n() + locale from expo-localization
 │   └── ThemeContext.tsx        # ThemeProvider + useTheme (persisted)

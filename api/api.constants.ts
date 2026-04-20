@@ -3,6 +3,8 @@ import Constants from "expo-constants";
 type Extra = {
   apiBaseUrl?: string;
   appEnv?: string;
+  stateMode?: string;
+  httpClient?: string;
 };
 
 function getExtra(): Extra {

@@ -4,6 +4,7 @@
  * @packageDocumentation
  */
 
+import { featureFlags } from "@/config/featureFlags";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
@@ -26,14 +27,19 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * ```
  */
 export function useDebounce<T>(value: T, delay: number): T {
+  const bypass = !featureFlags.enableDebounce;
   const [debounced, setDebounced] = useState(value);
 
   useEffect(() => {
+    if (bypass) {
+      setDebounced(value);
+      return;
+    }
     const id = setTimeout(() => setDebounced(value), delay);
     return () => clearTimeout(id);
-  }, [value, delay]);
+  }, [value, delay, bypass]);
 
-  return debounced;
+  return bypass ? value : debounced;
 }
 
 /**
@@ -59,6 +65,7 @@ export function useDebouncedCallback<Args extends unknown[]>(
   callback: (...args: Args) => void,
   delay: number
 ): (...args: Args) => void {
+  const bypass = !featureFlags.enableDebounce;
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -74,6 +81,10 @@ export function useDebouncedCallback<Args extends unknown[]>(
 
   return useCallback(
     (...args: Args) => {
+      if (bypass) {
+        callbackRef.current(...args);
+        return;
+      }
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -82,6 +93,6 @@ export function useDebouncedCallback<Args extends unknown[]>(
         callbackRef.current(...args);
       }, delay);
     },
-    [delay]
+    [delay, bypass]
   );
 }

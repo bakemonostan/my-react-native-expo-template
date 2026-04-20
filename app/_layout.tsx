@@ -1,6 +1,7 @@
 import { AuthPersistBridge } from "@/components/AuthPersistBridge";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import ToastComponent from "@/components/ui/ToastComponent";
+import { featureFlags } from "@/config/featureFlags";
 import { I18nProvider } from "@/context/I18nContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { usePushNotificationsSetup } from "@/hooks/usePushNotificationsSetup";
@@ -182,7 +183,7 @@ export default function RootLayout() {
           </Stack>
         </BottomSheetModalProvider>
       </ThemedNavigationShell>
-      <ToastComponent />
+      {featureFlags.enableToast ? <ToastComponent /> : null}
     </QueryClientProvider>
     </I18nProvider>
     </ThemeProvider>
