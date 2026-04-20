@@ -46,12 +46,12 @@ const androidPackage =
 
 const associatedDomainsRaw =
   process.env.EXPO_PUBLIC_IOS_ASSOCIATED_DOMAINS?.trim() ?? "";
-const iosAssociatedDomains = associatedDomainsRaw
+const iosAssociatedDomains: string[] = associatedDomainsRaw
   ? associatedDomainsRaw
       .split(",")
-      .map((h) => h.trim())
-      .filter(Boolean)
-      .map((host) => `applinks:${host}`)
+      .map((part: string) => part.trim())
+      .filter((host: string) => host.length > 0)
+      .map((host: string) => `applinks:${host}`)
   : [];
 
 const authModeEnv =
